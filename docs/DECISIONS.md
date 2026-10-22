@@ -19,3 +19,8 @@
 - **Decision:** put it in a `compare` dependency group (not runtime deps). The test skips if the package or network is missing.
 - **Alternatives:** make it a runtime dependency (rejected: the serving image never needs it).
 - **Consequences:** CI runs `uv sync --group compare` so the comparison test runs there.
+
+## 0005: notebook dependency group
+- **Context:** Ahmad wants to step through each phase in VS Code notebooks.
+- **Decision:** `notebook` group (ipykernel, nbclient, nbformat); not part of runtime or CI.
+- **Consequences:** `make setup` installs it; walkthrough notebooks live in `notebooks/NN_*.ipynb` and are committed with outputs.
