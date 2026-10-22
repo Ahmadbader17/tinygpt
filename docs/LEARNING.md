@@ -99,3 +99,60 @@ Measured: 202.8 tokens per story, 13 of 300,000 stories dropped as empty.
 **Interview angle.** "I tokenised 300k stories once into a 122 MB uint16 memmap (60.8M tokens), so batches are random slices with
 almost no RAM, instead of materialising every window as a tensor. The tokenizer is fit on train only, and `meta.json` records its
 hash so checkpoints can be matched to the right vocabulary."
+
+## Phase 3: the model (attention, MLP, GPT)
+
+**Concept.** A GPT turns token ids into next-token scores. Each token id becomes a vector, a position vector is added,
+and the sum passes through a stack of identical blocks. Each block lets tokens look at earlier tokens (attention)
+and then transforms each token on its own (MLP). A final LayerNorm and a linear head give one score per vocabulary entry.
+
+**Shapes, small config (B=batch, T=256, C=256, H=8 heads, head_dim=32, V=4096).**
+```
+idx                (B, T)            int64 token ids
+wte(idx) + wpe(pos) (B, T, C)        token vector + position vector
+-- per block (x6) --
+ ln1(x)            (B, T, C)
+ qkv(x)            (B, T, 3C)        -> split into q, k, v, each (B, T, C)
+ q, k, v           (B, H, T, 32)     view + transpose: heads become a batch dimension
+ q @ k^T / sqrt(32)(B, H, T, T)      score of every query position against every key position
+ mask + softmax    (B, H, T, T)      future positions get -inf, so weight 0; rows sum to 1
+ att @ v           (B, H, T, 32)
+ concat heads+proj (B, T, C)         added back onto x (residual)
+ mlp(ln2(x))       (B, T, C)         C -> 4C -> C, added back onto x (residual)
+-- end --
+ln_f, lm_head      (B, T, V)         logits; loss = cross_entropy over B*T rows
+```
+
+**The causal mask.** `scores[t, s]` is how much position t cares about position s. Setting it to `-inf` for s > t makes the
+softmax weight exactly 0, so token t cannot read the future. That is what lets one forward pass train all `T` next-token
+predictions at once without cheating. Test: change a later token and earlier logits stay identical.
+
+**Why divide by sqrt(head_dim).** A dot product of two 32-dim vectors with unit-variance entries has variance 32. Without scaling, the
+scores get large, softmax saturates to near one-hot, and gradients vanish. Dividing by sqrt(32) restores variance ~1.
+
+**Pre-norm.** `x = x + attn(ln1(x))` keeps an un-normalised identity path from the output back to the input, so gradients reach early
+layers directly. Post-norm puts LayerNorm on that path and is harder to train without careful warmup.
+
+**Weight tying.** `lm_head.weight is wte.weight`: one (4096 x 256) matrix reads tokens in and scores tokens out. It saves
+1,048,576 parameters (18% of the model) and ties the two meanings together. Counted once: **5,853,184 parameters**
+(4,739,072 without embeddings). The test recomputes this by hand from the design.
+
+**Init and initial loss.** All weights ~ N(0, 0.02), so the logits are tiny and the softmax is almost uniform over V tokens. Cross-entropy
+of a uniform guess is `ln(V)`: ln(4096) = 8.318, and the measured untrained loss was 8.371 (tiny: 6.243 vs ln(512) = 6.238).
+If your first loss is far from `ln(V)`, something is wrong, which is why this is a test. The residual output projections get an extra `1/sqrt(2*n_layer)` so variance does not grow with depth.
+
+**Versus the notebook.** The notebook stopped at embeddings. Here the embedding layer is the front of a model, and the same `wte` doubles as the output layer.
+
+<details><summary>Check questions</summary>
+
+1. *Why is the untrained loss ln(V)?* Near-zero logits give a uniform distribution, so every token has probability 1/V and
+   the cross-entropy is `-ln(1/V) = ln V`.
+2. *What would happen without the causal mask?* Position t could read token t+1, which is its own training target.
+   Loss would drop fast in training, but the model would be useless at generation time, when the future does not exist.
+3. *Why are the naive and sdpa attention paths both kept?* The naive one is readable and serves as a reference; sdpa is faster.
+   A test checks they agree to 1e-5, so the optimised path is proven correct.
+</details>
+
+**Interview angle.** "I implemented GPT-2 style attention twice: an explicit softmax(QK^T/sqrt(d))V with a triangular mask, and the
+fused PyTorch kernel, and a test asserts they agree and that the future never leaks into the past. I also check that the parameter count
+equals a hand-derived formula and that the untrained loss is ln(vocab), which catches wiring and init bugs before any training."
