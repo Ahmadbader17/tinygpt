@@ -1,6 +1,6 @@
-data/
-runs/
-export/
+/data/
+/runs/
+/export/
 *.safetensors
 *.bin
 .env
