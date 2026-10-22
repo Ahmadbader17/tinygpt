@@ -38,6 +38,10 @@ class BPETokenizer:
         # Special tokens in the text are parsed to their id, so "<|endoftext|>" round-trips.
         return list(self._hf.encode(text).ids)
 
+    def encode_batch(self, texts: Sequence[str]) -> list[list[int]]:
+        """Encode many texts at once; the Rust backend spreads them over all cores."""
+        return [list(e.ids) for e in self._hf.encode_batch(list(texts))]
+
     def decode(self, ids: Sequence[int]) -> str:
         return self._hf.decode(list(ids), skip_special_tokens=False)
 

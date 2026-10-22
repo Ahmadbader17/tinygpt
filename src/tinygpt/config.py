@@ -37,6 +37,14 @@ class DataConfig:
     train_stories: int = 300_000
     val_stories: int = 5_000
     tokenizer_vocab_size: int = 4096
+    train_url: str = (
+        "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/"
+        "TinyStoriesV2-GPT4-train.txt"
+    )
+    val_url: str = (
+        "https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/"
+        "TinyStoriesV2-GPT4-valid.txt"
+    )
 
 
 @dataclass(frozen=True)

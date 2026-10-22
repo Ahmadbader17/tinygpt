@@ -65,3 +65,37 @@ depend on the interface, so the tiktoken adapter slots in (used in one compariso
 **Interview angle.** "I trained a 4096-token byte-level BPE rather than reusing GPT-2's 50k vocab,
 because at d_model=256 the embedding table alone would have been over twice the rest of the model.
 Byte-level means no unknown tokens, and I verified lossless round trips on unicode and emoji."
+
+## Phase 2: data pipeline (clean, encode, memmap)
+
+**Concept.** Training should never touch text. We turn the corpus into numbers once, then training just reads
+them. `make data` runs `tinygpt prepare-data`: stream stories, clean them, train BPE on the training split only,
+encode each story plus `<|endoftext|>`, and write one flat `uint16` file per split (`train.bin`, `val.bin`) and a
+`meta.json`.
+
+**Shapes.** `train.bin` is a flat `(N,)` array of uint16 (N = 60,838,396, about 2 bytes per token). A training batch picks
+`B` random starts `s` and slices `x = tokens[s : s+T]`, `y = tokens[s+1 : s+T+1]`, giving `x, y` of shape `(B, T)`,
+cast to int64 for the embedding lookup. `y` is `x` shifted left by one, so at every position the target is the
+next token. One window therefore gives `T` training examples at once.
+
+**Versus the notebook.** The notebook's `GPTDatasetV1` builds a Python list holding a tensor for every window, so memory grows
+as `num_windows x context_length`. The memmap maps the file and the OS pages in only what we touch: RAM stays tiny and
+random starts replace `stride`. We keep `SlidingWindowDataset` for deterministic evaluation and tests.
+
+**Design choices.** Validation is held out, and the tokenizer never sees it. Cleaning is light (whitespace, control characters) so
+the model still sees natural text. `meta.json` stores the tokenizer SHA256 so a checkpoint can be checked against its tokenizer.
+Measured: 202.8 tokens per story, 13 of 300,000 stories dropped as empty.
+
+<details><summary>Check questions</summary>
+
+1. *Why is uint16 enough, and what breaks past 65,535?* ids are below 4096, so 2 bytes hold them. A vocab of 65,536 or more would
+   overflow, and `encode_split` raises instead of silently wrapping.
+2. *Why are `x` and `y` offset by one token?* The model is trained to predict the next token at every position, so the target
+   at position `i` is the input at `i+1`.
+3. *Why train the tokenizer on the training split only?* If it saw validation text, merges would be tuned to it and validation
+   loss would be slightly optimistic. Held-out data should be untouched.
+</details>
+
+**Interview angle.** "I tokenised 300k stories once into a 122 MB uint16 memmap (60.8M tokens), so batches are random slices with
+almost no RAM, instead of materialising every window as a tensor. The tokenizer is fit on train only, and `meta.json` records its
+hash so checkpoints can be matched to the right vocabulary."
