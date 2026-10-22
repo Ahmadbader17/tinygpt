@@ -1,0 +1,33 @@
+# Tests and CI: tiny model, runs in seconds.
+name = "tiny"
+seed = 1337
+
+[model]
+vocab_size = 512
+context_length = 64
+d_model = 64
+n_layer = 2
+n_head = 2
+dropout = 0.0
+attention_impl = "sdpa"
+
+[data]
+source = "tinystories"
+train_stories = 2000
+val_stories = 100
+tokenizer_vocab_size = 512
+
+[train]
+batch_size = 8
+grad_accum_steps = 1
+max_steps = 200
+warmup_steps = 20
+lr_peak = 1e-3
+lr_min = 1e-4
+weight_decay = 0.1
+beta1 = 0.9
+beta2 = 0.95
+grad_clip = 1.0
+eval_interval = 50
+eval_batches = 5
+num_threads = 4

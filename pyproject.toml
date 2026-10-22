@@ -1,0 +1,66 @@
+[project]
+name = "tinygpt"
+version = "0.1.0"
+description = "A small GPT trained from scratch on CPU, served with FastAPI."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "torch>=2.4",
+    "numpy>=1.26",
+    "tokenizers>=0.20",
+    "huggingface_hub>=0.25",
+    "safetensors>=0.4",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "pydantic>=2.8",
+    "matplotlib>=3.9",
+]
+
+[project.scripts]
+tinygpt = "tinygpt.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pre-commit>=3.8",
+    "httpx>=0.27",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tinygpt"]
+
+# CPU-only torch wheels: much smaller for CI and the Docker image.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["notebooks"]
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+strict = true
+files = ["src"]
+plugins = []
+
+[[tool.mypy.overrides]]
+module = ["tokenizers.*", "safetensors.*", "matplotlib.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
