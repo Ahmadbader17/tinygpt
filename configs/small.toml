@@ -1,5 +1,5 @@
-# Real run: ~5.8M parameters. max_steps and num_threads are placeholders until
-# `tinygpt bench` (Phase 5) measures throughput.
+# Real run: ~5.8M parameters. max_steps and num_threads come from `tinygpt bench`
+# (see docs/DECISIONS.md 0006): 12 threads, ~2.7k tok/s, 7500 steps = 61.4M tokens = 1 epoch.
 name = "small"
 seed = 1337
 
@@ -21,7 +21,7 @@ tokenizer_vocab_size = 4096
 [train]
 batch_size = 32
 grad_accum_steps = 1
-max_steps = 4500
+max_steps = 7500
 warmup_steps = 200
 lr_peak = 1e-3
 lr_min = 1e-4
@@ -31,4 +31,4 @@ beta2 = 0.95
 grad_clip = 1.0
 eval_interval = 250
 eval_batches = 20
-num_threads = 22
+num_threads = 12

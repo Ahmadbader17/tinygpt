@@ -156,3 +156,77 @@ If your first loss is far from `ln(V)`, something is wrong, which is why this is
 **Interview angle.** "I implemented GPT-2 style attention twice: an explicit softmax(QK^T/sqrt(d))V with a triangular mask, and the
 fused PyTorch kernel, and a test asserts they agree and that the future never leaks into the past. I also check that the parameter count
 equals a hand-derived formula and that the untrained loss is ln(vocab), which catches wiring and init bugs before any training."
+
+## Phase 4: the training loop
+
+**Concept.** Training is the same five lines repeated: get a batch, forward to a loss, backward to gradients, clip, update. Everything else
+(schedule, evaluation, checkpoints) exists to make those lines safe to run for hours.
+
+**Anatomy of one step (`Trainer.train_step`), small config, B=32, T=256.**
+```
+x, y = sampler.batch(32, rng)        (32, 256) int64 each; y is x shifted left by one
+logits, loss = model(x, y)           logits (32, 256, 4096) -> loss: one scalar (mean over 8192 positions)
+(loss / grad_accum).backward()       fills p.grad for all 5.85M parameters
+clip_grad_norm_(params, 1.0)         if the global gradient norm exceeds 1, rescale it to 1
+optimizer.step()                     AdamW update using the current learning rate
+```
+**Learning-rate schedule.** `lr_at(step)` rises linearly for 200 steps (Adam's moment estimates are noisy at the start, so big early steps
+are risky), then follows a cosine from 1e-3 down to 1e-4 at the last step. It is a pure function, which is why it is easy to test.
+
+**AdamW detail.** Weight decay 0.1 applies only to tensors with `ndim >= 2` (matrices and embeddings). Biases and LayerNorm gains are
+excluded: shrinking them toward zero has no regularising benefit.
+
+**Checkpoint and resume.** A checkpoint is the weights (safetensors), the optimiser state (Adam's two moment estimates per parameter, which is why the
+checkpoint is ~3x the weights), the step, and both RNG states. The test trains 5 steps, saves, then a new trainer with a different init resumes
+and produces the *same next 5 losses exactly*. Saves go to a temp directory and are swapped in, so a crash cannot leave half a checkpoint.
+`SIGINT` and `SIGTERM` finish the current step, save `last`, and exit.
+
+**Evaluation.** Every 250 steps the same validation windows (fixed seed) are scored, so the curve is comparable between points. `best`
+is kept by validation loss; `last` is for resuming. `samples.md` repeats five fixed prompts with fixed seeds so you can watch gibberish turn into English.
+
+**Versus the notebook.** The notebook had a DataLoader over a list of tensors and no notion of a run. Here a run is a directory (config, environment, git commit, metrics, plot, samples, checkpoints).
+
+<details><summary>Check questions</summary>
+
+1. *Why divide the loss by `grad_accum_steps`?* Gradients add across `backward()` calls, so dividing makes the accumulated gradient the mean over all micro batches, the same as one big batch.
+2. *Why save optimiser state, not just weights?* Without Adam's moment estimates a resumed run restarts with cold statistics and a different trajectory; the resume test would fail.
+3. *Why is the test "overfit one fixed batch" a good gradient check?* A model that cannot drive loss near zero on 64 tokens has a bug in the forward pass, the loss, the optimiser or the data path.
+</details>
+
+**Interview angle.** "I wrote the training loop with warmup plus cosine decay, global-norm clipping, decay only on matrices, and exact resume: a test checks that a resumed run
+reproduces the next five losses bit for bit. Checkpoints are written atomically and the run saves on SIGTERM, so a night-long CPU run survives interruptions."
+
+## Phase 5: benchmark, budget, baselines
+
+**Compute budgeting.** Throughput decides what is possible. `tinygpt bench` times real training steps for several thread counts on this laptop (Core Ultra 9 185H, 22 threads):
+
+| threads | 4 | 6 | 8 | 10 | 12 | 16 | 22 |
+|---|---|---|---|---|---|---|---|
+| tokens/s | 2.1k | 2.1k | 2.3k | 2.9k | 2.8k | 0.9k | 0.6k |
+
+Using every thread is 4 to 5 times *slower* than 12. Likely cause: the chip mixes performance and efficiency cores, and PyTorch's parallel loops wait for the slowest
+thread. So the config uses 12. The real run sustained ~2.5k tok/s (laptop thermals), so one pass over the 61M training tokens = 7,500 steps = about 6.8 hours.
+Rule of thumb: ~20 tokens per parameter is "compute optimal" (Chinchilla); we get ~10 for one epoch, a fair trade for a laptop budget.
+
+**Baselines.** Predict the validation tokens using only counts, no neural network:
+
+| model | perplexity | loss (nats) |
+|---|---|---|
+| uniform guess | 4096 | 8.32 |
+| unigram (token frequencies) | 357 | 5.88 |
+| bigram (previous token) | 38.4 | 3.65 |
+
+Perplexity = exp(loss) = "the model is as unsure as a fair die with this many sides". The trained GPT must beat the bigram table clearly; otherwise it has learned no more than which word follows which.
+
+**Reading loss curves.** Train and val falling together = healthy. Val flat or rising while train falls = overfitting (not expected in one epoch). Sudden spikes = learning rate too high or bad batch (clipping helps).
+Loss stuck near 7 to 8 = the model has only learned unigram frequencies.
+
+<details><summary>Check questions</summary>
+
+1. *Why can more threads be slower?* Synchronisation across unequal cores and memory-bandwidth limits; the slowest thread gates each parallel operation.
+2. *Why compare to a bigram baseline?* It is the best you can do looking one token back, so beating it proves the model uses longer context.
+3. *Why one epoch rather than several?* No data repeats, so val loss measures generalisation, and the budget fits the sleep window.
+</details>
+
+**Interview angle.** "I benchmarked thread counts before committing compute and found that using all 22 threads was 4x slower than 12 on a hybrid CPU, then sized the run from measured tokens per second.
+I judged the model against unigram and bigram perplexity baselines I computed on the same tokenisation, not just against its own loss."

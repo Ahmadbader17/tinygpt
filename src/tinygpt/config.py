@@ -7,6 +7,7 @@ config is written next to every run and is the single source of truth for it.
 from __future__ import annotations
 
 import dataclasses
+import json
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -61,6 +62,7 @@ class TrainConfig:
     grad_clip: float = 1.0
     eval_interval: int = 250
     eval_batches: int = 20
+    log_interval: int = 10
     num_threads: int = 4
 
 
@@ -101,3 +103,22 @@ def load_config(path: Path | str) -> Config:
         data=_build(DataConfig, raw.get("data", {}), "data"),
         train=_build(TrainConfig, raw.get("train", {}), "train"),
     )
+
+
+def dump_config(cfg: Config) -> str:
+    """Render a resolved config as TOML so a run directory is self-describing."""
+
+    def value(v: object) -> str:
+        if isinstance(v, str):
+            return json.dumps(v)  # JSON string escaping is valid TOML basic-string escaping
+        if isinstance(v, bool):
+            return str(v).lower()
+        return str(v)
+
+    lines = [f"name = {value(cfg.name)}", f"seed = {cfg.seed}"]
+    for section in ("model", "data", "train"):
+        lines += ["", f"[{section}]"]
+        for k, v in dataclasses.asdict(getattr(cfg, section)).items():
+            if v is not None:  # TOML has no null; an absent key means "use the default"
+                lines.append(f"{k} = {value(v)}")
+    return "\n".join(lines) + "\n"
