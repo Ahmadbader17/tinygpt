@@ -5,7 +5,7 @@ RUN ?= runs/latest
 .PHONY: setup check test data tokenizer bench train generate serve export docker
 
 setup:
-	uv sync
+	uv sync --group compare
 	uv run pre-commit install
 
 check:

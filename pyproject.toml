@@ -27,6 +27,8 @@ dev = [
     "pre-commit>=3.8",
     "httpx>=0.27",
 ]
+# Optional: only for the GPT-2 tokenizer comparison test and docs.
+compare = ["tiktoken>=0.7"]
 
 [build-system]
 requires = ["hatchling"]
@@ -58,7 +60,7 @@ files = ["src"]
 plugins = []
 
 [[tool.mypy.overrides]]
-module = ["tokenizers.*", "safetensors.*", "matplotlib.*"]
+module = ["tokenizers.*", "safetensors.*", "matplotlib.*", "tiktoken.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

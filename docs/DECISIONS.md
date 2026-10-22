@@ -13,3 +13,9 @@
 
 ## 0003: CPU-only torch via uv index
 - **Decision:** `[tool.uv.sources] torch` points at the PyTorch CPU wheel index, so local, CI and Docker installs match and stay small.
+
+## 0004: tiktoken as an optional dependency group
+- **Context:** DESIGN D2 wants a tiktoken GPT-2 adapter for one comparison test; tiktoken is not in the D9 dependency list and fetches its vocab over the network.
+- **Decision:** put it in a `compare` dependency group (not runtime deps). The test skips if the package or network is missing.
+- **Alternatives:** make it a runtime dependency (rejected: the serving image never needs it).
+- **Consequences:** CI runs `uv sync --group compare` so the comparison test runs there.

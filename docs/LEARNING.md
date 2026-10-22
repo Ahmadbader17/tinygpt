@@ -29,3 +29,39 @@ variables. Here they live in one place and every run saves its resolved config.
 **Interview angle.** "I kept configuration declarative (TOML into frozen, validated dataclasses) so
 every run is reproducible from one saved file." Mention strict typing and `make check` as the single
 gate used locally and in CI.
+
+## Phase 1: tokenizer (byte-level BPE)
+
+**Concept.** Text must become integers. Your notebook split on words and built a dictionary, so
+unseen words needed `<|unk|>`. Byte-level BPE starts from the 256 byte values and *learns* merges:
+count adjacent pairs in the training text, fuse the most frequent into a new token, repeat until the
+vocab reaches 4096 (256 bytes + 1 special + 3839 merges). Encoding replays the merges in the order
+they were learned. Because every string is bytes, nothing is ever unknown.
+
+**Shapes.** `encode: str -> list[int]` (length L, each id in `[0, vocab)`); later the pipeline
+turns these into `(B, T)` int tensors. Decoding concatenates bytes and decodes UTF-8, which is why
+a single id may print as `�`: it holds a partial multi-byte character.
+
+**Worked example (tiny vocab 512, fixture stories).** `"the"` -> `[84, 257]` = `t` + `he`
+(not one token: only 255 merges to spend and "the" is usually preceded by a space); `" the"` ->
+one token `[261]`; `"Pip"` -> `Pi` + `p`; `"🦊"` -> 4 byte tokens (the emoji is 4 UTF-8 bytes
+and never appeared in training, so no merges cover it). With vocab 4096 on real TinyStories, common
+words become single tokens.
+
+**Design choices.** `add_prefix_space=False` keeps `" the"` and `"the"` distinct, like GPT-2.
+Train the tokenizer on the training split only. `Tokenizer` is a `Protocol`: model and trainer
+depend on the interface, so the tiktoken adapter slots in (used in one comparison test).
+
+<details><summary>Check questions</summary>
+
+1. *Why can byte-level BPE never produce an unknown token?* The base alphabet is all 256 bytes,
+   so any input decomposes into known symbols.
+2. *Why does `" the"` get its own token while `"the"` may not?* Pre-tokenization keeps the leading
+   space attached to the word, and `" the"` is far more frequent mid-sentence.
+3. *What does a bigger vocab trade off?* Fewer tokens per text (cheaper attention) versus a larger
+   embedding/output matrix (vocab x d_model) and sparser statistics per token.
+</details>
+
+**Interview angle.** "I trained a 4096-token byte-level BPE rather than reusing GPT-2's 50k vocab,
+because at d_model=256 the embedding table alone would have been over twice the rest of the model.
+Byte-level means no unknown tokens, and I verified lossless round trips on unicode and emoji."
