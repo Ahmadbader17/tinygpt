@@ -230,3 +230,37 @@ Loss stuck near 7 to 8 = the model has only learned unigram frequencies.
 
 **Interview angle.** "I benchmarked thread counts before committing compute and found that using all 22 threads was 4x slower than 12 on a hybrid CPU, then sized the run from measured tokens per second.
 I judged the model against unigram and bigram perplexity baselines I computed on the same tokenisation, not just against its own loss."
+
+## Phase 6: sampling and the CompletionService
+
+**Concept.** The model never outputs text. For a context of `T` tokens it outputs scores `(T, V)`; only the last row matters for generation.
+Sampling turns that row into one token, appends it, and repeats. That loop is `generate()`; `CompletionService` wraps it with tokenising, seeding, stop handling and a concurrency cap.
+
+**Shapes (one generation step, small config).**
+```
+ctx          (1, T)       last <= 256 tokens (older ones are cropped away)
+logits       (1, T, 4096) -> keep the last position only -> (1, 4096)
+/ temperature             one score per token, sharpened (<1) or flattened (>1)
+top-k                     everything below the k-th best score becomes -inf (probability 0)
+softmax      (1, 4096)    probabilities summing to 1
+multinomial  (1, 1)       the next token id; concatenate -> ctx becomes (1, T+1)
+```
+**Temperature.** Dividing scores by `t` before softmax: `t -> 0` makes the top token take all the probability (greedy), `t = 1` is the model's own belief,
+`t > 1` flattens it so rare tokens get picked. **Top-k** removes the long tail of nonsense tokens so a flat distribution cannot pick them. See the side-by-side table in `docs/RESULTS.md`:
+greedy repeats one story, 0.8 varies and stays fluent, 1.5 invents words, 2.5 is noise, and 1.5 without top-k is worse than 1.5 with it.
+
+**Determinism.** A `torch.Generator` seeded per request means the same seed gives the same tokens, and the service returns the seed it used, so any sample you liked can be reproduced.
+**Stopping.** Generation stops at `<|endoftext|>` (`finish_reason = "stop"`) or at `max_new_tokens` (`"length"`). The stop token is trimmed from the text. An empty prompt starts from `<|endoftext|>`, the context every training story began with.
+**Cost.** No KV cache: every new token re-runs the whole context, so cost per token grows with the prompt. 100 tokens took about 0.5 s here, fine for 256 context.
+
+**Versus the notebook.** The notebook ended at embeddings. Here the same tokenizer that encoded training data encodes the prompt, and the trained tied embedding matrix both reads the prompt and scores the next token.
+
+<details><summary>Check questions</summary>
+
+1. *Why does temperature 0.2 look nearly identical to greedy?* Dividing logits by 0.2 multiplies the gaps by 5 before softmax, so the top token gets almost all the probability.
+2. *Why combine top-k with temperature above 1?* High temperature flattens the distribution so unlikely tokens become plausible picks; top-k removes those tokens before sampling.
+3. *What does a KV cache change?* It stores each layer's past keys and values, so each new token only computes attention for itself instead of re-running all `T` positions: per-token cost stops growing with the context.
+</details>
+
+**Interview angle.** "Generation is a loop over one forward pass: take the last position's logits, apply temperature and top-k, sample, append. I seeded a per-request generator, so any output is reproducible,
+and I returned the seed and a finish reason from one service that both the CLI and the API call. I also know what it costs: without a KV cache each token re-runs the whole context."

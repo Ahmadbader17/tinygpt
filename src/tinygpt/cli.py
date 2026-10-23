@@ -15,7 +15,7 @@ from tinygpt.baselines import compute_baselines
 from tinygpt.config import SampleConfig, load_config
 from tinygpt.data.dataset import MemmapTokenSampler
 from tinygpt.data.prepare import prepare_data
-from tinygpt.inference import generate
+from tinygpt.inference import CompletionRequest, CompletionService, generate
 from tinygpt.model import GPT
 from tinygpt.tokenizer import BPETokenizer, train_bpe
 from tinygpt.training.bench import bench_threads
@@ -57,6 +57,15 @@ def build_parser() -> argparse.ArgumentParser:
     bench.add_argument("--threads", default="6,8,10,12,14,16,22")
     bench.add_argument("--steps", type=int, default=6)
     bench.add_argument("--token-budget", type=int, default=100_000_000)
+    gen = sub.add_parser("generate", help="complete a prompt with a trained run")
+    gen.add_argument("--run", required=True, help="run directory, e.g. runs/overnight_long")
+    gen.add_argument("--prompt", default="Once upon a time")
+    gen.add_argument("--checkpoint", default="best", choices=["best", "last"])
+    gen.add_argument("--tokenizer", default="data/tokenizer/tokenizer.json")
+    gen.add_argument("--max-new-tokens", type=int, default=SampleConfig.max_new_tokens)
+    gen.add_argument("--temperature", type=float, default=SampleConfig.temperature)
+    gen.add_argument("--top-k", type=int, default=SampleConfig.top_k, help="0 disables top-k")
+    gen.add_argument("--seed", type=int, help="fix for a reproducible sample")
     base = sub.add_parser("baselines", help="unigram and bigram perplexity on the validation split")
     base.add_argument("--config", required=True)
     base.add_argument("--data-dir", default="data")
@@ -149,6 +158,25 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(
                 f"{r.threads:>8} {r.tokens_per_sec:>10.0f} {r.hours_for_budget:>26.2f}", flush=True
             )
+    elif args.command == "generate":
+        run_dir = Path(args.run)
+        torch.set_num_threads(load_config(run_dir / "config.toml").train.num_threads)
+        service = CompletionService.from_run(run_dir, Path(args.tokenizer), args.checkpoint)
+        res = service.complete(
+            CompletionRequest(
+                args.prompt,
+                args.max_new_tokens,
+                args.temperature,
+                args.top_k or None,
+                args.seed,
+            )
+        )
+        print(args.prompt + res.text)
+        print(
+            f"\n[{res.completion_tokens} tokens, {res.finish_reason}, seed {res.seed}, "
+            f"{res.latency_s:.1f}s]",
+            file=sys.stderr,
+        )
     elif args.command == "baselines":
         cfg = load_config(args.config)
         processed = Path(args.data_dir) / "processed"

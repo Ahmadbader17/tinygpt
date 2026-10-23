@@ -55,7 +55,8 @@ def save_checkpoint(
 def load_checkpoint(in_dir: Path, model: GPT, optimizer: optim.Optimizer) -> TrainState:
     """Load weights and optimiser state in place; return the trainer state."""
     load_model(model, str(in_dir / WEIGHTS_FILE))
-    # our own file, so full unpickling is fine (it holds numpy RNG state, not just tensors)
-    blob = torch.load(in_dir / STATE_FILE, map_location="cpu", weights_only=False)
+    # weights_only=True: the file holds only tensors and plain Python scalars/dicts (the numpy
+    # RNG state is stored as a dict), so no arbitrary unpickling is needed
+    blob = torch.load(in_dir / STATE_FILE, map_location="cpu", weights_only=True)
     optimizer.load_state_dict(blob["optimizer"])
     return TrainState(**blob["state"])
