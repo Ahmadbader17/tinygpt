@@ -60,7 +60,9 @@ def build_parser() -> argparse.ArgumentParser:
     bench.add_argument("--steps", type=int, default=6)
     bench.add_argument("--token-budget", type=int, default=100_000_000)
     gen = sub.add_parser("generate", help="complete a prompt with a trained run")
-    gen.add_argument("--run", required=True, help="run directory, e.g. runs/overnight_long")
+    source = gen.add_mutually_exclusive_group(required=True)
+    source.add_argument("--run", help="a training run directory, e.g. runs/overnight_long")
+    source.add_argument("--hub", help="a model repo on the Hugging Face Hub, e.g. user/tiny-gpt")
     gen.add_argument("--prompt", default="Once upon a time")
     gen.add_argument("--checkpoint", default="best", choices=["best", "last"])
     gen.add_argument("--tokenizer", default="data/tokenizer/tokenizer.json")
@@ -218,9 +220,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 f"{r.threads:>8} {r.tokens_per_sec:>10.0f} {r.hours_for_budget:>26.2f}", flush=True
             )
     elif args.command == "generate":
-        run_dir = Path(args.run)
-        torch.set_num_threads(load_config(run_dir / "config.toml").train.num_threads)
-        service = CompletionService.from_run(run_dir, Path(args.tokenizer), args.checkpoint)
+        if args.hub:
+            from huggingface_hub import snapshot_download
+
+            service = CompletionService.from_bundle(Path(snapshot_download(repo_id=args.hub)))
+        else:
+            run_dir = Path(args.run)
+            torch.set_num_threads(load_config(run_dir / "config.toml").train.num_threads)
+            service = CompletionService.from_run(run_dir, Path(args.tokenizer), args.checkpoint)
         res = service.complete(
             CompletionRequest(
                 args.prompt,
