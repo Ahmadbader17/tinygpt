@@ -13,7 +13,7 @@ WORKDIR /home/user/app
 
 COPY --chown=user pyproject.toml uv.lock README.md LICENSE ./
 COPY --chown=user src ./src
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --no-cache  # no cache: it would be baked into the layer (~1 GB)
 
 ENV PATH="/home/user/app/.venv/bin:$PATH" \
     TINYGPT_MODEL_DIR=/home/user/model \
