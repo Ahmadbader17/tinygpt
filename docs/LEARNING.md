@@ -296,3 +296,35 @@ schemas (pydantic)           prompt 1-500 chars, max_new_tokens 1-256, temperatu
 
 **Interview angle.** "I kept FastAPI out of the core library: the CLI and the API call the same `CompletionService`. The app is built by a factory with an injectable model loader, so my API tests run against a tiny random model in milliseconds,
 including the 503-while-loading and 429-when-busy paths. Generation runs in the threadpool under a bounded semaphore, so a small CPU host degrades with a clear 429 instead of falling over."
+
+## Phase 8: packaging and publishing (model card, Docker, Hub)
+
+**Concept.** Training produces files on your laptop; publishing makes them something a stranger can run. That takes three artefacts: a **bundle** (weights, config, tokenizer that load without `runs/` or `data/`),
+a **container** (the same server, with pinned dependencies, running as a non-root user), and a **model card** (an honest description of what the model is and is not).
+
+**The pieces.**
+```
+tinygpt export        -> export/ : model.safetensors, model_config.json, tokenizer.json, model_info.json
+Dockerfile            python:3.12-slim + pinned uv; `uv sync --frozen --no-dev` (CPU torch from uv.lock); user uid 1000; port 7860
+Space                 same image; at startup downloads the bundle from TINYGPT_HF_REPO into TINYGPT_MODEL_DIR
+tinygpt publish       dry run by default; --upload makes one atomic commit per repo; token only from HF_TOKEN
+```
+**Why `--frozen --no-dev`.** `--frozen` installs exactly the versions in `uv.lock` (the image you test is the image you ship); `--no-dev` leaves out pytest, ruff and mypy. I checked this without Docker by installing into a clean folder: it got `torch 2.14.1+cpu`, no pytest,
+and served the same completion for seed 42 as the training environment.
+**Why a non-root user and a health check.** A bug in the app then cannot write system files, and Spaces expect uid 1000 anyway. `HEALTHCHECK` hits `/health`, which is true while the weights still download.
+**Why weights are downloaded, not baked in.** The image stays reusable and small, and a new model version is a Hub upload, not a rebuild.
+
+**What a model card should honestly contain.** What it is, how it was trained (data, tokens, hardware, time), real evaluation numbers *with their baselines and caveats* (perplexity depends on the tokenizer), intended use, and limitations: here, narrow domain, repetition and lost plots,
+and synthetic training data that carries its generator's biases. It should not oversell: ours says outright it is not an assistant and has not been bias-tested.
+
+**Not done yet, on purpose.** Nothing has been uploaded: that needs your Hugging Face token and your go-ahead. `docker build` has not run because Docker is not installed here.
+
+<details><summary>Check questions</summary>
+
+1. *Why bundle the tokenizer with the weights?* The model only makes sense with the exact tokenizer it was trained with; `model_info.json` also stores its SHA256 so a mismatch can be detected.
+2. *Why is the upload a dry run by default?* Publishing is outward-facing and hard to undo (copies may be cached or indexed), so the safe default lists what would be sent and the real upload needs an explicit flag.
+3. *Why does a perplexity of 5.4 not mean this model beats GPT-2?* Perplexity is per token of a specific tokenizer on a specific dataset; ours is a 4096-token BPE on simple children's stories, so it is only comparable to our own baselines.
+</details>
+
+**Interview angle.** "I separated the model bundle from the training run so the server loads from one self-contained directory, containerised it with a pinned, CPU-only, non-root image, and wrote a model card with real baselines and explicit limitations. The publish command is a dry run
+unless asked otherwise and reads the token only from the environment, and I tested the upload logic against a fake Hub client."

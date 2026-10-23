@@ -38,3 +38,11 @@
 - **Alternatives:** serve straight from a run directory plus `data/tokenizer` (rejected: the Docker image and the Space would need the training folders).
 - **Consequences:** `TINYGPT_HF_REPO` (download from the Hub) is not in `Settings` yet; Phase 8 adds it with `huggingface_hub`.
 - **Also:** `generate()` now uses `torch.inference_mode()` (DESIGN D7) and `CompletionService` takes an optional `queue_timeout` so a full server answers 429 instead of queueing forever.
+
+## 0008: publishing layout, and what is not yet verified
+- **Decision:** the model repo holds the export bundle plus `deploy/MODEL_CARD.md` as `README.md`; the Docker Space holds `Dockerfile`, `pyproject.toml`, `uv.lock`, `LICENSE`, `src/` and `deploy/space_README.md` as `README.md` (front matter: `sdk: docker`, `app_port: 7860`). The Space downloads weights at startup from `TINYGPT_HF_REPO`, which `tinygpt publish --upload` sets as a Space variable. `publish` is a dry run unless `--upload` is given and reads `HF_TOKEN` from the environment only.
+- **Deviation:** the config file is `model_config.json`, not `config.json` as DESIGN D8 says; our `ModelConfig` is not a `transformers` config, so a generic name would mislead tools that look for one.
+- **Not verified locally:** Docker is not installed in this WSL. The install and serve steps were replicated in a clean folder (`uv sync --frozen --no-dev` then `uvicorn`), but `docker build` itself has not run, and the Space has not been built.
+- **Defaults for a small free host:** `TINYGPT_NUM_THREADS=2`, `TINYGPT_MAX_CONCURRENCY=1` (a free Space has 2 vCPUs). Space latency is unmeasured.
+- **Image size:** `matplotlib` is a runtime dependency (plots only, DESIGN D9) so the image carries it; torch CPU dominates the size anyway (about 1 GB `.venv`).
+- **Licence caveat:** code and weights are MIT; the data is CDLA-Sharing-1.0. The model card says so and points to the dataset card. Whether the data licence imposes anything on trained weights is a legal question to confirm, not something decided here.

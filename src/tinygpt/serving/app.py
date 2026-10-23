@@ -23,9 +23,19 @@ log = logging.getLogger(__name__)
 ServiceLoader = Callable[[Settings], CompletionService]
 
 
+def fetch_bundle(settings: Settings) -> None:
+    """Download the model bundle from the Hub into model_dir when a repo is configured."""
+    if settings.hf_repo:
+        from huggingface_hub import snapshot_download
+
+        log.info("downloading %s from the Hugging Face Hub", settings.hf_repo)
+        snapshot_download(repo_id=settings.hf_repo, local_dir=settings.model_dir)
+
+
 def load_from_disk(settings: Settings) -> CompletionService:
     if settings.num_threads:
         torch.set_num_threads(settings.num_threads)
+    fetch_bundle(settings)
     return CompletionService.from_bundle(
         settings.model_dir, settings.max_concurrency, settings.queue_timeout
     )

@@ -18,6 +18,7 @@ from tinygpt.data.dataset import MemmapTokenSampler
 from tinygpt.data.prepare import prepare_data
 from tinygpt.inference import CompletionRequest, CompletionService, export_bundle, generate
 from tinygpt.model import GPT
+from tinygpt.publish import plan_model_upload, plan_space_upload, upload
 from tinygpt.tokenizer import BPETokenizer, train_bpe
 from tinygpt.training.bench import bench_threads
 from tinygpt.training.trainer import Trainer, estimate_loss
@@ -72,6 +73,11 @@ def build_parser() -> argparse.ArgumentParser:
     exp.add_argument("--out", default="export")
     exp.add_argument("--checkpoint", default="best", choices=["best", "last"])
     exp.add_argument("--data-dir", default="data")
+    pub = sub.add_parser("publish", help="plan (default) or perform the Hugging Face upload")
+    pub.add_argument("--bundle", default="export", help="directory made by `tinygpt export`")
+    pub.add_argument("--model-repo", required=True, help="e.g. your-username/tiny-gpt")
+    pub.add_argument("--space-repo", required=True, help="e.g. your-username/tiny-gpt-demo")
+    pub.add_argument("--upload", action="store_true", help="really upload; needs HF_TOKEN in env")
     base = sub.add_parser("baselines", help="unigram and bigram perplexity on the validation split")
     base.add_argument("--config", required=True)
     base.add_argument("--data-dir", default="data")
@@ -125,6 +131,28 @@ def run_export(args: argparse.Namespace) -> None:
         run_dir, data_dir / "tokenizer" / "tokenizer.json", Path(args.out), info, args.checkpoint
     )
     print(json.dumps(info, indent=2))
+
+
+def run_publish(args: argparse.Namespace) -> None:
+    root = Path(".")
+    plans = [
+        plan_model_upload(Path(args.bundle), root / "deploy" / "MODEL_CARD.md", args.model_repo),
+        plan_space_upload(root, root / "deploy" / "space_README.md", args.space_repo),
+    ]
+    for plan in plans:
+        size = sum(p.stat().st_size for p in plan.files.values()) / 1e6
+        print(f"{plan.repo_type} {plan.repo_id}: {len(plan.files)} files, {size:.1f} MB")
+        for dest in plan.files:
+            print(f"  {dest}")
+    if not args.upload:
+        print("\ndry run: nothing uploaded. Add --upload (with HF_TOKEN set) to publish.")
+        return
+    from huggingface_hub import HfApi
+
+    api = HfApi()  # reads HF_TOKEN from the environment; the token is never a CLI argument
+    variables = {"TINYGPT_HF_REPO": args.model_repo}
+    for plan in plans:
+        print(upload(plan, api, variables if plan.repo_type == "space" else None))
 
 
 def run_train(args: argparse.Namespace) -> None:
@@ -210,6 +238,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     elif args.command == "export":
         run_export(args)
+    elif args.command == "publish":
+        run_publish(args)
     elif args.command == "baselines":
         cfg = load_config(args.config)
         processed = Path(args.data_dir) / "processed"

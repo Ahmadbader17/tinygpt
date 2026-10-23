@@ -1,0 +1,14 @@
+.git
+.venv
+.github
+.mypy_cache
+.ruff_cache
+.pytest_cache
+**/__pycache__
+data
+runs
+export
+notebooks
+tests
+docs
+deploy

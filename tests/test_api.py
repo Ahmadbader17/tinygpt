@@ -170,3 +170,23 @@ def test_settings_from_env() -> None:
     )
     assert (s.model_dir, s.max_concurrency, s.num_threads) == (Path("/m"), 3, 6)
     assert Settings.from_env({}) == Settings()
+
+
+def test_settings_reads_hf_repo() -> None:
+    assert Settings.from_env({"TINYGPT_HF_REPO": "me/tiny-gpt"}).hf_repo == "me/tiny-gpt"
+    assert Settings.from_env({"TINYGPT_HF_REPO": ""}).hf_repo is None
+
+
+def test_fetch_bundle_downloads_only_when_a_repo_is_configured(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    import huggingface_hub
+
+    from tinygpt.serving.app import fetch_bundle
+
+    calls: list[dict[str, object]] = []
+    monkeypatch.setattr(huggingface_hub, "snapshot_download", lambda **kw: calls.append(kw))
+    fetch_bundle(Settings(model_dir=tmp_path))
+    assert calls == []  # local bundle: no network
+    fetch_bundle(Settings(model_dir=tmp_path, hf_repo="me/tiny-gpt"))
+    assert calls == [{"repo_id": "me/tiny-gpt", "local_dir": tmp_path}]
