@@ -264,3 +264,35 @@ greedy repeats one story, 0.8 varies and stays fluent, 1.5 invents words, 2.5 is
 
 **Interview angle.** "Generation is a loop over one forward pass: take the last position's logits, apply temperature and top-k, sample, append. I seeded a per-request generator, so any output is reproducible,
 and I returned the seed and a finish reason from one service that both the CLI and the API call. I also know what it costs: without a KV cache each token re-runs the whole context."
+
+## Phase 7: the API (app factory, lifespan, dependency boundaries)
+
+**Concept.** The API adds no ML. It translates HTTP into a `CompletionRequest`, calls `CompletionService`, and translates the result back. All the model code stays importable and testable
+without a web server: `serving` is the only package that imports FastAPI, and it depends on `inference`, never the reverse.
+
+**The pieces.**
+```
+Settings.from_env()          frozen dataclass: model dir, max concurrency, queue timeout, threads
+create_app(settings, loader) builds the FastAPI app; `loader` is injectable
+lifespan                     starts a thread that loads the model, so /health answers while weights load
+routes                       /health /v1/model /v1/completions  (+ static page at /, OpenAPI at /docs)
+schemas (pydantic)           prompt 1-500 chars, max_new_tokens 1-256, temperature 0-2, top_k >= 1, seed >= 0
+```
+**Why a factory.** `create_app` returns a fresh app each call, so each test builds one with a tiny random model (`loader=lambda _: service`) and no files on disk. A module-level `app = FastAPI()` that loads weights on import cannot be tested this way.
+**Why a background load.** While the model loads, `/health` is 200 (the process is alive) but `/v1/*` is 503 ("model is loading"). A host such as a Space can tell "starting" from "dead", and if loading fails the 503 message says why instead of the process crashing.
+**Status codes.** 422 bad input (pydantic, plus `top_k` above the vocabulary, which is only known once the model is loaded), 503 not ready, 429 all slots busy. The answer to the predict-first question: a third simultaneous request waits up to `queue_timeout` (2 s) for a slot, then gets **429**, not a hang and not a crash. The test blocks a real generation, sends a second request, and checks the 429 and that the first one still returns 200.
+**Why `def`, not `async def`, for the completion route.** Generation is CPU-bound and blocking. FastAPI runs a plain `def` in a worker thread, so the event loop keeps serving `/health` meanwhile. An `async def` would freeze the whole server for the duration of each generation.
+**Concurrency.** A CPU forward pass already uses many threads, so two at a time is the sweet spot; more would only make each request slower.
+**Safety detail.** The demo page writes model output with `textContent`, never `innerHTML`, so generated text can never be interpreted as HTML.
+
+**Versus the notebook.** None of this existed. It is the part that turns a trained file into something a stranger can use.
+
+<details><summary>Check questions</summary>
+
+1. *Why inject the loader into `create_app`?* So tests can serve a tiny random model without files, and a failing load can be simulated; the app code is identical in both cases.
+2. *Why is `/health` separate from readiness?* Liveness says the process is up; the model may still be loading. Mixing them makes an orchestrator kill a healthy-but-slow-starting container.
+3. *What breaks if the completion route is `async def`?* The blocking generation runs on the event loop, so every other request, including `/health`, stalls until it finishes.
+</details>
+
+**Interview angle.** "I kept FastAPI out of the core library: the CLI and the API call the same `CompletionService`. The app is built by a factory with an injectable model loader, so my API tests run against a tiny random model in milliseconds,
+including the 503-while-loading and 429-when-busy paths. Generation runs in the threadpool under a bounded semaphore, so a small CPU host degrades with a clear 429 instead of falling over."

@@ -31,3 +31,10 @@
 - **Why one epoch:** 61M tokens is about 10 tokens per parameter, and no data repeats, so validation loss tracks generalisation directly. More steps would mean a second epoch over the same stories.
 - **Alternatives:** more steps (rejected: repeats data, and the cosine schedule must finish inside the sleep window); a smaller context or fewer layers (not needed, the budget fits).
 - **Consequences:** if the machine sleeps or throttles hard, `--resume` continues from `checkpoints/last`; time-limited stops leave the learning rate not fully decayed.
+
+## 0007: model bundle and `export` pulled forward from Phase 8
+- **Context:** the API (Phase 7) needs a self-contained model directory; DESIGN puts `tinygpt export` in Phase 8.
+- **Decision:** `export_bundle` and `tinygpt export` land now (about 30 lines): `model.safetensors`, `model_config.json`, `tokenizer.json`, `model_info.json` (steps, tokens, validation loss and perplexity, tokenizer hash). The server loads only this directory, so it never depends on `runs/` or `data/`. Phase 8 adds the model card and Hub upload on top.
+- **Alternatives:** serve straight from a run directory plus `data/tokenizer` (rejected: the Docker image and the Space would need the training folders).
+- **Consequences:** `TINYGPT_HF_REPO` (download from the Hub) is not in `Settings` yet; Phase 8 adds it with `huggingface_hub`.
+- **Also:** `generate()` now uses `torch.inference_mode()` (DESIGN D7) and `CompletionService` takes an optional `queue_timeout` so a full server answers 429 instead of queueing forever.

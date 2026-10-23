@@ -10,7 +10,7 @@ from tinygpt.model import GPT
 
 
 # LEARN: rewrite this yourself, see docs/LEARNING_PLAN.md item 6
-@torch.no_grad()
+@torch.inference_mode()  # no autograd bookkeeping: less memory and faster than no_grad
 def generate(model: GPT, idx: Tensor, cfg: SampleConfig, eot_id: int | None) -> Tensor:
     """Extend `idx` (B, T) by up to cfg.max_new_tokens tokens; returns (B, T + new)."""
     was_training = model.training

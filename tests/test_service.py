@@ -96,3 +96,42 @@ def test_from_run_loads_best_checkpoint(tmp_path: Path, tiny_tokenizer: BPEToken
     svc = CompletionService.from_run(tmp_path / "run", tmp_path / "tok.json")
     req = CompletionRequest("The fox", max_new_tokens=10, seed=2)
     assert svc.complete(req).text == CompletionService(model, tiny_tokenizer).complete(req).text
+
+
+def test_busy_service_raises_after_queue_timeout(
+    tiny_tokenizer: BPETokenizer, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import tinygpt.inference.service as service_module
+    from tinygpt.inference import ServiceBusy
+
+    entered, release = threading.Event(), threading.Event()
+    real = service_module.generate
+
+    def blocking(*args, **kwargs):  # type: ignore[no-untyped-def]
+        entered.set()
+        release.wait(5)
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(service_module, "generate", blocking)
+    svc = CompletionService(GPT(CFG.model), tiny_tokenizer, max_concurrency=1, queue_timeout=0.05)
+    t = threading.Thread(target=lambda: svc.complete(CompletionRequest("A", max_new_tokens=2)))
+    t.start()
+    assert entered.wait(5)
+    with pytest.raises(ServiceBusy):
+        svc.complete(CompletionRequest("B", max_new_tokens=2))
+    release.set()
+    t.join(5)
+    svc.complete(CompletionRequest("C", max_new_tokens=2))  # the slot was released afterwards
+
+
+def test_from_bundle_roundtrip(tmp_path: Path, tiny_tokenizer: BPETokenizer) -> None:
+    from tinygpt.inference import export_bundle
+
+    torch.manual_seed(0)
+    model = GPT(CFG.model)
+    model.save_pretrained(tmp_path / "run" / "checkpoints" / "best")
+    tiny_tokenizer.save(tmp_path / "tok.json")
+    export_bundle(tmp_path / "run", tmp_path / "tok.json", tmp_path / "bundle", {"val_loss": 1.0})
+    svc = CompletionService.from_bundle(tmp_path / "bundle")
+    req = CompletionRequest("The fox", max_new_tokens=10, seed=2)
+    assert svc.complete(req).text == CompletionService(model, tiny_tokenizer).complete(req).text

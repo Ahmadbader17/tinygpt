@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiny GPT</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #1b1b1f; }
+  textarea { width: 100%; box-sizing: border-box; font: inherit; padding: .5rem; }
+  label { display: block; margin: .6rem 0 .1rem; font-size: .9rem; }
+  button { margin-top: 1rem; padding: .5rem 1.2rem; font: inherit; cursor: pointer; }
+  #out { white-space: pre-wrap; margin-top: 1.2rem; padding: 1rem; background: #f4f4f6; border-radius: 6px; min-height: 3rem; }
+  #out .prompt { font-weight: 600; }
+  #meta, #status { color: #666; font-size: .85rem; margin-top: .4rem; }
+  @media (prefers-color-scheme: dark) { body { background: #17171a; color: #e8e8ec; } #out { background: #232328; } }
+</style>
+</head>
+<body>
+<h1>Tiny GPT</h1>
+<p>A 5.8M-parameter GPT trained from scratch on children's stories. Start a story and it will continue it.</p>
+<textarea id="prompt" rows="3" maxlength="500">Once upon a time, a little fox</textarea>
+<label>Length: <span id="lenv">120</span> tokens <input id="len" type="range" min="10" max="256" value="120"></label>
+<label>Temperature: <span id="tv">0.8</span> <input id="temp" type="range" min="0" max="2" step="0.1" value="0.8"></label>
+<label>Top-k: <span id="kv">40</span> <input id="topk" type="range" min="1" max="200" value="40"></label>
+<button id="go">Continue the story</button>
+<div id="status"></div>
+<div id="out"></div>
+<div id="meta"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+for (const [input, label] of [["len", "lenv"], ["temp", "tv"], ["topk", "kv"]])
+  $(input).oninput = () => ($(label).textContent = $(input).value);
+
+$("go").onclick = async () => {
+  $("go").disabled = true; $("status").textContent = "Generating..."; $("meta").textContent = "";
+  try {
+    const res = await fetch("/v1/completions", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: $("prompt").value, max_new_tokens: +$("len").value,
+        temperature: +$("temp").value, top_k: +$("topk").value,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "invalid request");
+    const out = $("out"); out.textContent = "";
+    const p = document.createElement("span"); p.className = "prompt"; p.textContent = data.prompt;
+    out.append(p, document.createTextNode(data.completion));  // textContent: never interpreted as HTML
+    $("meta").textContent = `${data.tokens_generated} tokens, ${data.stop_reason}, ${data.latency_ms} ms, seed ${data.seed}`;
+    $("status").textContent = "";
+  } catch (e) { $("status").textContent = "Error: " + e.message; }
+  $("go").disabled = false;
+};
+</script>
+</body>
+</html>

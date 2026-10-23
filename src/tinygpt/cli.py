@@ -4,6 +4,7 @@ import argparse
 import dataclasses
 import json
 import logging
+import math
 import sys
 import time
 from collections.abc import Callable, Sequence
@@ -15,11 +16,11 @@ from tinygpt.baselines import compute_baselines
 from tinygpt.config import SampleConfig, load_config
 from tinygpt.data.dataset import MemmapTokenSampler
 from tinygpt.data.prepare import prepare_data
-from tinygpt.inference import CompletionRequest, CompletionService, generate
+from tinygpt.inference import CompletionRequest, CompletionService, export_bundle, generate
 from tinygpt.model import GPT
 from tinygpt.tokenizer import BPETokenizer, train_bpe
 from tinygpt.training.bench import bench_threads
-from tinygpt.training.trainer import Trainer
+from tinygpt.training.trainer import Trainer, estimate_loss
 from tinygpt.utils.device import pick_device
 from tinygpt.utils.env import probe_environment
 from tinygpt.utils.logging import setup_logging
@@ -66,6 +67,11 @@ def build_parser() -> argparse.ArgumentParser:
     gen.add_argument("--temperature", type=float, default=SampleConfig.temperature)
     gen.add_argument("--top-k", type=int, default=SampleConfig.top_k, help="0 disables top-k")
     gen.add_argument("--seed", type=int, help="fix for a reproducible sample")
+    exp = sub.add_parser("export", help="bundle a run's weights, config and tokenizer for serving")
+    exp.add_argument("--run", required=True)
+    exp.add_argument("--out", default="export")
+    exp.add_argument("--checkpoint", default="best", choices=["best", "last"])
+    exp.add_argument("--data-dir", default="data")
     base = sub.add_parser("baselines", help="unigram and bigram perplexity on the validation split")
     base.add_argument("--config", required=True)
     base.add_argument("--data-dir", default="data")
@@ -94,6 +100,31 @@ def make_sample_fn(tokenizer: BPETokenizer, device: torch.device) -> Callable[[G
         return "\n\n".join(out)
 
     return sample
+
+
+def run_export(args: argparse.Namespace) -> None:
+    """Bundle a checkpoint with its tokenizer and a model_info.json the API serves at /v1/model."""
+    run_dir, data_dir = Path(args.run), Path(args.data_dir)
+    cfg = load_config(run_dir / "config.toml")
+    ckpt = run_dir / "checkpoints" / args.checkpoint
+    state = json.loads((ckpt / "state.json").read_text(encoding="utf-8"))
+    model = GPT.from_pretrained(ckpt)
+    val = MemmapTokenSampler(data_dir / "processed" / "val.bin", cfg.model.context_length)
+    loss = estimate_loss(model, val, 200, 32, torch.device("cpu"))  # same recipe as docs/RESULTS.md
+    data_meta = json.loads((data_dir / "processed" / "meta.json").read_text(encoding="utf-8"))
+    info = {
+        "run": run_dir.name,
+        "checkpoint": args.checkpoint,
+        "training_steps": state["step"],
+        "training_tokens": state["tokens_seen"],
+        "val_loss": round(loss, 4),
+        "val_perplexity": round(math.exp(loss), 3),
+        "tokenizer_sha256": data_meta["tokenizer_sha256"],
+    }
+    export_bundle(
+        run_dir, data_dir / "tokenizer" / "tokenizer.json", Path(args.out), info, args.checkpoint
+    )
+    print(json.dumps(info, indent=2))
 
 
 def run_train(args: argparse.Namespace) -> None:
@@ -177,6 +208,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             f"{res.latency_s:.1f}s]",
             file=sys.stderr,
         )
+    elif args.command == "export":
+        run_export(args)
     elif args.command == "baselines":
         cfg = load_config(args.config)
         processed = Path(args.data_dir) / "processed"
