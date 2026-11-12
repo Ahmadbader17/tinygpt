@@ -58,3 +58,44 @@ def story_nll(
             nll[i] += row_nll[r]
             count[i] += len(ys)
     return nll, count
+
+
+@torch.inference_mode()
+def sequence_nll(
+    model: GPT, sequences: Sequence[Sequence[int]], batch_size: int = 32
+) -> tuple[NDArray[np.float64], NDArray[np.int64]]:
+    """Summed NLL of each sequence's tokens 2..T given their prefixes, with no framing.
+
+    Used by the budgeted `read` call, where the editor chooses the token sequences.
+    Sequences longer than the context are rejected rather than windowed.
+    """
+    if model.training:
+        raise ValueError("put the model in eval mode before scoring")
+    ctx = model.cfg.context_length
+    for seq in sequences:
+        if not 2 <= len(seq) <= ctx:
+            raise ValueError(f"sequence length {len(seq)} must be between 2 and {ctx}")
+    order = sorted(range(len(sequences)), key=lambda i: -len(sequences[i]))
+    nll = np.zeros(len(sequences), dtype=np.float64)
+    count = np.zeros(len(sequences), dtype=np.int64)
+    for start in range(0, len(order), batch_size):
+        rows = order[start : start + batch_size]
+        width = max(len(sequences[i]) - 1 for i in rows)
+        xb = torch.zeros((len(rows), width), dtype=torch.long)
+        yb = torch.full((len(rows), width), _IGNORE, dtype=torch.long)
+        for r, i in enumerate(rows):
+            seq = sequences[i]
+            xb[r, : len(seq) - 1] = torch.tensor(seq[:-1], dtype=torch.long)
+            yb[r, : len(seq) - 1] = torch.tensor(seq[1:], dtype=torch.long)
+        logits, _ = model(xb)
+        per_token = F.cross_entropy(
+            logits.reshape(-1, logits.size(-1)),
+            yb.reshape(-1),
+            ignore_index=_IGNORE,
+            reduction="none",
+        ).reshape(len(rows), width)
+        row_nll = per_token.double().sum(dim=1).numpy()
+        for r, i in enumerate(rows):
+            nll[i] = row_nll[r]
+            count[i] = len(sequences[i]) - 1
+    return nll, count
