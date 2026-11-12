@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -38,7 +39,7 @@ def main() -> None:
     layer_of = np.repeat(np.arange(6), 8)
     original = dict(headscore.THRESHOLDS)
     out: dict[str, object] = {"note": "post hoc, not preregistered", "variants": {}}
-    variants: dict[str, object] = {}
+    variants: dict[str, Any] = {}
     for name, change in VARIANTS.items():
         headscore.THRESHOLDS.update({**original, **change})
         rep = evaluate_predictions(confidence, scores, layer_of)
