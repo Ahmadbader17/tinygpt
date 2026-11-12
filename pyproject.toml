@@ -58,7 +58,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.mypy]
 strict = true
-files = ["src"]
+files = ["src", "experiments"]
 plugins = []
 
 [[tool.mypy.overrides]]

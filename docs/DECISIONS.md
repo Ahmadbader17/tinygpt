@@ -46,3 +46,11 @@
 - **Defaults for a small free host:** `TINYGPT_NUM_THREADS=2`, `TINYGPT_MAX_CONCURRENCY=1` (a free Space has 2 vCPUs). Space latency is unmeasured.
 - **Image size:** `matplotlib` is a runtime dependency (plots only, DESIGN D9) so the image carries it; torch CPU dominates the size anyway (about 1 GB `.venv`).
 - **Licence caveat:** code and weights are MIT; the data is CDLA-Sharing-1.0. The model card says so and points to the dataset card. Whether the data licence imposes anything on trained weights is a legal question to confirm, not something decided here.
+
+## 0010: Weight Space Programming study as a separate research harness
+- **Context:** Ahmad asked for a small replication of "Sparks of Weight-Space Programming" (Takehi et al., 2 Nov 2026) on the published checkpoint, on branch `exp/weight_space_programming`. DESIGN.md does not call for it, so the scope guard applies.
+- **Decision:** harness code lives in a new package `src/tinygpt/wsp/` (typed, under mypy strict and pytest like the rest); the plan, edit scripts, journals and result files live in `experiments/wsp/`; the report goes to `docs/WSP_REPORT.md`. `mypy` now also checks `experiments/`. No new dependency.
+- **Layering:** `tinygpt.wsp` imports `model`, `tokenizer` and `data`; nothing in the core library, the CLI or `serving` imports it. The original checkpoint and `main` are never modified; edited weights are written under `runs/wsp/` (gitignored) and are rebuilt by scripts.
+- **Why a second sampler (`wsp/generation.py`):** the final evaluation generates about 70,000 stories. The repo's `generate` has no KV cache and stops a batch only when every row ends, so it would take many hours; the cached sampler does 1,500 stories in under 2 minutes. The evaluation sampler computes the same distribution (temperature, top-k) with a KV cache and common random numbers, and a test pins it to `GPT.forward` and to greedy `generate`.
+- **Alternatives:** a separate repo (rejected: the study must run from a clean clone of this one); scripts only, no package (rejected: the metrics and the budgeted forward function need tests and types).
+- **Consequences:** CLAUDE.md's teaching protocol (phase briefings, `docs/LEARNING.md` entries) is not applied to this study; it follows the phases and stop points of Ahmad's study brief instead. `experiments/wsp/PLAN.md` is the spec for it.
