@@ -9,7 +9,7 @@ import torch
 from tinygpt.config import load_config
 from tinygpt.model import GPT
 from tinygpt.tokenizer import BPETokenizer
-from tinygpt.wsp.activations import forward_with_attention
+from tinygpt.wsp.activations import CAPTURE_KINDS, forward_with_attention
 from tinygpt.wsp.generation import DecodeConfig, generate_all
 from tinygpt.wsp.sandbox import (
     MAX_READ_LENGTH,
@@ -19,6 +19,7 @@ from tinygpt.wsp.sandbox import (
     Sandbox,
     SealedAccessError,
     guard_path,
+    init_budget,
 )
 from tinygpt.wsp.scoring import sequence_nll
 
@@ -148,6 +149,10 @@ def test_read_rejects_bad_input(tmp_path: Path, checkpoint: tuple[Path, Path]) -
         sb.read(ckpt, [[1, 512]], purpose="bad token")
     with pytest.raises(ValueError, match="tokens"):
         sb.read(ckpt, [[1] * (MAX_READ_LENGTH + 1)], purpose="too long")
+    with pytest.raises(ValueError, match="unknown capture"):
+        sb.read(ckpt, [[1, 2, 3]], purpose="bad kind", capture=("gradients",), layers=(0,))
+    with pytest.raises(ValueError, match="equal length"):
+        sb.read(ckpt, [[1, 2, 3], [1, 2]], purpose="ragged", capture=("logits",))
     assert sb.used == 0  # invalid input is rejected before a pass is spent
 
 
@@ -158,8 +163,8 @@ def test_attention_capture_is_causal_and_normalised(
     sb = Sandbox(tmp_path / "w", role="editor", limit=3, tokenizer_path=tok)
     seqs = [[5, 9, 12, 40, 41], [7, 7, 8, 8, 9]]
     got = sb.read(ckpt, seqs, purpose="attention check", attention_layers=(0, 1))
-    with np.load(got["attention_file"]) as data:
-        layer0 = data["layer0"]
+    with np.load(got["capture_file"]) as data:
+        layer0 = data["attn0"]
     assert layer0.shape == (2, CFG.n_head, 5, 5)
     assert np.allclose(layer0.sum(axis=-1), 1.0, atol=1e-5)
     assert np.all(np.triu(layer0[0, 0], k=1) == 0)
@@ -220,3 +225,58 @@ def test_sequence_nll_rejects_out_of_range_lengths(checkpoint: tuple[Path, Path]
     model = GPT.from_pretrained(ckpt).eval()
     with pytest.raises(ValueError):
         sequence_nll(model, [[5]])
+
+
+def test_captured_pieces_add_up_to_the_residual_stream(
+    tmp_path: Path, checkpoint: tuple[Path, Path]
+) -> None:
+    ckpt, tok = checkpoint
+    sb = Sandbox(tmp_path / "w", role="editor", limit=3, tokenizer_path=tok)
+    seqs = [[5, 9, 12, 40, 41, 7], [7, 7, 8, 8, 9, 3]]
+    got = sb.read(
+        ckpt,
+        seqs,
+        purpose="capture check",
+        capture=(*CAPTURE_KINDS, "logits", "token_loss"),
+        layers=(0, 1),
+    )
+    model = GPT.from_pretrained(ckpt).eval()
+    with np.load(got["capture_file"]) as data:
+        a = {k: torch.from_numpy(data[k]) for k in data.files}
+    bias = model.blocks[1].attn.proj.bias
+    # the heads' separate writes, plus the bias, are the attention sublayer's output
+    assert torch.allclose(a["head_out1"].sum(dim=1) + bias, a["attn_out1"], atol=1e-5)
+    assert torch.allclose(a["resid_pre1"] + a["attn_out1"], a["resid_mid1"], atol=1e-5)
+    assert torch.allclose(a["resid_mid1"] + a["mlp_out1"], a["resid_post1"], atol=1e-5)
+    assert torch.allclose(a["resid_post0"], a["resid_pre1"])
+    assert a["mlp_hidden0"].shape == (2, 6, 4 * CFG.d_model)
+    with torch.inference_mode():
+        ref, _ = model(torch.tensor(seqs))
+    assert torch.allclose(a["logits"], ref, atol=1e-5)
+    # per-token losses sum to the reported sequence loss
+    summed = a["token_loss"].double().sum(dim=1)
+    assert torch.allclose(summed, torch.tensor(got["nll"], dtype=torch.float64), atol=1e-4)
+
+
+def test_editor_budget_comes_from_the_harness_record(
+    tmp_path: Path, checkpoint: tuple[Path, Path]
+) -> None:
+    ckpt, tok = checkpoint
+    work = tmp_path / "ws" / "work"
+    genesis = init_budget(work, limit=2)
+    # the editor asks for more; the harness record wins
+    sb = Sandbox(work, role="someone-else", limit=1000, tokenizer_path=tok)
+    assert sb.limit == 2 and sb.role == "editor"
+    sb.read(ckpt, [[5, 9, 12]], purpose="one")
+    sb.read(ckpt, [[5, 9, 12]], purpose="two")
+    with pytest.raises(BudgetExceeded):
+        Sandbox.open(work, tokenizer_path=tok).read(ckpt, [[5, 9, 12]], purpose="three")
+    assert sb.ledger.records()[0]["hash"] == genesis
+    with pytest.raises(LedgerError):
+        init_budget(work, limit=50)  # a budget cannot be issued twice
+
+
+def test_open_needs_a_harness_budget(tmp_path: Path, checkpoint: tuple[Path, Path]) -> None:
+    _, tok = checkpoint
+    with pytest.raises(LedgerError, match="no budget record"):
+        Sandbox.open(tmp_path / "plain", tokenizer_path=tok)

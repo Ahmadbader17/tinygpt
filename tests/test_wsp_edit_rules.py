@@ -13,14 +13,22 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
-RULED_DIRS = (REPO / "experiments" / "wsp" / "edits", REPO / "experiments" / "wsp" / "analysis")
+RULED_DIRS = (
+    REPO / "experiments" / "wsp" / "edits",
+    REPO / "experiments" / "wsp" / "analysis",
+    REPO / "experiments" / "wsp" / "logs",  # the editors' own scripts are archived here
+)
 
 FORBIDDEN_MODULES = (
     "torch.optim",
     "sklearn",
     "scipy.optimize",
     "tinygpt.training",
+    "tinygpt.inference",
+    "tinygpt.model",
     "tinygpt.wsp.scoring",
+    "tinygpt.wsp.activations",
+    "tinygpt.wsp.evaluate",
 )
 FORBIDDEN_NAMES = {
     "backward",
@@ -39,6 +47,16 @@ FORBIDDEN_NAMES = {
     "solve",
     "cholesky_solve",
     "linear_regression",
+    # running the model anywhere but through the sandbox (rule 4)
+    "GPT",
+    "from_pretrained",
+    "generate_all",
+    "generate_batch",
+    "forward_capture",
+    "forward_with_attention",
+    "story_nll",
+    "sequence_nll",
+    "scaled_dot_product_attention",
 }
 FORBIDDEN_STRINGS = ("sealed", "GPT4-valid", "TinyStoriesV2")
 
@@ -94,6 +112,9 @@ def test_the_scan_catches_each_forbidden_pattern() -> None:
         "w = torch.linalg.pinv(a) @ b": "pinv",
         "from scipy.optimize import minimize": "scipy.optimize",
         "path = 'data/sealed/x.txt'": "sealed",
+        "from tinygpt.model import GPT": "tinygpt.model",
+        "m = GPT.from_pretrained(p)": "from_pretrained",
+        "from tinygpt.wsp.generation import generate_all": "generate_all",
         "name = 'TinyStoriesV2-GPT4-valid.txt'": "TinyStoriesV2",
     }
     for source, marker in bad.items():

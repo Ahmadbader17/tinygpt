@@ -149,3 +149,26 @@ def per_prompt_stats(generations: Sequence[Sequence[Sequence[int]]]) -> dict[str
         rows["rep4"].append(float(np.mean([repeated_ngram_fraction(t, 4) for t in runs])))
         rows["length"].append(float(np.mean([len(t) for t in runs])))
     return {name: np.asarray(values, dtype=np.float64) for name, values in rows.items()}
+
+
+def bootstrap_recovery(
+    nll_damaged: FloatArray,
+    nll_repaired: FloatArray,
+    nll_clean: FloatArray,
+    n_boot: int = N_BOOT,
+    seed: int = BOOT_SEED,
+    alpha: float = 0.05,
+) -> Interval:
+    """Share of the loss a fault cost that a repair won back, with a bootstrap over stories.
+
+    recovery = (loss damaged - loss repaired) / (loss damaged - loss clean). All three models
+    are scored on the same stories, so the token counts cancel and the ratio of summed NLL
+    differences is the ratio of loss differences. 1 is a full repair, 0 is no change, and a
+    negative value means the "repair" made things worse.
+    """
+    won = np.asarray(nll_damaged, dtype=np.float64) - np.asarray(nll_repaired, dtype=np.float64)
+    lost = np.asarray(nll_damaged, dtype=np.float64) - np.asarray(nll_clean, dtype=np.float64)
+    idx = _resample_indices(len(won), n_boot, seed)
+    ratios = won[idx].sum(axis=1) / lost[idx].sum(axis=1)
+    low, high = np.quantile(ratios, [alpha / 2, 1 - alpha / 2])
+    return Interval(float(won.sum() / lost.sum()), float(low), float(high))

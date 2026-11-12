@@ -4,7 +4,9 @@ Three things are enforced here, not by convention:
 
 1. **Budget.** Every call to `read` or `generate` appends a line to a hash-chained ledger
    before it runs. The count comes from the ledger, so a new process cannot reset it. A call
-   beyond the limit is logged as refused and raises `BudgetExceeded`.
+   beyond the limit is logged as refused and raises `BudgetExceeded`. For an editor the
+   limit is the ledger's first record, written by the harness (`init_budget`), so the editor's
+   own code cannot choose it.
 2. **Sealed data.** Paths under the sealed directories, and any file whose name contains the
    official validation file's name, raise `SealedAccessError`.
 3. **No gradients.** Models are loaded with `requires_grad=False` and every call runs under
@@ -26,11 +28,12 @@ from typing import Any, Literal
 
 import numpy as np
 import torch
+import torch.nn.functional as F
 
 from tinygpt.model import GPT
 from tinygpt.model.gpt import WEIGHTS_FILE
 from tinygpt.tokenizer import BPETokenizer
-from tinygpt.wsp.activations import forward_with_attention
+from tinygpt.wsp.activations import CAPTURE_KINDS, forward_capture
 from tinygpt.wsp.generation import DecodeConfig, generate_all
 from tinygpt.wsp.metrics import has_loop, repeated_ngram_fraction
 from tinygpt.wsp.scoring import sequence_nll
@@ -116,6 +119,36 @@ class Ledger:
         """Forward passes this role has spent (refused calls are not counted)."""
         return sum(1 for r in self._records if r["role"] == role and r["status"] == "ok")
 
+    def config(self) -> dict[str, Any] | None:
+        """The budget record the harness wrote first, if this ledger has one."""
+        if self._records and self._records[0]["status"] == "config":
+            return self._records[0]
+        return None
+
+
+EDITOR_ROLE = "editor"
+
+
+def init_budget(workdir: Path, limit: int) -> str:
+    """Harness only: start a workspace ledger whose first record fixes the editor's budget.
+
+    Returns the record's hash; the harness keeps it to check later that the ledger an editor
+    hands back still starts with the same record.
+    """
+    ledger = Ledger(guard_path(workdir) / "ledger.jsonl")
+    if ledger.records():
+        raise LedgerError("the ledger already has records; a budget is set once, on an empty one")
+    record = ledger.append(
+        {
+            "role": "harness",
+            "kind": "config",
+            "status": "config",
+            "limit": limit,
+            "purpose": "forward-pass budget for the editor of this workspace",
+        }
+    )
+    return str(record["hash"])
+
 
 class Sandbox:
     """Budgeted, logged access to checkpoints.
@@ -135,8 +168,21 @@ class Sandbox:
         self.role = role
         self.limit = limit
         self.ledger = Ledger(self.workdir / "ledger.jsonl")
+        config = self.ledger.config()
+        if config is not None:  # a harness-issued budget overrides whatever the caller passed
+            self.role = EDITOR_ROLE
+            self.limit = int(config["limit"])
         self.tokenizer = BPETokenizer.load(guard_path(tokenizer_path))
         self._models: dict[str, GPT] = {}
+
+    @classmethod
+    def open(cls, workdir: Path, tokenizer_path: Path | None = None) -> Sandbox:
+        """Open an editor workspace's sandbox; the budget comes from the ledger's first record."""
+        workdir = Path(workdir)
+        if Ledger(workdir / "ledger.jsonl").config() is None:
+            raise LedgerError(f"{workdir} has no budget record; the harness creates workspaces")
+        tok = tokenizer_path if tokenizer_path is not None else workdir.parent / "tokenizer.json"
+        return cls(workdir, EDITOR_ROLE, None, tok)
 
     @property
     def used(self) -> int:
@@ -179,9 +225,16 @@ class Sandbox:
         sequences: list[list[int]],
         *,
         purpose: str,
+        capture: tuple[str, ...] = (),
+        layers: tuple[int, ...] = (),
         attention_layers: tuple[int, ...] = (),
     ) -> dict[str, Any]:
-        """Per-token loss of each sequence; optionally saves attention patterns to a file."""
+        """Loss of each sequence, and optionally activations saved to a file.
+
+        `capture` names kinds from `activations.CAPTURE_KINDS`, taken at `layers`; it may also
+        hold "logits" and "token_loss" (per-token loss, shape (rows, T-1)). `attention_layers`
+        is shorthand for capture=("attn",) at those layers. Capturing needs equal-length rows.
+        """
         if not 1 <= len(sequences) <= MAX_ROWS_PER_CALL:
             raise ValueError(f"read takes 1 to {MAX_ROWS_PER_CALL} sequences")
         vocab = self.tokenizer.vocab_size
@@ -190,14 +243,27 @@ class Sandbox:
                 raise ValueError(f"each sequence needs 2 to {MAX_READ_LENGTH} tokens")
             if min(seq) < 0 or max(seq) >= vocab:
                 raise ValueError("token id outside the vocabulary")
-        if attention_layers and len({len(s) for s in sequences}) != 1:
-            raise ValueError("attention capture needs sequences of equal length")
+        extra = {"logits", "token_loss"}
+        kinds = set(capture) - extra
+        unknown = kinds - set(CAPTURE_KINDS)
+        if unknown:
+            raise ValueError(f"unknown capture kinds {sorted(unknown)}")
+        if kinds and not layers:
+            raise ValueError("name the layers to capture at")
+        capturing = bool(capture) or bool(attention_layers)
+        if capturing and len({len(s) for s in sequences}) != 1:
+            raise ValueError("capturing needs sequences of equal length")
         model, sha = self._load(checkpoint)
         n = self._spend(
             "read",
             purpose,
             sha,
-            {"rows": len(sequences), "attention_layers": list(attention_layers)},
+            {
+                "rows": len(sequences),
+                "capture": sorted(capture),
+                "layers": list(layers),
+                "attention_layers": list(attention_layers),
+            },
         )
         nll, count = sequence_nll(model, sequences)
         result: dict[str, Any] = {
@@ -207,14 +273,24 @@ class Sandbox:
             "tokens": count.tolist(),
             "mean_nll": float(nll.sum() / count.sum()),
         }
-        if attention_layers:
+        if capturing:
             idx = torch.tensor(sequences, dtype=torch.long)
-            _, captured = forward_with_attention(model, idx, attention_layers)
-            path = self.outputs / f"attention_call{n:03d}.npz"
+            logits, captured = forward_capture(model, idx, kinds, layers)
+            arrays: dict[str, Any] = {key: value.numpy() for key, value in captured.items()}
+            if attention_layers:
+                _, attn = forward_capture(model, idx, ("attn",), attention_layers)
+                arrays.update({key: value.numpy() for key, value in attn.items()})
+            if "logits" in capture:
+                arrays["logits"] = logits.numpy()
+            if "token_loss" in capture:
+                arrays["token_loss"] = (
+                    F.cross_entropy(logits[:, :-1].transpose(1, 2), idx[:, 1:], reduction="none")
+                ).numpy()  # (rows, T-1): loss of token t+1 given tokens up to t
+            path = self.outputs / f"read_call{n:03d}.npz"
             self.outputs.mkdir(parents=True, exist_ok=True)
-            arrays: dict[str, Any] = {f"layer{k}": v.numpy() for k, v in captured.items()}
             np.savez(str(path), **arrays)
-            result["attention_file"] = str(path)
+            result["capture_file"] = str(path)
+            result["captured"] = sorted(arrays)
         return result
 
     @torch.inference_mode()
