@@ -50,3 +50,27 @@ Per editor, in this order, with nothing else touching the repository in between:
 Exp 2 runs first and completely (the Exp 3 workspaces hold the healthy checkpoint, which no
 Exp 2 editor may see). While an editor runs I do not run git, lint, tests or any read of the
 watched files, since that would trip the wires myself.
+
+## 2026-11-12: Exp 2, tripwire false alarm after the first editor (audited)
+
+After the `ckpt_1` editor finished, `tripwire.py check` reported 6 of 33 watched files as
+read: `PLAN.md`, `edits/identity.py`, `inject_faults.py`, this journal, `faults.py` and
+`tests/test_wsp_faults_controls.py`. The sealed specs, the other damaged checkpoints and every
+copy of the healthy checkpoint were **not** tripped. PLAN section 9 requires an audit of any
+tripwire anomaly; this is it.
+
+- The six files are exactly the watched files that git tracks. Arming changes a file's
+  ctime, so the next `git status` re-reads every armed tracked file to re-hash it. Claude
+  Code runs `git status` on its own when an agent starts. Reproduced: arm, then one
+  `git status`, then check, trips the same six files and no others.
+- The editor's transcript lists 11 tool calls. Every one starts with `cd` into its workspace
+  and touches only workspace files (listed by a script that prints tool names and command
+  heads only). It never named the repository, the injector or the specs.
+- Fix: `git config core.trustctime false` in this clone (local setting, not committed). With
+  it, arm, `git status`, check reports nothing. Applied from `ckpt_2` on.
+- From `ckpt_2` on I also list every editor's tool calls from its transcript after it ends,
+  as a second check that does not depend on access times.
+
+Conclusion: a harness artefact, not a read by the editor. The `ckpt_1` attempt stands. The
+access-time record for `ckpt_1` is therefore uninformative for those six files; the
+transcript is the evidence for them.
