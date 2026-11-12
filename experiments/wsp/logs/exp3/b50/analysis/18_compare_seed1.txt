@@ -1,0 +1,15 @@
+rows 310
+base       loop=0.2774  long=0.0032  rep4=0.0289  rep2=0.1801  len=158.3000  eot=0.7774
+v2         loop=0.1645  long=0.0032  rep4=0.0207  rep2=0.1595  len=159.2903  eot=0.7677
+   loop  diff -0.1129  95% CI [-0.1742, -0.0548]   relative -40.7%
+   rep4  diff -0.0082  95% CI [-0.0120, -0.0044]   relative -28.4%
+   rep2  diff -0.0206  95% CI [-0.0287, -0.0126]   relative -11.4%
+   len   diff +0.9903  95% CI [-3.9968, +5.8774]   relative +0.6%
+--- both seeds pooled (620 rows)
+rows 620
+base       loop=0.2613  long=0.0048  rep4=0.0282  rep2=0.1800  len=159.4823  eot=0.7597
+v2         loop=0.1710  long=0.0032  rep4=0.0213  rep2=0.1623  len=161.8355  eot=0.7419
+   loop  diff -0.0903  95% CI [-0.1339, -0.0452]   relative -34.6%
+   rep4  diff -0.0069  95% CI [-0.0097, -0.0042]   relative -24.6%
+   rep2  diff -0.0177  95% CI [-0.0232, -0.0121]   relative -9.8%
+   len   diff +2.3532  95% CI [-1.2000, +5.8404]   relative +1.5%

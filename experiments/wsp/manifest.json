@@ -1,0 +1,485 @@
+{
+ "exp3": {
+  "unedited": {
+   "checkpoint": "runs/wsp/original",
+   "sha256": "6d9615059a7d499ad645f2f310fef70f91388a4804714becb008c72d90cb86ec"
+  },
+  "attempts": [
+   {
+    "name": "b10",
+    "budget": 10,
+    "passes_used": 10,
+    "edited": true,
+    "controls": [
+     {
+      "name": "b10_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp3_b10/gauss_0",
+      "sha256": "040c97cee51345069391f6a7cea92bd374c3169dc172df0fc0502c09ddf91b51",
+      "relative_l2": 0.019251520697386327
+     },
+     {
+      "name": "b10_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp3_b10/gauss_1",
+      "sha256": "db2e71d19077a9f4c2ce1cd4241340e7e42a52dd0c884b90aa0b39ea3cc05a8c",
+      "relative_l2": 0.01925152131661647
+     },
+     {
+      "name": "b10_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp3_b10/gauss_2",
+      "sha256": "1a997e9669116a01f44a84bb4feb62a6ed9b258e9897fdf1ef97c2a6b27f241c",
+      "relative_l2": 0.019251521093594615
+     },
+     {
+      "name": "b10_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp3_b10/gauss_3",
+      "sha256": "17a811319609d22b0edda3326ffad103b1c2ebd97ce903cba66911e96f9170ce",
+      "relative_l2": 0.01925152079844928
+     },
+     {
+      "name": "b10_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp3_b10/gauss_4",
+      "sha256": "836bec6c7ea355cf8194654ce7da1a33d5d8733ffc53b13dc8fd5c1e5e35d699",
+      "relative_l2": 0.019251521765722715
+     }
+    ],
+    "checkpoint": "runs/wsp/rebuild/exp3_b10/edited/copyheads_075",
+    "sha256": "ce8b7b855d8652d76bd878dd13c0c35d81f58eca04f90ac79e2ddbfa7c85793c"
+   },
+   {
+    "name": "b25",
+    "budget": 25,
+    "passes_used": 22,
+    "edited": true,
+    "controls": [
+     {
+      "name": "b25_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp3_b25/gauss_0",
+      "sha256": "276656a6283ae8bb96dc5f7073e592e5c25d4b306bfd1559da3d5d8dd9dcdbdb",
+      "relative_l2": 0.019558231585757285
+     },
+     {
+      "name": "b25_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp3_b25/gauss_1",
+      "sha256": "61069985a5916b1384ffc2cd918834b2b7fd0c97ecd7fbf3a753d62bb92dea2c",
+      "relative_l2": 0.019558231393121947
+     },
+     {
+      "name": "b25_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp3_b25/gauss_2",
+      "sha256": "796137a4fa6145d8ee7e1d73b6c7fa4c33b5437a5b7a57ceeb1d1418982bffcc",
+      "relative_l2": 0.019558231996600332
+     },
+     {
+      "name": "b25_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp3_b25/gauss_3",
+      "sha256": "c99d975ac0dc7f082240cfb1e1ac7afbfd8b0829a4964443816d1d9467bab11a",
+      "relative_l2": 0.019558231768603464
+     },
+     {
+      "name": "b25_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp3_b25/gauss_4",
+      "sha256": "b999b12b7fd4ab1f7d9eb4b3755b7eb532d10b83f56e9b6cdf86db7e3218f78f",
+      "relative_l2": 0.01955823136422138
+     }
+    ],
+    "checkpoint": "runs/wsp/rebuild/exp3_b25/edited/copy_heads_08",
+    "sha256": "4afd606117bf379052eb9f60bd99f449ffad22cef738d6b0d40b5b8033e47020"
+   },
+   {
+    "name": "b50",
+    "budget": 50,
+    "passes_used": 40,
+    "edited": true,
+    "controls": [
+     {
+      "name": "b50_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp3_b50/gauss_0",
+      "sha256": "15b71667f9e08b2eb4789f64a853f7aef40ec6250642e6601306d051f5bfc516",
+      "relative_l2": 0.02058416850526018
+     },
+     {
+      "name": "b50_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp3_b50/gauss_1",
+      "sha256": "92ffaaf26b9ee51b413589ed95b701a17453ed020816efe369d8fcc417f78a52",
+      "relative_l2": 0.020584168217955008
+     },
+     {
+      "name": "b50_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp3_b50/gauss_2",
+      "sha256": "e21856fd114b15ca7992ca7fac2f6f9b2ff35afc0c59138fa65357a9e6865b72",
+      "relative_l2": 0.02058416875319752
+     },
+     {
+      "name": "b50_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp3_b50/gauss_3",
+      "sha256": "a42438438735467d4f33875b56fce67c1fb459c3f042b944807b9081004c425f",
+      "relative_l2": 0.020584168994673756
+     },
+     {
+      "name": "b50_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp3_b50/gauss_4",
+      "sha256": "24a1ee918ee51a697caa7500588cae5f79b0ea3492baf4b5eee2894ea835af59",
+      "relative_l2": 0.020584168244762245
+     }
+    ],
+    "checkpoint": "runs/wsp/rebuild/exp3_b50/edited/copy8_x080",
+    "sha256": "0bae6140301531717336d1e42ef29ab3bcc41336016eb0502455e830586153d6"
+   }
+  ]
+ },
+ "exp2": {
+  "clean": {
+   "checkpoint": "runs/wsp/original",
+   "sha256": "6d9615059a7d499ad645f2f310fef70f91388a4804714becb008c72d90cb86ec"
+  },
+  "specs": "runs/wsp/sealed/exp2/specs.json",
+  "specs_sha256": "a8261cd8db84c97401b0da11b776b8ad87fba4c2c9ffdbc479da519118956606",
+  "cases": [
+   {
+    "name": "ckpt_1",
+    "passes_used": 4,
+    "damaged": {
+     "checkpoint": "runs/wsp/sealed/exp2/ckpt_1",
+     "sha256": "38ca7074c5eb89c4a90526fc75e8a133679976a53e66f03f491a4d1579071e93"
+    },
+    "repaired": {
+     "checkpoint": "runs/wsp/rebuild/exp2_ckpt_1/repaired",
+     "sha256": "7302069e4c6fe029413dba9e41658d1e02e1b8110552761b562612f8ccce41d4"
+    },
+    "diagnosis": "experiments/wsp/logs/exp2/ckpt_1/diagnosis.json",
+    "controls": [
+     {
+      "name": "ckpt_1_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_1/gauss_0",
+      "sha256": "1cb6aa7d2cd33e98896056fec25362e454ce76efa507ea43d6b167d7e5cd859e",
+      "relative_l2": 0.23309412294602685
+     },
+     {
+      "name": "ckpt_1_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_1/gauss_1",
+      "sha256": "641a06d38e52fc9894d576c77e1a8ce81caafda078ae8264e14b3e723567eceb",
+      "relative_l2": 0.2330941158517982
+     },
+     {
+      "name": "ckpt_1_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_1/gauss_2",
+      "sha256": "ea14daef0ce0159dfb429ea0aa244e638ba01ca211969bc497e8e3232ab31b32",
+      "relative_l2": 0.23309410048457158
+     },
+     {
+      "name": "ckpt_1_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_1/gauss_3",
+      "sha256": "9ce9c6ca03ba7d3d862ff12f7ff301589cbd6f0ccaf07b518679394163a0666c",
+      "relative_l2": 0.23309411397292126
+     },
+     {
+      "name": "ckpt_1_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_1/gauss_4",
+      "sha256": "d55388b8e6b50fb316fc64272501137e9fed3eab7b77610cb30639f362d236e8",
+      "relative_l2": 0.23309410686494308
+     }
+    ]
+   },
+   {
+    "name": "ckpt_2",
+    "passes_used": 4,
+    "damaged": {
+     "checkpoint": "runs/wsp/sealed/exp2/ckpt_2",
+     "sha256": "353caf6aa644f4e1417d0461f4b3faf925e85ace4846215655fb9bbb8098aa8a"
+    },
+    "repaired": {
+     "checkpoint": "runs/wsp/rebuild/exp2_ckpt_2/repaired",
+     "sha256": "2566a60ba70f47c1466178757d833d1adb1112666104ee8ad5f383da933483cb"
+    },
+    "diagnosis": "experiments/wsp/logs/exp2/ckpt_2/diagnosis.json",
+    "controls": [
+     {
+      "name": "ckpt_2_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_2/gauss_0",
+      "sha256": "8f3cce1fc3690220f361c5174f089e4e632895b0bd3a20ad2c122ae1c1d06e60",
+      "relative_l2": 0.02635868657377383
+     },
+     {
+      "name": "ckpt_2_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_2/gauss_1",
+      "sha256": "9a933266077b6e3b071510233d1ca1ff59437ab1828f9c15b64d91d634d57aca",
+      "relative_l2": 0.026358685989130808
+     },
+     {
+      "name": "ckpt_2_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_2/gauss_2",
+      "sha256": "56afef49939fe2e377895303a3591df9a08de3778d672f8981de605c2a4f3f64",
+      "relative_l2": 0.026358684293462872
+     },
+     {
+      "name": "ckpt_2_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_2/gauss_3",
+      "sha256": "e0e5eae64bae6feb954b4bca21f2cfdce18846d6f561bf292b4e827a9ad7851f",
+      "relative_l2": 0.026358685966533176
+     },
+     {
+      "name": "ckpt_2_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_2/gauss_4",
+      "sha256": "cc4b9d73780dec1f6f5a39c7ed7d395d65e76b66107836b280e5315d95e33eee",
+      "relative_l2": 0.026358684839756157
+     }
+    ]
+   },
+   {
+    "name": "ckpt_3",
+    "passes_used": 8,
+    "damaged": {
+     "checkpoint": "runs/wsp/sealed/exp2/ckpt_3",
+     "sha256": "1082c4b52de931995672e775334341bd195c0d49244a3e8b6dae5b85bc07ec95"
+    },
+    "repaired": {
+     "checkpoint": "runs/wsp/rebuild/exp2_ckpt_3/repaired",
+     "sha256": "8d84d611168d92257a4afeb3d42a976c03abd1c2359c908e8b932e82d940ddd0"
+    },
+    "diagnosis": "experiments/wsp/logs/exp2/ckpt_3/diagnosis.json",
+    "controls": [
+     {
+      "name": "ckpt_3_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_3/gauss_0",
+      "sha256": "60b84097e8c3080079063819ea9b670e2adb729b04e9bbc26793afd5a7da1062",
+      "relative_l2": 0.09404142278949593
+     },
+     {
+      "name": "ckpt_3_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_3/gauss_1",
+      "sha256": "37889050e762c1245ef619e6291349ef03063ddd6b25f066a5fb71417b081596",
+      "relative_l2": 0.09404142303977715
+     },
+     {
+      "name": "ckpt_3_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_3/gauss_2",
+      "sha256": "7e78a8146b30850888dd2d78865e5be5d284a3835657d2f8a0cda89d5cce75ae",
+      "relative_l2": 0.09404142617973728
+     },
+     {
+      "name": "ckpt_3_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_3/gauss_3",
+      "sha256": "5af63ee331893be41d9b019be542d444a2d153f0da95de4053282e2dcf038672",
+      "relative_l2": 0.09404142283982828
+     },
+     {
+      "name": "ckpt_3_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_3/gauss_4",
+      "sha256": "e8b084319a1e00eed58fc38d125b8bf11f00a8440fbe3150af9fd803a473d130",
+      "relative_l2": 0.09404142375596755
+     }
+    ]
+   },
+   {
+    "name": "ckpt_4",
+    "passes_used": 4,
+    "damaged": {
+     "checkpoint": "runs/wsp/sealed/exp2/ckpt_4",
+     "sha256": "b3fbe3943e3521cf98e2dd2b7e2cc6022c60a7ec6b0c55a91fa3d8bd98aeb650"
+    },
+    "repaired": {
+     "checkpoint": "runs/wsp/rebuild/exp2_ckpt_4/repaired",
+     "sha256": "1b7d8ac0006e97fe73f0cf1237fbe29101619f8c398617a35e9ead58bbc39613"
+    },
+    "diagnosis": "experiments/wsp/logs/exp2/ckpt_4/diagnosis.json",
+    "controls": [
+     {
+      "name": "ckpt_4_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_0",
+      "sha256": "135fbd4073e293a3e255b46a8eef717c75d63f159de115d47392fa4e7aec896a",
+      "relative_l2": 0.25352207791066045
+     },
+     {
+      "name": "ckpt_4_lowrank_0",
+      "kind": "lowrank",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_0",
+      "sha256": "bded6d262a5f1f17705ce2c42040059c9e87111ea569a0c1bf2b4825fc3d2333",
+      "relative_l2": 0.2535220723603557
+     },
+     {
+      "name": "ckpt_4_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_1",
+      "sha256": "72803036ac22ca47c289df669eea36fb4cec8766836ccd6b5ea0a6b85e30a50b",
+      "relative_l2": 0.25352206777211145
+     },
+     {
+      "name": "ckpt_4_lowrank_1",
+      "kind": "lowrank",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_1",
+      "sha256": "1026332c92a1f823521542788828c7884a74faf203b1ad01d9fdf3c2885bac41",
+      "relative_l2": 0.25352207613791156
+     },
+     {
+      "name": "ckpt_4_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_2",
+      "sha256": "4ca37700d01d713908669f057a20bcae64c5da70ece7d5ff2dab941d2ec9f124",
+      "relative_l2": 0.25352205798338995
+     },
+     {
+      "name": "ckpt_4_lowrank_2",
+      "kind": "lowrank",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_2",
+      "sha256": "40b00cf299f7bd62f5eb8cee8d8f9927b14d341f63425a6e43487a3373afdf64",
+      "relative_l2": 0.253522059249438
+     },
+     {
+      "name": "ckpt_4_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_3",
+      "sha256": "c4311c7935631eb79e83bcbe46cb3781a9c75a17ab2d8184a519c6e6ee570dfc",
+      "relative_l2": 0.25352206096031
+     },
+     {
+      "name": "ckpt_4_lowrank_3",
+      "kind": "lowrank",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_3",
+      "sha256": "568a4d56389283fb37a403d9963eeddaddf38596575d988b5d8efa65c633ff60",
+      "relative_l2": 0.2535220684089783
+     },
+     {
+      "name": "ckpt_4_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_4",
+      "sha256": "b7fe090914ca00a2f9d55db96952eb133905e5d24c6b8e41cc509f84283e3a5d",
+      "relative_l2": 0.253522069834198
+     },
+     {
+      "name": "ckpt_4_lowrank_4",
+      "kind": "lowrank",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_4",
+      "sha256": "dcdbe9eb21866f0077f7086e4ee8b3ea494984e4aef8ea734e4d4ef258f89fda",
+      "relative_l2": 0.25352208271922766
+     }
+    ]
+   },
+   {
+    "name": "ckpt_5",
+    "passes_used": 5,
+    "damaged": {
+     "checkpoint": "runs/wsp/sealed/exp2/ckpt_5",
+     "sha256": "52a2b9cc82d7c0e67033a1c8ecbd858220a699776fb41b5406eaa4648495f0db"
+    },
+    "repaired": {
+     "checkpoint": "runs/wsp/rebuild/exp2_ckpt_5/repaired",
+     "sha256": "24119087dcc18a48a32fae20bc37d60bd6be5fca885a3836ac9c0dca6d04c01f"
+    },
+    "diagnosis": "experiments/wsp/logs/exp2/ckpt_5/diagnosis.json",
+    "controls": [
+     {
+      "name": "ckpt_5_gauss_0",
+      "kind": "gauss",
+      "seed": 0,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_0",
+      "sha256": "d2e1712a187d83c237f49cd032030a64df027878dc1674430f1367934862f5ce",
+      "relative_l2": 0.13134120187706888
+     },
+     {
+      "name": "ckpt_5_gauss_1",
+      "kind": "gauss",
+      "seed": 1,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_1",
+      "sha256": "1fa59fb273523c12eecfcc17acfe57bfa85acc56b3ea70d5253d0b5ebe05da4f",
+      "relative_l2": 0.13134120500152974
+     },
+     {
+      "name": "ckpt_5_gauss_2",
+      "kind": "gauss",
+      "seed": 2,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_2",
+      "sha256": "ea5198df953b7f3d538f68b4147a2cd7d993ee97426ec5feb537514c4c3d3199",
+      "relative_l2": 0.1313412087389926
+     },
+     {
+      "name": "ckpt_5_gauss_3",
+      "kind": "gauss",
+      "seed": 3,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_3",
+      "sha256": "1318e4dddba85ef9cec21713570970a983f863e4659c5c114c81075aa1e1ecac",
+      "relative_l2": 0.1313412087765242
+     },
+     {
+      "name": "ckpt_5_gauss_4",
+      "kind": "gauss",
+      "seed": 4,
+      "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_4",
+      "sha256": "9e90de6c336cb6a48c1a28a2e01373a02d2ea843d9ed5ce3b590dbe2917f30bc",
+      "relative_l2": 0.1313412105263761
+     }
+    ]
+   }
+  ]
+ }
+}

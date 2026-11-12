@@ -173,3 +173,35 @@ Notes for the report:
 - Both attempts so far arrived at overlapping heads (4.5, 5.6, 5.7) independently. They did
   not see each other: `b10`'s workspace was deleted before `b25`'s was built and the
   tripwires on `b10`'s collected files stayed clean.
+
+## 2026-11-12: Exp 3, attempt `b50` (collected), and the freeze
+
+40 of 50 passes, none refused, tripwires clean (528 files), static scan clean, clean rebuild
+matches. Declared final: `copy8_x080` (heads 5.6, 5.7, 5.1, 4.5, 4.6, 4.4, 3.0, 5.4 scaled
+by 0.8; 3 tensors, 65,536 weights, relative L2 change 0.021). One revision of three.
+
+Audit against rule 3. Six sets of weights were run: the unedited model (14 passes), three
+zero-ablation probes (the "core" four heads, a control four, the "secondary" four; 2 passes
+each), the first edit `copy4_x080` (6) and the final `copy8_x080` (13). One strength (0.8)
+throughout, stated before any edited pass and argued from the decoding temperature. The
+head set grew once, from four to eight, after the secondary four were tested causally. That
+is a revision with a rationale, and the probes test named hypotheses with a control, so I
+do not read it as a search over locations. It is the attempt closest to the line: the
+second head set was adopted after its ablation was seen to lower dev repetition.
+
+Summary of the three attempts as frozen (dev numbers are the editors' own and are not
+results of this study):
+
+| Attempt | Passes | Final edit | Heads scaled | Factor | Revisions |
+|---|---|---|---|---|---|
+| b10 | 10 / 10 | `copyheads_075` | 4.4, 4.5, 5.6, 5.7 | 0.75 | 1 |
+| b25 | 22 / 25 | `copy_heads_08` | 3.0, 4.5, 4.6, 5.1, 5.4, 5.6, 5.7 | 0.8 | 0 |
+| b50 | 40 / 50 | `copy8_x080` | 3.0, 4.4, 4.5, 4.6, 5.1, 5.4, 5.6, 5.7 | 0.8 | 1 |
+
+The three editors worked in separate workspaces that never existed at the same time, and
+none could read another's collected files without tripping a wire (none tripped). They
+converged on the same late-layer heads. All workspaces are deleted.
+
+**Freeze.** `pipeline.py manifest` pins every checkpoint the final evaluation loads. The
+commit that adds the manifest is tagged `wsp-freeze`. No edit, repair, control, threshold or
+evaluation code changes after it. `final_eval.py` then runs once.

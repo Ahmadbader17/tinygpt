@@ -1,0 +1,12 @@
+rows 310
+base       loop=0.2452  long=0.0065  rep4=0.0275  rep2=0.1798  len=160.6645  eot=0.7419
+v1         loop=0.2290  long=0.0000  rep4=0.0239  rep2=0.1697  len=161.9419  eot=0.7129
+   loop  diff -0.0161  95% CI [-0.0774, +0.0484]   relative -6.6%
+   rep4  diff -0.0036  95% CI [-0.0075, +0.0003]   relative -13.1%
+   rep2  diff -0.0101  95% CI [-0.0178, -0.0023]   relative -5.6%
+   len   diff +1.2774  95% CI [-3.5226, +6.1806]   relative +0.8%
+v2         loop=0.1774  long=0.0032  rep4=0.0218  rep2=0.1651  len=164.3806  eot=0.7161
+   loop  diff -0.0677  95% CI [-0.1290, -0.0065]   relative -27.6%
+   rep4  diff -0.0056  95% CI [-0.0095, -0.0017]   relative -20.5%
+   rep2  diff -0.0147  95% CI [-0.0226, -0.0070]   relative -8.2%
+   len   diff +3.7161  95% CI [-1.2067, +8.5420]   relative +2.3%

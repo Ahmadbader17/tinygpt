@@ -1,0 +1,10 @@
+test_ablate_core4 tensors touched 2 weights changed 32768 relative L2 0.07954
+test_ablate_control4 tensors touched 2 weights changed 32768 relative L2 0.05864
+pass3 base loss {"call": 3, "weights_sha256": "6d9615059a7d499ad645f2f310fef70f91388a4804714becb008c72d90cb86ec", "mean_nll": 1.6499893557179008}
+pass4 core4 ablated gen {"call": 4, "weights_sha256": "6f9826b3c53b2eed02a444c499ea50d517d2c5381fd7d7dd843b9abdeaa8f3c9", "generations_file": "/home/baderowski/wsp_workspaces/exp3_b50/work/outputs/generations_call004.json", "loop_rate": 0.109375, "rep4": 0.012382359795936358, "mean_length": 155.875, "eot_rate": 0.734375}
+pass5 core4 ablated loss {"call": 5, "weights_sha256": "6f9826b3c53b2eed02a444c499ea50d517d2c5381fd7d7dd843b9abdeaa8f3c9", "mean_nll": 1.7958897593200214}
+  delta vs base 0.14590040360212053
+pass6 control4 ablated gen {"call": 6, "weights_sha256": "04c0d474115e31bba49ba74520dba115ab9ce99ca2c43c802329b572ba8ec49f", "generations_file": "/home/baderowski/wsp_workspaces/exp3_b50/work/outputs/generations_call006.json", "loop_rate": 0.234375, "rep4": 0.023716997395177228, "mean_length": 162.578125, "eot_rate": 0.671875}
+pass7 control4 ablated loss {"call": 7, "weights_sha256": "04c0d474115e31bba49ba74520dba115ab9ce99ca2c43c802329b572ba8ec49f", "mean_nll": 1.6838265530049288}
+  delta vs base 0.03383719728702794
+used 7 remaining 43

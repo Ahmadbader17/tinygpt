@@ -1,0 +1,10 @@
+base greedy {"call": 39, "weights_sha256": "6d9615059a7d499ad645f2f310fef70f91388a4804714becb008c72d90cb86ec", "generations_file": "/home/baderowski/wsp_workspaces/exp3_b50/work/outputs/generations_call039.json", "loop_rate": 0.421875, "rep4": 0.11084694171649279, "mean_length": 165.09375, "eot_rate": 0.71875}
+v2 greedy {"call": 40, "weights_sha256": "0bae6140301531717336d1e42ef29ab3bcc41336016eb0502455e830586153d6", "generations_file": "/home/baderowski/wsp_workspaces/exp3_b50/work/outputs/generations_call040.json", "loop_rate": 0.28125, "rep4": 0.0434206556275656, "mean_length": 158.34375, "eot_rate": 0.875}
+used 40 remaining 10
+rows 64
+base       loop=0.4219  long=0.1406  rep4=0.1108  rep2=0.2673  len=165.0938  eot=0.7188
+v2         loop=0.2812  long=0.0156  rep4=0.0434  rep2=0.2036  len=158.3438  eot=0.8750
+   loop  diff -0.1406  95% CI [-0.2812, +0.0000]   relative -33.3%
+   rep4  diff -0.0674  95% CI [-0.1074, -0.0338]   relative -60.8%
+   rep2  diff -0.0637  95% CI [-0.1008, -0.0304]   relative -23.8%
+   len   diff -6.7500  95% CI [-15.0625, +1.6875]   relative -4.1%
