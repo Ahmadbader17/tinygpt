@@ -32,3 +32,21 @@ was never evaluated and all its files were deleted. It cost 2 harness passes on 
 checkpoint, whose only output I read was the list of returned keys.
 
 Deviations from the plan made here are in the PLAN change log (section 12).
+
+## 2026-11-12 (evening): Exp 2 and Exp 3 procedure, fixed before the injection
+
+Session resumed by the harness builder (Claude Fable 5.2, main session). `make check` green
+(218 passed) at `9adb19e`.
+
+Per editor, in this order, with nothing else touching the repository in between:
+
+1. `make_workspace.py` builds the workspace (budget written as the ledger's first record).
+2. `tripwire.py arm <profile>`.
+3. One fresh general-purpose subagent on Fable 5.2 receives the committed launch prompt with
+   only the workspace path filled in. No other text is added.
+4. `tripwire.py check`, then `pipeline.py collect`, `rebuild`, `controls`.
+5. The workspace is deleted, then the next one is built.
+
+Exp 2 runs first and completely (the Exp 3 workspaces hold the healthy checkpoint, which no
+Exp 2 editor may see). While an editor runs I do not run git, lint, tests or any read of the
+watched files, since that would trip the wires myself.

@@ -442,3 +442,8 @@ Change log:
     or saved activations exist there, so an edit whose values depend on data cannot be rebuilt.
   - The final evaluation flags the section 9 "too good" conditions automatically
     (`audit_triggers` in `final_eval.json`).
+- 2026-11-12, before the Exp 2 injection: the access-time tripwires also watch the earlier
+  editors' collected logs, archived edit scripts, rebuilt checkpoints and random controls
+  (commit `fe28f14`). Without this a later Exp 2 editor could have compared its damaged
+  checkpoint with an earlier rebuilt one unseen. Exp 3 attempts also run one after another,
+  each workspace deleted before the next is built, so attempts cannot read each other.
