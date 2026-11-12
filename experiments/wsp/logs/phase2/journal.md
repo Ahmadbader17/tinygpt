@@ -127,3 +127,28 @@ I have not opened the sealed specs. Whether these names are right, and what the 
 recover on sealed stories, is decided by `final_eval.py` after the freeze. The editors' own
 dev numbers (in their journals) are on 64-row samples and are not results of this study.
 No Exp 2 edit is changed after this point.
+
+## 2026-11-12: Exp 3, attempt `b10` (collected)
+
+10 of 10 passes, none refused, tripwires clean (328 files), clean rebuild matches the
+workspace checkpoint. Declared final: `copyheads_075` (heads 4.5, 4.4, 5.7, 5.6 scaled by
+0.75; 2 tensors, 32,768 weights, relative L2 change 0.019).
+
+My audit of the ledger against rule 3 (no search):
+
+- Weights run: unedited (4 passes), the four heads zeroed (2, a causal probe), factor 0.5
+  (1), factor 0.75 (3). So one location at three strengths. It is not a sweep in the sense
+  of the plan: the zeroing was declared a probe of "do these heads matter" before it ran,
+  0.5 was the first edit, and 0.75 is one revision with a written reason (0.5 cost
+  +0.0225 nats on 64 dev stories, over the tolerance; the step was halved, not solved for).
+  One of three revisions used. The factor was however chosen after seeing a dev loss, which
+  the editor states itself. I accept it as a revision and report it as such.
+- The four heads were chosen from activations captured in budgeted passes, which the rules
+  allow (passes test which component matters). The numbers written into the weights are the
+  existing weights times 0.75.
+- Static scan flag: `analysis/07_copy_mode_split.py` uses `pinv` on a head's output matrix
+  (weights) to express captured head outputs in the head's own basis. Analysis only; the
+  editor rejected the idea it was testing and no edit uses it. Listed with the audited cases.
+- The transcript's tool calls outside the workspace are reads of the agent's own tool-output
+  files and one `free`/`df`/`nproc`. Nothing of the repository.
+- Unused script `edits/final_gain_090.py` was never run through the model and is not final.

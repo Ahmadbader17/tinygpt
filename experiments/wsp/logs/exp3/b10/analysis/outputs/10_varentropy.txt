@@ -1,0 +1,3 @@
+mean loss 1.7626  mean entropy 1.7675 (calibration: entropy ~ loss)  mean varentropy 3.275
+first-order term of a rescale, mean(loss - entropy) = -0.0049 per unit (1-s)
+second-order prediction for s=0.9: dLoss ~ 0.0005 + 0.0164

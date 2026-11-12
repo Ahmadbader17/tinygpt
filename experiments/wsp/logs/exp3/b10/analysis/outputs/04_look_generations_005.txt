@@ -1,0 +1,41 @@
+n 64 loop 0.125 len 161.125
+--- prompt 3 len 148 rep4 0.028: '. The bird was'x3
+--- prompt 7 len 189 rep4 0.011: ' and said, "'x3
+--- prompt 10 len 131 rep4 0.016: ' her mom and dad'x3
+--- prompt 25 len 200 rep4 0.015: '!" Ben says.'x3
+--- prompt 51 len 176 rep4 0.012: ' to climb the tree'x3
+--- prompt 52 len 167 rep4 0.024: ' and said, "'x3
+--- prompt 57 len 200 rep4 0.025: ' help the bird.'x3
+--- prompt 60 len 183 rep4 0.022: '. Lily and Tom'x3
+most common repeated 4-grams over all generations:
+12 ' and said, "'
+4 ' said, "I'
+3 ' her mom and dad'
+2 '. He wanted to'
+2 '. The bird was'
+2 '!" Ben says.'
+2 ' and his friends were'
+2 ' to climb the tree'
+2 ' had lots of fun'
+2 ' lots of fun.'
+2 ' help the bird.'
+2 '. Lily and Tom'
+1 ' was very happy.'
+1 ', but he was'
+1 ', Tim. You'
+1 ' said, "Thank'
+1 ', "Thank you'
+1 ' "Thank you,'
+1 'Thank you, Lily'
+1 ' want to play with'
+1 ' the tree, they'
+1 ' tree, they saw'
+1 '. It was a'
+1 ' a real bird.'
+1 ' Remy and his friends'
+===== 4 'Once upon a time, there was a little' =>  girl named Lily. She had a big, soft teddy bear that she loved very much. One day, she went to the park to play with her friends.
+At the park, Lily saw a boy named Tim. Tim was sad because he lost his toy. Lily wanted to help him find his toy. She looked under the trees, behind the bushes, and in the sandbox. They looked and looked, but they could not find it.
+Finally, Lily had an idea. She asked her friends to help him look for the toy. They all looked all around the park and found the toy under a big tree. Tim was so happy! He said, "Thank you, Lily! You are very kind." Just then, a little dog came running up to them. The dog was happy to see them. They all played together and had a great day.
+===== 44 'Once upon a time, there was a flexible' =>  dog named Velvet. Lily liked to play with her friends in the park. They would run, jump, and have fun together. One day, while playing, they found a big box. The box had an open bow and many funny things inside.
+Lily and her friends were curious and wanted to see what was inside. They tried to open the box, but it was too hard. They were too small for them to lift. They tried and tried, but they could not lift it. Then, a wise old lady saw them and said, "Someone needs help. If we give up, we will get you a new home."
+Lily and her friends went to the new place. They found a small house, a big tree, and a window. They filled the house with toys and shared them with each other. The moral of the story is that when we help others, we can make our world a better place.

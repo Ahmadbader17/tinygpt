@@ -39,6 +39,7 @@ AUDITED_WEIGHT_ONLY = {
     "experiments/wsp/edits/exp2_ckpt_2/edits/surrogate_h1h7.py": ".pinv",
     "experiments/wsp/edits/exp2_ckpt_2/repair.py": ".pinv",
     "experiments/wsp/edits/exp2_ckpt_3/analysis/03_gram.py": ".lstsq",
+    "experiments/wsp/edits/exp3_b10/analysis/07_copy_mode_split.py": ".pinv",
 }
 
 

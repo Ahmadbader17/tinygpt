@@ -1,0 +1,48 @@
+L0H0: copy score sum(Re)/sum|.| = -0.03  n_pos=15  sum_pos=     22.8  sum_neg=    -24.7  top Re: 3 3 3 3 2
+L0H1: copy score sum(Re)/sum|.| =  0.02  n_pos=18  sum_pos=     25.2  sum_neg=    -24.0  top Re: 7 3 3 2 2
+L0H2: copy score sum(Re)/sum|.| =  0.47  n_pos=20  sum_pos=     48.6  sum_neg=     -8.8  top Re: 9 7 6 4 4
+L0H3: copy score sum(Re)/sum|.| =  0.79  n_pos=30  sum_pos=    240.8  sum_neg=     -3.6  top Re: 31 18 15 15 13
+L0H4: copy score sum(Re)/sum|.| =  0.49  n_pos=18  sum_pos=     57.9  sum_neg=    -15.1  top Re: 23 6 6 3 3
+L0H5: copy score sum(Re)/sum|.| =  0.76  n_pos=26  sum_pos=    177.6  sum_neg=    -13.5  top Re: 50 12 12 8 8
+L0H6: copy score sum(Re)/sum|.| =  0.84  n_pos=29  sum_pos=    209.9  sum_neg=     -7.0  top Re: 17 17 15 15 13
+L0H7: copy score sum(Re)/sum|.| =  0.90  n_pos=29  sum_pos=    235.2  sum_neg=     -1.8  top Re: 18 18 17 17 16
+L1H0: copy score sum(Re)/sum|.| = -0.65  n_pos= 7  sum_pos=     62.5  sum_neg=   -630.9  top Re: 33 12 7 5 5
+L1H1: copy score sum(Re)/sum|.| = -0.35  n_pos=11  sum_pos=    143.9  sum_neg=   -447.1  top Re: 63 13 13 11 10
+L1H2: copy score sum(Re)/sum|.| = -0.61  n_pos= 5  sum_pos=     31.2  sum_neg=   -361.1  top Re: 21 6 2 2 1
+L1H3: copy score sum(Re)/sum|.| = -0.47  n_pos=10  sum_pos=    175.2  sum_neg=   -608.3  top Re: 86 27 27 25 5
+L1H4: copy score sum(Re)/sum|.| = -0.32  n_pos= 6  sum_pos=     37.2  sum_neg=   -183.1  top Re: 11 11 8 5 2
+L1H5: copy score sum(Re)/sum|.| = -0.48  n_pos= 6  sum_pos=     98.6  sum_neg=   -382.4  top Re: 43 43 5 5 1
+L1H6: copy score sum(Re)/sum|.| =  0.09  n_pos=13  sum_pos=    305.2  sum_neg=   -236.6  top Re: 71 71 44 44 33
+L1H7: copy score sum(Re)/sum|.| =  0.16  n_pos=16  sum_pos=    398.5  sum_neg=   -235.4  top Re: 61 41 40 40 39
+L2H0: copy score sum(Re)/sum|.| = -0.08  n_pos=19  sum_pos=    428.9  sum_neg=   -517.0  top Re: 58 53 35 35 33
+L2H1: copy score sum(Re)/sum|.| = -0.48  n_pos=13  sum_pos=    237.4  sum_neg=   -924.0  top Re: 58 58 28 22 16
+L2H2: copy score sum(Re)/sum|.| = -0.28  n_pos=12  sum_pos=    246.2  sum_neg=   -495.3  top Re: 47 47 33 23 23
+L2H3: copy score sum(Re)/sum|.| = -0.49  n_pos=12  sum_pos=    126.1  sum_neg=   -631.1  top Re: 37 19 19 17 9
+L2H4: copy score sum(Re)/sum|.| = -0.50  n_pos=12  sum_pos=    192.4  sum_neg=   -768.0  top Re: 35 24 24 21 21
+L2H5: copy score sum(Re)/sum|.| = -0.40  n_pos=11  sum_pos=    217.0  sum_neg=   -724.0  top Re: 62 46 24 24 18
+L2H6: copy score sum(Re)/sum|.| = -0.58  n_pos=13  sum_pos=    178.5  sum_neg=   -937.0  top Re: 56 30 22 22 8
+L2H7: copy score sum(Re)/sum|.| = -0.46  n_pos=13  sum_pos=    224.0  sum_neg=   -807.8  top Re: 49 36 23 23 23
+L3H0: copy score sum(Re)/sum|.| =  0.34  n_pos=15  sum_pos=   1089.8  sum_neg=   -362.3  top Re: 160 160 124 89 89
+L3H1: copy score sum(Re)/sum|.| = -0.40  n_pos=12  sum_pos=    251.9  sum_neg=   -819.9  top Re: 45 45 27 21 21
+L3H2: copy score sum(Re)/sum|.| = -0.00  n_pos=22  sum_pos=    610.8  sum_neg=   -617.2  top Re: 85 64 55 55 48
+L3H3: copy score sum(Re)/sum|.| = -0.71  n_pos= 8  sum_pos=    109.5  sum_neg=  -1440.7  top Re: 20 20 12 12 11
+L3H4: copy score sum(Re)/sum|.| =  0.03  n_pos=18  sum_pos=    563.4  sum_neg=   -524.9  top Re: 84 60 45 45 42
+L3H5: copy score sum(Re)/sum|.| = -0.02  n_pos=15  sum_pos=    544.0  sum_neg=   -579.9  top Re: 80 73 73 53 49
+L3H6: copy score sum(Re)/sum|.| = -0.52  n_pos=13  sum_pos=    246.3  sum_neg=  -1127.8  top Re: 39 36 27 27 22
+L3H7: copy score sum(Re)/sum|.| = -0.65  n_pos= 8  sum_pos=    140.6  sum_neg=  -1326.0  top Re: 40 24 24 16 16
+L4H0: copy score sum(Re)/sum|.| =  0.24  n_pos=18  sum_pos=    857.4  sum_neg=   -431.1  top Re: 124 124 78 73 62
+L4H1: copy score sum(Re)/sum|.| = -0.35  n_pos=15  sum_pos=    534.9  sum_neg=  -1314.4  top Re: 99 99 66 66 46
+L4H2: copy score sum(Re)/sum|.| = -0.25  n_pos= 8  sum_pos=    314.8  sum_neg=   -700.9  top Re: 121 54 54 30 19
+L4H3: copy score sum(Re)/sum|.| = -0.14  n_pos=17  sum_pos=    488.5  sum_neg=   -710.1  top Re: 59 59 54 46 46
+L4H4: copy score sum(Re)/sum|.| = -0.13  n_pos=16  sum_pos=    784.2  sum_neg=  -1094.1  top Re: 149 80 80 67 67
+L4H5: copy score sum(Re)/sum|.| = -0.19  n_pos= 8  sum_pos=    736.5  sum_neg=  -1272.1  top Re: 499 71 71 31 29
+L4H6: copy score sum(Re)/sum|.| =  0.68  n_pos=26  sum_pos=   2359.0  sum_neg=   -188.3  top Re: 286 205 205 176 176
+L4H7: copy score sum(Re)/sum|.| =  0.04  n_pos=16  sum_pos=    643.2  sum_neg=   -567.8  top Re: 134 95 95 75 50
+L5H0: copy score sum(Re)/sum|.| =  0.55  n_pos=26  sum_pos=   1901.0  sum_neg=   -465.6  top Re: 295 222 164 164 157
+L5H1: copy score sum(Re)/sum|.| =  0.22  n_pos=18  sum_pos=   2040.9  sum_neg=  -1180.7  top Re: 324 324 226 200 200
+L5H2: copy score sum(Re)/sum|.| = -0.57  n_pos=10  sum_pos=    420.5  sum_neg=  -1944.8  top Re: 124 77 77 50 39
+L5H3: copy score sum(Re)/sum|.| =  0.13  n_pos=20  sum_pos=    959.2  sum_neg=   -693.4  top Re: 137 137 94 68 68
+L5H4: copy score sum(Re)/sum|.| = -0.12  n_pos=18  sum_pos=   1016.0  sum_neg=  -1371.6  top Re: 120 117 117 95 95
+L5H5: copy score sum(Re)/sum|.| =  0.08  n_pos=21  sum_pos=   1020.9  sum_neg=   -846.2  top Re: 140 116 99 83 83
+L5H6: copy score sum(Re)/sum|.| =  0.56  n_pos=23  sum_pos=   3496.2  sum_neg=   -704.3  top Re: 619 619 238 238 238
+L5H7: copy score sum(Re)/sum|.| =  0.36  n_pos=18  sum_pos=   3553.9  sum_neg=  -1229.2  top Re: 808 449 260 260 244

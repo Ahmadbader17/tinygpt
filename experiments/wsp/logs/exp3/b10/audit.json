@@ -1,0 +1,521 @@
+{
+ "workspace": "/home/baderowski/wsp_workspaces/exp3_b10",
+ "budget": 10,
+ "passes_used": 10,
+ "calls_refused": 0,
+ "within_budget": true,
+ "ledger_verifies": true,
+ "genesis_matches": true,
+ "ledger_final_hash": "6a9bf1c92a970388a89971019b7e32e5042bcfe3d09b9154ae41ab156cd0b899",
+ "calls": [
+  {
+   "n": 1,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "Baseline for paired comparison and source of model-written text: hypothesis that the unedited model, sampled at T=0.8/top-k 40 on the first 64 dev prompts, shows loop rate near 24% and that its loops are verbatim re-use of earlier 4-grams (to be attributed to heads in the next read)."
+  },
+  {
+   "n": 2,
+   "kind": "read",
+   "weights": "6d9615059a7d",
+   "purpose": "Hypothesis: on the model's own sampled text, the logit of tokens that complete an already-seen 4-gram is supplied by a small set of late attention heads that attend to the token following an earlier occurrence of the current token (induction/copy heads), not spread evenly over heads and MLPs. Captures attention, per-head outputs, MLP outputs and residuals at all layers to attribute repeat-token logits per component."
+  },
+  {
+   "n": 3,
+   "kind": "read",
+   "weights": "6d9615059a7d",
+   "purpose": "Hypothesis: on real stories the same late heads (L5H7, L5H6, L4H5, L5H1, L5H4) carry the copy-specific logit of 4-gram-repeating tokens, and the model is roughly calibrated there (its probability of the copied continuation matches how often real text takes it), so the excess repetition in samples comes from sharpened sampling of this copy pathway rather than from a miscalibrated one. Also gives the unedited per-token loss on these 64 stories as the paired baseline for testing edits."
+  },
+  {
+   "n": 4,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "Hypothesis: the excess repetition over real stories is produced by the sampler's sharpening (T=0.8), not by an over-active copy circuit: passes 2-3 showed the model's probability of a 4-gram-completing token is calibrated (slightly under-confident) on real text. Prediction: at T=1.0 with the same prompts, seed and top-k, loop rate and rep-4 fall to about the real-story level (0.19, 0.018) from 0.234 / 0.0255."
+  },
+  {
+   "n": 5,
+   "kind": "generate",
+   "weights": "555fb2cb7efa",
+   "purpose": "Causal test of the hypothesis 'heads L4H5, L4H4, L5H7, L5H6 drive repetition'. Their direct log-odds push toward 4-gram-completing tokens is small (about 0.27 logits summed) and later MLPs push the other way, so my prediction is that even removing them entirely leaves the loop rate near the baseline 0.234 (above 0.19), i.e. repetition is not localised in these heads. A large drop would refute that and justify a head edit."
+  },
+  {
+   "n": 6,
+   "kind": "read",
+   "weights": "c2e33039daf1",
+   "purpose": "Hypothesis: scaling heads L4H5, L4H4, L5H7, L5H6 by 0.5 (edit copyheads_half) raises real-story loss by less than 0.02 nats, because the cost of down-scaling a component of a trained model is second order; and whatever cost there is falls on tokens that legitimately repeat earlier text (names, noun phrases), which would show these heads are the model's in-context copy mechanism. Same 64 dev stories as pass 3, paired per token."
+  },
+  {
+   "n": 7,
+   "kind": "read",
+   "weights": "ce8b7b855d86",
+   "purpose": "Hypothesis (revision 1): the loss cost of scaling heads L4H5, L4H4, L5H7, L5H6 is second order in the step, so the factor 0.75 (edit copyheads_075, half the step of the rejected factor 0.5 which cost +0.0225) costs about a quarter of that, near +0.006 nats, well inside the 0.02 limit. Same 64 dev stories as passes 3 and 6, paired per token."
+  },
+  {
+   "n": 8,
+   "kind": "generate",
+   "weights": "ce8b7b855d86",
+   "purpose": "Hypothesis: scaling heads L4H5, L4H4, L5H7, L5H6 by 0.75 (edit copyheads_075, loss cost +0.006) lowers repetition under the standard decoder by about a quarter of the ablation effect: on the same 64 prompts and seed as pass 1 (loop 0.234, rep-4 0.0255) I predict loop rate about 0.21 and rep-4 about 0.022, with mean length unchanged (about 162). No change or a rise would mean the dose-response is not linear and the edit is not justified."
+  },
+  {
+   "n": 9,
+   "kind": "read",
+   "weights": "ce8b7b855d86",
+   "purpose": "Sampled generations are too noisy to resolve the expected ~10% effect of edit copyheads_075 (64 texts give +-0.008 on rep-4). Low-noise test of the same hypothesis on identical contexts: on the unedited model's own pass-1 texts, the edited model, under the standard decoder (T=0.8, top-k 40), assigns lower probability than the unedited model (pass-2 logits) to tokens that would complete an already-seen 4-gram. Prediction: the expected number of 4-gram-repeating tokens per position falls by roughly 5-15%; no fall would mean the edit is not justified."
+  },
+  {
+   "n": 10,
+   "kind": "read",
+   "weights": "555fb2cb7efa",
+   "purpose": "The factor-0.75 edit lowers the one-step sampler probability of completing a seen 4-gram by only 1.6% (pass 9). Hypothesis: the effect of scaling these four heads is linear in the step and the one-step measure understates sampled rep-4 by a constant factor of about 5 (as it does for temperature: -6.5% one-step vs -36% sampled at T=1.0). Prediction for the full ablation on the same contexts: one-step ratio between 0.90 and 0.94 (4 x 1.6% if linear; 10% if the factor 5 links it to the sampled -49%). A ratio far below 0.90 would mean the dose-response is convex and the 0.75 edit keeps less than a quarter of the ablation effect."
+  }
+ ],
+ "weights_run": [
+  "555fb2cb7efab8f35c8b28f46f8344a78c72da3b8515d03415c8a14812fdf134",
+  "6d9615059a7d499ad645f2f310fef70f91388a4804714becb008c72d90cb86ec",
+  "c2e33039daf11cd986ab33012f2dbc8137e1c41a45cc29a066b68b5ad802093e",
+  "ce8b7b855d8652d76bd878dd13c0c35d81f58eca04f90ac79e2ddbfa7c85793c"
+ ],
+ "static_scan": {
+  "analysis/01_overview.py": [],
+  "analysis/02_copy_scores.py": [],
+  "analysis/03_data_look.py": [],
+  "analysis/04_look_generations.py": [],
+  "analysis/05_attribute.py": [],
+  "analysis/06_ov_eigs.py": [],
+  "analysis/07_copy_mode_split.py": [
+   "line 39: uses .pinv"
+  ],
+  "analysis/08_selectivity.py": [],
+  "analysis/09_second_order.py": [],
+  "analysis/10_varentropy.py": [],
+  "analysis/11_paired.py": [],
+  "analysis/12_sampler_copy_prob.py": [],
+  "analysis/13_temperature_onestep.py": [],
+  "edits/copyheads_075.py": [],
+  "edits/copyheads_half.py": [],
+  "edits/final_gain_090.py": [],
+  "edits/probe_copyheads_ablate.py": [],
+  "passes/common.py": [],
+  "passes/gen_edit.py": [],
+  "passes/p01_baseline_generate.py": [],
+  "passes/p02_read_generated.py": [],
+  "passes/p03_read_real.py": [],
+  "passes/p04_generate_T1.py": [],
+  "passes/p05_probe_generate.py": [],
+  "passes/p09_read_edit_on_generated.py": [],
+  "passes/p10_read_probe_on_generated.py": [],
+  "passes/read_edit.py": []
+ },
+ "static_scan_clean": false,
+ "workspace_checkpoint_sha256": "ce8b7b855d8652d76bd878dd13c0c35d81f58eca04f90ac79e2ddbfa7c85793c",
+ "files": [
+  {
+   "path": "TASK.md",
+   "bytes": 8782
+  },
+  {
+   "path": "analysis/01_overview.py",
+   "bytes": 883
+  },
+  {
+   "path": "analysis/02_copy_scores.py",
+   "bytes": 2617
+  },
+  {
+   "path": "analysis/03_data_look.py",
+   "bytes": 1032
+  },
+  {
+   "path": "analysis/04_look_generations.py",
+   "bytes": 1265
+  },
+  {
+   "path": "analysis/05_attribute.py",
+   "bytes": 5069
+  },
+  {
+   "path": "analysis/06_ov_eigs.py",
+   "bytes": 1918
+  },
+  {
+   "path": "analysis/07_copy_mode_split.py",
+   "bytes": 2779
+  },
+  {
+   "path": "analysis/08_selectivity.py",
+   "bytes": 3204
+  },
+  {
+   "path": "analysis/09_second_order.py",
+   "bytes": 3872
+  },
+  {
+   "path": "analysis/10_varentropy.py",
+   "bytes": 928
+  },
+  {
+   "path": "analysis/11_paired.py",
+   "bytes": 1440
+  },
+  {
+   "path": "analysis/12_sampler_copy_prob.py",
+   "bytes": 2390
+  },
+  {
+   "path": "analysis/13_temperature_onestep.py",
+   "bytes": 1367
+  },
+  {
+   "path": "analysis/__pycache__/06_ov_eigs.cpython-312.pyc",
+   "bytes": 3602
+  },
+  {
+   "path": "analysis/outputs/01_overview.txt",
+   "bytes": 5323
+  },
+  {
+   "path": "analysis/outputs/02_copy_scores.txt",
+   "bytes": 4721
+  },
+  {
+   "path": "analysis/outputs/03_data_look.txt",
+   "bytes": 815
+  },
+  {
+   "path": "analysis/outputs/04_look_generations_001.txt",
+   "bytes": 2943
+  },
+  {
+   "path": "analysis/outputs/04_look_generations_004.txt",
+   "bytes": 1225
+  },
+  {
+   "path": "analysis/outputs/04_look_generations_005.txt",
+   "bytes": 2569
+  },
+  {
+   "path": "analysis/outputs/04_look_generations_008.txt",
+   "bytes": 1332
+  },
+  {
+   "path": "analysis/outputs/05_attribute_call002.txt",
+   "bytes": 6994
+  },
+  {
+   "path": "analysis/outputs/05_attribute_call003.txt",
+   "bytes": 6986
+  },
+  {
+   "path": "analysis/outputs/06_ov_eigs.txt",
+   "bytes": 5381
+  },
+  {
+   "path": "analysis/outputs/07_copy_mode_split_call002.txt",
+   "bytes": 1031
+  },
+  {
+   "path": "analysis/outputs/07_copy_mode_split_call003.txt",
+   "bytes": 1031
+  },
+  {
+   "path": "analysis/outputs/08_selectivity.txt",
+   "bytes": 4400
+  },
+  {
+   "path": "analysis/outputs/09_second_order.txt",
+   "bytes": 3526
+  },
+  {
+   "path": "analysis/outputs/10_varentropy.txt",
+   "bytes": 227
+  },
+  {
+   "path": "analysis/outputs/11_paired_001_004.txt",
+   "bytes": 604
+  },
+  {
+   "path": "analysis/outputs/11_paired_001_005.txt",
+   "bytes": 604
+  },
+  {
+   "path": "analysis/outputs/11_paired_001_008.txt",
+   "bytes": 604
+  },
+  {
+   "path": "analysis/outputs/12_sampler_copy_prob_call009.txt",
+   "bytes": 611
+  },
+  {
+   "path": "analysis/outputs/12_sampler_copy_prob_call010.txt",
+   "bytes": 611
+  },
+  {
+   "path": "analysis/outputs/13_temperature_onestep.txt",
+   "bytes": 210
+  },
+  {
+   "path": "checkpoint/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "checkpoint/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "checkpoint/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "dev/prompts.json",
+   "bytes": 45284
+  },
+  {
+   "path": "dev/stories.txt",
+   "bytes": 3992888
+  },
+  {
+   "path": "diagnosis.md",
+   "bytes": 6379
+  },
+  {
+   "path": "edited/copyheads_075/diff_summary.json",
+   "bytes": 14093
+  },
+  {
+   "path": "edited/copyheads_075/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "edited/copyheads_075/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "edited/copyheads_075/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "edited/copyheads_half/diff_summary.json",
+   "bytes": 14093
+  },
+  {
+   "path": "edited/copyheads_half/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "edited/copyheads_half/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "edited/copyheads_half/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "edited/final_gain_090/diff_summary.json",
+   "bytes": 14084
+  },
+  {
+   "path": "edited/final_gain_090/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "edited/final_gain_090/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "edited/final_gain_090/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "edited/probe_copyheads_ablate/diff_summary.json",
+   "bytes": 14108
+  },
+  {
+   "path": "edited/probe_copyheads_ablate/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "edited/probe_copyheads_ablate/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "edited/probe_copyheads_ablate/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "edits/copyheads_075.py",
+   "bytes": 1653
+  },
+  {
+   "path": "edits/copyheads_half.py",
+   "bytes": 1460
+  },
+  {
+   "path": "edits/final_gain_090.py",
+   "bytes": 1242
+  },
+  {
+   "path": "edits/probe_copyheads_ablate.py",
+   "bytes": 1417
+  },
+  {
+   "path": "final.txt",
+   "bytes": 14
+  },
+  {
+   "path": "harness_source/activations.py",
+   "bytes": 3763
+  },
+  {
+   "path": "harness_source/edits.py",
+   "bytes": 4757
+  },
+  {
+   "path": "harness_source/generation.py",
+   "bytes": 8605
+  },
+  {
+   "path": "harness_source/metrics.py",
+   "bytes": 7098
+  },
+  {
+   "path": "harness_source/sandbox.py",
+   "bytes": 14435
+  },
+  {
+   "path": "journal.md",
+   "bytes": 15005
+  },
+  {
+   "path": "model_source/__init__.py",
+   "bytes": 192
+  },
+  {
+   "path": "model_source/attention.py",
+   "bytes": 2820
+  },
+  {
+   "path": "model_source/gpt.py",
+   "bytes": 3892
+  },
+  {
+   "path": "model_source/layers.py",
+   "bytes": 1525
+  },
+  {
+   "path": "passes/__pycache__/common.cpython-312.pyc",
+   "bytes": 2064
+  },
+  {
+   "path": "passes/common.py",
+   "bytes": 1058
+  },
+  {
+   "path": "passes/gen_edit.py",
+   "bytes": 536
+  },
+  {
+   "path": "passes/p01_baseline_generate.py",
+   "bytes": 660
+  },
+  {
+   "path": "passes/p02_read_generated.py",
+   "bytes": 1469
+  },
+  {
+   "path": "passes/p03_read_real.py",
+   "bytes": 1279
+  },
+  {
+   "path": "passes/p04_generate_T1.py",
+   "bytes": 858
+  },
+  {
+   "path": "passes/p05_probe_generate.py",
+   "bytes": 867
+  },
+  {
+   "path": "passes/p09_read_edit_on_generated.py",
+   "bytes": 1210
+  },
+  {
+   "path": "passes/p10_read_probe_on_generated.py",
+   "bytes": 1309
+  },
+  {
+   "path": "passes/purposes/p06.txt",
+   "bytes": 431
+  },
+  {
+   "path": "passes/purposes/p07.txt",
+   "bytes": 343
+  },
+  {
+   "path": "passes/purposes/p08.txt",
+   "bytes": 441
+  },
+  {
+   "path": "passes/read_edit.py",
+   "bytes": 1801
+  },
+  {
+   "path": "tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "work/ledger.jsonl",
+   "bytes": 9467
+  },
+  {
+   "path": "work/outputs/generations_call001.json",
+   "bytes": 132737
+  },
+  {
+   "path": "work/outputs/generations_call004.json",
+   "bytes": 131854
+  },
+  {
+   "path": "work/outputs/generations_call005.json",
+   "bytes": 131452
+  },
+  {
+   "path": "work/outputs/generations_call008.json",
+   "bytes": 133591
+  },
+  {
+   "path": "work/outputs/p02_rows.json",
+   "bytes": 68262
+  },
+  {
+   "path": "work/outputs/p03_nll.json",
+   "bytes": 1574
+  },
+  {
+   "path": "work/outputs/p03_rows.json",
+   "bytes": 83090
+  },
+  {
+   "path": "work/outputs/read_call002.npz",
+   "bytes": 1608248402
+  },
+  {
+   "path": "work/outputs/read_call003.npz",
+   "bytes": 2080446546
+  },
+  {
+   "path": "work/outputs/read_call006.npz",
+   "bytes": 65554
+  },
+  {
+   "path": "work/outputs/read_call007.npz",
+   "bytes": 65554
+  },
+  {
+   "path": "work/outputs/read_call009.npz",
+   "bytes": 222298378
+  },
+  {
+   "path": "work/outputs/read_call010.npz",
+   "bytes": 222298378
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+positions with a repeatable trigram context: 722 of 10408
+sampler prob of completing a seen 4-gram there: unedited 0.4261  edited 0.4193  ratio 0.984
+expected 4-gram-repeat tokens per generated token: unedited 0.02956  edited 0.02909  (observed in these texts 0.02834)
+ratio edited/unedited, bootstrap over texts: 0.984  95% [0.978, 0.989]
+   unedited prob in [0,0.1): n= 299  unedited 0.020  edited 0.019
+   unedited prob in [0.1,0.5): n= 111  unedited 0.266  edited 0.251
+   unedited prob in [0.5,0.9): n= 128  unedited 0.713  edited 0.695
+   unedited prob in [0.9,1.01): n= 184  unedited 0.983  edited 0.980

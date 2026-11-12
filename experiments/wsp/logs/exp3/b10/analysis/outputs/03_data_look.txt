@@ -1,0 +1,11 @@
+<class 'list'> 310
+prompt lens [  0   0   0   0   2   3   0   2  40 210  40   8   5]
+'One day, a little boy named Tim went' [383, 327, 12, 259, 391, 497]
+'One day, a boy named Tim went to' [383, 327, 12, 259, 497, 402]
+'Once there was a little girl called Pip.' [430, 401, 283, 259, 391, 476]
+'John was a popular boy. He was always' [1743, 283, 259, 3195, 497, 14]
+'Once upon a time, there was a little' [430, 439, 259, 398, 12, 401]
+stories 5000
+len quantiles [137. 153. 178. 212. 271.] share>=255 0.1145
+real loop rate (first 200 tok) 0.193 rep4 0.017607794353078632
+'u don\'t have to be scared of the loud dog, I\'ll protect you". The mole felt so safe with the little girl. She was very kind and the mole soon came to trust her. He leaned against her and she kept him safe. The mole had found his best friend.'

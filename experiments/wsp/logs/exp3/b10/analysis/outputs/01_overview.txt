@@ -1,0 +1,89 @@
+wte.weight                       (4096, 256)    norm=63.320
+wpe.weight                       (256, 256)     norm=5.520
+blocks.0.ln1.weight              (256,)         norm=8.834
+blocks.0.ln1.bias                (256,)         norm=1.327
+blocks.0.attn.qkv.weight         (768, 256)     norm=21.511
+blocks.0.attn.qkv.bias           (768,)         norm=4.093
+blocks.0.attn.proj.weight        (256, 256)     norm=4.091
+blocks.0.attn.proj.bias          (256,)         norm=0.091
+blocks.0.ln2.weight              (256,)         norm=15.276
+blocks.0.ln2.bias                (256,)         norm=1.965
+blocks.0.mlp.fc.weight           (1024, 256)    norm=22.223
+blocks.0.mlp.fc.bias             (1024,)        norm=2.994
+blocks.0.mlp.proj.weight         (256, 1024)    norm=18.848
+blocks.0.mlp.proj.bias           (256,)         norm=0.774
+blocks.1.ln1.weight              (256,)         norm=12.190
+blocks.1.ln1.bias                (256,)         norm=1.488
+blocks.1.attn.qkv.weight         (768, 256)     norm=15.455
+blocks.1.attn.qkv.bias           (768,)         norm=4.951
+blocks.1.attn.proj.weight        (256, 256)     norm=8.315
+blocks.1.attn.proj.bias          (256,)         norm=0.598
+blocks.1.ln2.weight              (256,)         norm=16.140
+blocks.1.ln2.bias                (256,)         norm=3.837
+blocks.1.mlp.fc.weight           (1024, 256)    norm=24.370
+blocks.1.mlp.fc.bias             (1024,)        norm=2.656
+blocks.1.mlp.proj.weight         (256, 1024)    norm=18.443
+blocks.1.mlp.proj.bias           (256,)         norm=0.476
+blocks.2.ln1.weight              (256,)         norm=14.562
+blocks.2.ln1.bias                (256,)         norm=1.078
+blocks.2.attn.qkv.weight         (768, 256)     norm=18.986
+blocks.2.attn.qkv.bias           (768,)         norm=2.372
+blocks.2.attn.proj.weight        (256, 256)     norm=9.328
+blocks.2.attn.proj.bias          (256,)         norm=0.585
+blocks.2.ln2.weight              (256,)         norm=17.725
+blocks.2.ln2.bias                (256,)         norm=3.642
+blocks.2.mlp.fc.weight           (1024, 256)    norm=25.030
+blocks.2.mlp.fc.bias             (1024,)        norm=2.081
+blocks.2.mlp.proj.weight         (256, 1024)    norm=21.675
+blocks.2.mlp.proj.bias           (256,)         norm=0.492
+blocks.3.ln1.weight              (256,)         norm=16.789
+blocks.3.ln1.bias                (256,)         norm=1.009
+blocks.3.attn.qkv.weight         (768, 256)     norm=21.154
+blocks.3.attn.qkv.bias           (768,)         norm=1.814
+blocks.3.attn.proj.weight        (256, 256)     norm=10.485
+blocks.3.attn.proj.bias          (256,)         norm=0.532
+blocks.3.ln2.weight              (256,)         norm=19.250
+blocks.3.ln2.bias                (256,)         norm=3.568
+blocks.3.mlp.fc.weight           (1024, 256)    norm=25.704
+blocks.3.mlp.fc.bias             (1024,)        norm=2.131
+blocks.3.mlp.proj.weight         (256, 1024)    norm=24.755
+blocks.3.mlp.proj.bias           (256,)         norm=0.383
+blocks.4.ln1.weight              (256,)         norm=17.331
+blocks.4.ln1.bias                (256,)         norm=0.906
+blocks.4.attn.qkv.weight         (768, 256)     norm=21.214
+blocks.4.attn.qkv.bias           (768,)         norm=1.753
+blocks.4.attn.proj.weight        (256, 256)     norm=11.666
+blocks.4.attn.proj.bias          (256,)         norm=0.569
+blocks.4.ln2.weight              (256,)         norm=20.245
+blocks.4.ln2.bias                (256,)         norm=3.385
+blocks.4.mlp.fc.weight           (1024, 256)    norm=26.227
+blocks.4.mlp.fc.bias             (1024,)        norm=2.063
+blocks.4.mlp.proj.weight         (256, 1024)    norm=26.953
+blocks.4.mlp.proj.bias           (256,)         norm=0.561
+blocks.5.ln1.weight              (256,)         norm=18.364
+blocks.5.ln1.bias                (256,)         norm=0.958
+blocks.5.attn.qkv.weight         (768, 256)     norm=21.907
+blocks.5.attn.qkv.bias           (768,)         norm=1.549
+blocks.5.attn.proj.weight        (256, 256)     norm=13.707
+blocks.5.attn.proj.bias          (256,)         norm=0.685
+blocks.5.ln2.weight              (256,)         norm=19.427
+blocks.5.ln2.bias                (256,)         norm=2.630
+blocks.5.mlp.fc.weight           (1024, 256)    norm=26.124
+blocks.5.mlp.fc.bias             (1024,)        norm=2.279
+blocks.5.mlp.proj.weight         (256, 1024)    norm=27.099
+blocks.5.mlp.proj.bias           (256,)         norm=0.532
+ln_f.weight                      (256,)         norm=39.537
+ln_f.bias                        (256,)         norm=2.191
+
+L0 OV fro:   0.31   0.30   0.36   0.69   0.36   0.58   0.60   0.62
+L0 QK fro:   2.86   3.33   5.27  10.36   6.43   9.93   8.97   7.95
+L1 OV fro:   2.11   2.73   1.51   2.57   1.22   1.39   2.28   2.52
+L1 QK fro:   2.30   3.55   1.50   3.01   1.42   1.57   3.44   3.88
+L2 OV fro:   2.01   2.49   1.87   2.16   2.08   2.39   2.16   2.43
+L2 QK fro:   5.29   3.58   4.75   3.28   5.00   3.08   3.89   3.83
+L3 OV fro:   3.38   2.28   2.35   2.73   2.56   2.74   2.27   2.73
+L3 QK fro:   3.48   5.96   4.86   3.44   3.71   4.19   5.52   3.96
+L4 OV fro:   3.03   3.11   2.45   2.68   3.72   3.69   4.27   3.13
+L4 QK fro:   5.33   4.24   4.22   4.99   3.50   3.80   3.89   3.31
+L5 OV fro:   3.20   5.38   3.27   3.33   3.92   2.97   5.83   7.58
+L5 QK fro:   4.18   3.78   3.02   3.95   3.52   4.36   3.92   3.76

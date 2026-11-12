@@ -1,0 +1,8 @@
+loop      base   0.2344  edit   0.2031  diff  -0.0312  95% [-0.1719, +0.1094]
+rep4      base   0.0255  edit   0.0238  diff  -0.0017  95% [-0.0098, +0.0061]
+rep3      base   0.0637  edit   0.0609  diff  -0.0029  95% [-0.0156, +0.0095]
+rep2      base   0.1793  edit   0.1691  diff  -0.0102  95% [-0.0268, +0.0066]
+long_loop base   0.0000  edit   0.0000  diff  +0.0000  95% [+0.0000, +0.0000]
+length    base 162.6250  edit 163.9375  diff  +1.3125  95% [-9.5629, +12.6094]
+eot       base   0.7188  edit   0.6562  diff  -0.0625  95% [-0.2031, +0.0781]
+n=64: loops lost 11, gained 9, kept 4; identical texts 0
