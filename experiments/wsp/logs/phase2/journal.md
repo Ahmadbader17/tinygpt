@@ -96,3 +96,11 @@ transcript is the evidence for them.
   pattern was a proxy for "least squares on data" and is over-broad here. I count the repair
   and disclose the flag; whether to count it is put to Ahmad in the final summary, and the
   report gives H2 both ways.
+
+## 2026-11-12: Exp 2, `ckpt_3` editor (collected)
+
+8 of 20 passes, tripwires clean (142 files), all 14 tool calls inside the workspace, clean
+rebuild matches. Static scan flag: `analysis/03_gram.py` calls `lstsq`, to fit a line
+through two spectra computed from weight matrices (a description of the weights, labelled
+as such in the script). No text or activation enters and `repair.py` does not use it.
+Same judgement as the `pinv` case of `ckpt_2`: within I1, flagged and disclosed.
