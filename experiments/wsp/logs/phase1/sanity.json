@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "identity_bytes_equal_original": true,
+    "identity_dev_loss_difference": 0.0,
+    "dev_loss_repeat_identical": true,
+    "generation_repeat_identical": true,
+    "budget_refuses_call_n_plus_1": true,
+    "budget_used": 2,
+    "ledger_last_status": "refused",
+    "ledger_verifies_after_reopen": true,
+    "sandbox_read_equals_direct_computation": true,
+    "static_rules_test_passed": true
+  },
+  "failures": {},
+  "passed": true
+}

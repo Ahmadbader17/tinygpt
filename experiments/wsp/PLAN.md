@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Phase 0 measured; plan not yet committed.** Waiting for Ahmad's approval before Phase 1. |
+| Status | **Phase 1 (harness) built and checked; no editor has run.** Next: Phase 2, after the open items in `logs/phase1/journal.md`. |
 | Branch | `exp/weight_space_programming` (from `main` at `a60bae9`) |
 | Written | 2026-11-11, before any weight analysis and before any edit |
 | Editor | Claude (`claude-fable-5-2`) in Claude Code; fresh subagents of the same model where section 7 says so |
@@ -407,4 +407,12 @@ repetition penalty to beat every edit on repetition, while overshooting the real
 | D4 | Approval for the long runs in section 10, in the background. | Approve. |
 | D5 | Thresholds: loss tolerance +0.02 nats; length guardrail 90%; repetition penalty 1.2; Exp 1 class thresholds; fault damage window 0.05 to 1.0 nats. | Accept; all were fixed before any weight analysis. |
 
-Change log: none yet.
+Change log:
+
+- 2026-11-12, D1 to D5 approved with the recommended defaults. Editor model for Exp 2 and Exp 3:
+  Fable 5.2, as written in section 7.
+- 2026-11-12, Phase 1: the sealed-data guard also refuses any file whose name contains
+  `GPT4-valid`. Not in the original plan; it closes a path that section 5 would not otherwise
+  catch.
+- 2026-11-12, Phase 1: the penalised decoder's test loss (section 7) is not implemented yet.
+  Listed as an open item in `logs/phase1/journal.md`, to be done before the freeze.
