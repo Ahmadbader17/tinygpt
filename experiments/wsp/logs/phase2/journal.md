@@ -152,3 +152,24 @@ My audit of the ledger against rule 3 (no search):
 - The transcript's tool calls outside the workspace are reads of the agent's own tool-output
   files and one `free`/`df`/`nproc`. Nothing of the repository.
 - Unused script `edits/final_gain_090.py` was never run through the model and is not final.
+
+## 2026-11-12: Exp 3, attempt `b25` (collected)
+
+22 of 25 passes, none refused, tripwires clean (449 files), static scan clean, clean rebuild
+matches. Declared final: `copy_heads_08` (heads 3.0, 4.5, 4.6, 5.1, 5.4, 5.6, 5.7 scaled by
+0.8; 3 tensors, 57,344 weights, relative L2 change 0.0196). No revision.
+
+Audit against rule 3: two sets of weights were run, the unedited model (11 passes) and the
+one edit (11 passes). One location set, one strength, fixed before the edit was first run.
+No sweep. Sixteen of the passes are generations spent measuring that single edit on 256
+prompts and two seeds.
+
+Notes for the report:
+- The factor 0.8 is argued from the decoder's temperature, not from a measurement.
+- `analysis/06_copy_extended.py` applies the layer-0 MLP to the rows of the embedding table
+  and reads the heads' output-value circuits on the result. Under I2 as written this is free
+  (one nonlinear sublayer, no token sequence). It is more than I allowed myself in Exp 1,
+  where I read nothing behind an MLP; the comparison of the two readings is worth a line.
+- Both attempts so far arrived at overlapping heads (4.5, 5.6, 5.7) independently. They did
+  not see each other: `b10`'s workspace was deleted before `b25`'s was built and the
+  tripwires on `b10`'s collected files stayed clean.

@@ -1,0 +1,455 @@
+{
+ "workspace": "/home/baderowski/wsp_workspaces/exp3_b25",
+ "budget": 25,
+ "passes_used": 22,
+ "calls_refused": 0,
+ "within_budget": true,
+ "ledger_verifies": true,
+ "genesis_matches": true,
+ "ledger_final_hash": "3b7d60cb92b8051d353fbf3a2a2524af3e35738b2534b8387cff1038b0a9be60",
+ "calls": [
+  {
+   "n": 1,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "Baseline for later paired comparisons (prompts 0-63, seed 0, T=0.8, top-k 40), and material to test the hypothesis that sampled 4-gram loops are copies of earlier context (names/phrases) rather than tight cycles."
+  },
+  {
+   "n": 2,
+   "kind": "read",
+   "weights": "6d9615059a7d",
+   "purpose": "Test H1: at positions where the next token completes an already-seen 4-gram, the direct logit contribution to that token comes mainly from the weight-identified late copy heads (4.6, 5.0, 5.6, 5.1, 5.7), which there attend to the earlier occurrence; compare own generations with real stories."
+  },
+  {
+   "n": 3,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] paired comparison of loop rate / rep-4 / length on prompts 64-127, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 4,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] paired comparison of loop rate / rep-4 / length on prompts 128-191, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 5,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] paired comparison of loop rate / rep-4 / length on prompts 192-255, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 6,
+   "kind": "read",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] story loss on dev stories 100-163: H3 = the 0.8 scaling of copy heads costs well under 0.02 nats per token (second-order cost of a small perturbation)."
+  },
+  {
+   "n": 7,
+   "kind": "read",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] story loss on dev stories 164-227: H3 = the 0.8 scaling of copy heads costs well under 0.02 nats per token (second-order cost of a small perturbation)."
+  },
+  {
+   "n": 8,
+   "kind": "read",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] story loss on dev stories 100-163: H3 = the 0.8 scaling of copy heads costs well under 0.02 nats per token (second-order cost of a small perturbation)."
+  },
+  {
+   "n": 9,
+   "kind": "read",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] story loss on dev stories 164-227: H3 = the 0.8 scaling of copy heads costs well under 0.02 nats per token (second-order cost of a small perturbation)."
+  },
+  {
+   "n": 10,
+   "kind": "read",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] teacher-forced loss on the fixed pass-2 sequences: H4 = the edit raises the loss of 4-gram-repeating tokens (R4) much more than of other tokens, on generated and on real text."
+  },
+  {
+   "n": 11,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] paired comparison of loop rate / rep-4 / length on prompts 0-63, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 12,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] paired comparison of loop rate / rep-4 / length on prompts 64-127, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 13,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] paired comparison of loop rate / rep-4 / length on prompts 128-191, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 14,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] paired comparison of loop rate / rep-4 / length on prompts 192-255, seed 0: H2 = scaling the copy heads' output by 0.8 lowers loop rate and rep-4 without shortening stories."
+  },
+  {
+   "n": 15,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] replication of the paired comparison on prompts 0-63 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 16,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] replication of the paired comparison on prompts 64-127 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 17,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] replication of the paired comparison on prompts 128-191 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 18,
+   "kind": "generate",
+   "weights": "6d9615059a7d",
+   "purpose": "[checkpoint] replication of the paired comparison on prompts 192-255 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 19,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] replication of the paired comparison on prompts 0-63 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 20,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] replication of the paired comparison on prompts 64-127 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 21,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] replication of the paired comparison on prompts 128-191 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  },
+  {
+   "n": 22,
+   "kind": "generate",
+   "weights": "4afd606117bf",
+   "purpose": "[copy_heads_08] replication of the paired comparison on prompts 192-255 with seed 1: is the loop-rate drop of edit v1 seen with seed 0 (0.250 -> 0.199, about 1.4 standard errors) reproduced on fresh randomness?"
+  }
+ ],
+ "weights_run": [
+  "4afd606117bf379052eb9f60bd99f449ffad22cef738d6b0d40b5b8033e47020",
+  "6d9615059a7d499ad645f2f310fef70f91388a4804714becb008c72d90cb86ec"
+ ],
+ "static_scan": {
+  "analysis/00_inspect_data.py": [],
+  "analysis/01_overview.py": [],
+  "analysis/02_baseline_gen.py": [],
+  "analysis/03_inspect_loops.py": [],
+  "analysis/04_capture.py": [],
+  "analysis/05_attribution.py": [],
+  "analysis/06_copy_extended.py": [],
+  "analysis/07_eval.py": [],
+  "analysis/08_tf_compare.py": [],
+  "analysis/09_eval_seed1.py": [],
+  "analysis/10_paired_stats.py": [],
+  "analysis/common.py": [],
+  "edits/copy_heads_08.py": []
+ },
+ "static_scan_clean": true,
+ "workspace_checkpoint_sha256": "4afd606117bf379052eb9f60bd99f449ffad22cef738d6b0d40b5b8033e47020",
+ "files": [
+  {
+   "path": "TASK.md",
+   "bytes": 8782
+  },
+  {
+   "path": "analysis/00_inspect_data.out",
+   "bytes": 488
+  },
+  {
+   "path": "analysis/00_inspect_data.py",
+   "bytes": 583
+  },
+  {
+   "path": "analysis/01_overview.out",
+   "bytes": 4427
+  },
+  {
+   "path": "analysis/01_overview.py",
+   "bytes": 3974
+  },
+  {
+   "path": "analysis/02_baseline_gen.out",
+   "bytes": 318
+  },
+  {
+   "path": "analysis/02_baseline_gen.py",
+   "bytes": 384
+  },
+  {
+   "path": "analysis/03_inspect_loops.out",
+   "bytes": 3074
+  },
+  {
+   "path": "analysis/03_inspect_loops.py",
+   "bytes": 822
+  },
+  {
+   "path": "analysis/04_capture.out",
+   "bytes": 652
+  },
+  {
+   "path": "analysis/04_capture.py",
+   "bytes": 1345
+  },
+  {
+   "path": "analysis/04_sequences.json",
+   "bytes": 51401
+  },
+  {
+   "path": "analysis/05_attribution.out",
+   "bytes": 6821
+  },
+  {
+   "path": "analysis/05_attribution.py",
+   "bytes": 4583
+  },
+  {
+   "path": "analysis/06_copy_extended.out",
+   "bytes": 1615
+  },
+  {
+   "path": "analysis/06_copy_extended.py",
+   "bytes": 1705
+  },
+  {
+   "path": "analysis/07_eval.py",
+   "bytes": 2577
+  },
+  {
+   "path": "analysis/07_eval_base.out",
+   "bytes": 1114
+  },
+  {
+   "path": "analysis/07_eval_v1_gen.out",
+   "bytes": 1095
+  },
+  {
+   "path": "analysis/07_eval_v1_loss.out",
+   "bytes": 501
+  },
+  {
+   "path": "analysis/08_tf_compare.py",
+   "bytes": 1162
+  },
+  {
+   "path": "analysis/08_tf_v1.out",
+   "bytes": 475
+  },
+  {
+   "path": "analysis/09_eval_seed1.py",
+   "bytes": 970
+  },
+  {
+   "path": "analysis/09_seed1_base.out",
+   "bytes": 1108
+  },
+  {
+   "path": "analysis/09_seed1_v1.out",
+   "bytes": 1126
+  },
+  {
+   "path": "analysis/10_paired_stats.out",
+   "bytes": 608
+  },
+  {
+   "path": "analysis/10_paired_stats.py",
+   "bytes": 2284
+  },
+  {
+   "path": "analysis/__pycache__/common.cpython-312.pyc",
+   "bytes": 1683
+  },
+  {
+   "path": "analysis/common.py",
+   "bytes": 762
+  },
+  {
+   "path": "analysis/eval_results.jsonl",
+   "bytes": 10862
+  },
+  {
+   "path": "checkpoint/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "checkpoint/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "checkpoint/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "dev/prompts.json",
+   "bytes": 45284
+  },
+  {
+   "path": "dev/stories.txt",
+   "bytes": 3992888
+  },
+  {
+   "path": "diagnosis.md",
+   "bytes": 5172
+  },
+  {
+   "path": "edited/copy_heads_08/diff_summary.json",
+   "bytes": 14111
+  },
+  {
+   "path": "edited/copy_heads_08/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "edited/copy_heads_08/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "edited/copy_heads_08/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "edits/copy_heads_08.py",
+   "bytes": 1256
+  },
+  {
+   "path": "final.txt",
+   "bytes": 14
+  },
+  {
+   "path": "harness_source/activations.py",
+   "bytes": 3763
+  },
+  {
+   "path": "harness_source/edits.py",
+   "bytes": 4757
+  },
+  {
+   "path": "harness_source/generation.py",
+   "bytes": 8605
+  },
+  {
+   "path": "harness_source/metrics.py",
+   "bytes": 7098
+  },
+  {
+   "path": "harness_source/sandbox.py",
+   "bytes": 14435
+  },
+  {
+   "path": "journal.md",
+   "bytes": 9876
+  },
+  {
+   "path": "model_source/__init__.py",
+   "bytes": 192
+  },
+  {
+   "path": "model_source/attention.py",
+   "bytes": 2820
+  },
+  {
+   "path": "model_source/gpt.py",
+   "bytes": 3892
+  },
+  {
+   "path": "model_source/layers.py",
+   "bytes": 1525
+  },
+  {
+   "path": "tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "work/ledger.jsonl",
+   "bytes": 15104
+  },
+  {
+   "path": "work/outputs/generations_call001.json",
+   "bytes": 132737
+  },
+  {
+   "path": "work/outputs/generations_call003.json",
+   "bytes": 136886
+  },
+  {
+   "path": "work/outputs/generations_call004.json",
+   "bytes": 130540
+  },
+  {
+   "path": "work/outputs/generations_call005.json",
+   "bytes": 130299
+  },
+  {
+   "path": "work/outputs/generations_call011.json",
+   "bytes": 133640
+  },
+  {
+   "path": "work/outputs/generations_call012.json",
+   "bytes": 132450
+  },
+  {
+   "path": "work/outputs/generations_call013.json",
+   "bytes": 136196
+  },
+  {
+   "path": "work/outputs/generations_call014.json",
+   "bytes": 128736
+  },
+  {
+   "path": "work/outputs/generations_call015.json",
+   "bytes": 131724
+  },
+  {
+   "path": "work/outputs/generations_call016.json",
+   "bytes": 130904
+  },
+  {
+   "path": "work/outputs/generations_call017.json",
+   "bytes": 131713
+  },
+  {
+   "path": "work/outputs/generations_call018.json",
+   "bytes": 127814
+  },
+  {
+   "path": "work/outputs/generations_call019.json",
+   "bytes": 131201
+  },
+  {
+   "path": "work/outputs/generations_call020.json",
+   "bytes": 135633
+  },
+  {
+   "path": "work/outputs/generations_call021.json",
+   "bytes": 131548
+  },
+  {
+   "path": "work/outputs/generations_call022.json",
+   "bytes": 130161
+  },
+  {
+   "path": "work/outputs/read_call002.npz",
+   "bytes": 1006681414
+  },
+  {
+   "path": "work/outputs/read_call010.npz",
+   "bytes": 40978
+  }
+ ]
+}
