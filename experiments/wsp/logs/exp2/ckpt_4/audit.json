@@ -1,0 +1,183 @@
+{
+ "workspace": "/home/baderowski/wsp_workspaces/exp2_ckpt_4",
+ "budget": 20,
+ "passes_used": 4,
+ "calls_refused": 0,
+ "within_budget": true,
+ "ledger_verifies": true,
+ "genesis_matches": true,
+ "ledger_final_hash": "ba766bd9067fce771b737804cdc6589f2e13788d23616ac6aea557aa191f3fa0",
+ "calls": [
+  {
+   "n": 1,
+   "kind": "read",
+   "weights": "b3fbe3943e35",
+   "purpose": "Baseline on damaged checkpoint, 64 random 256-token dev windows: if blocks.2.mlp.proj.weight carries a foreign rank-1 term (sigma 36 vs 3), loss is well above 1.688 and layer-2 mlp_out is dominated by the u direction, unlike layers 1 and 3"
+  },
+  {
+   "n": 2,
+   "kind": "read",
+   "weights": "1b7d8ac0006e",
+   "purpose": "Same windows on repaired checkpoint (rank-1 term removed from blocks.2.mlp.proj.weight): if that term is the damage, loss returns near 1.688 and layer-2 mlp_out norm falls in line with layers 1 and 3"
+  },
+  {
+   "n": 3,
+   "kind": "read",
+   "weights": "b3fbe3943e35",
+   "purpose": "Baseline on damaged checkpoint, 64 whole dev stories from <|endoftext|>: the foreign rank-1 term in blocks.2.mlp.proj.weight should lift loss above the healthy 1.605"
+  },
+  {
+   "n": 4,
+   "kind": "read",
+   "weights": "1b7d8ac0006e",
+   "purpose": "Same 64 stories on repaired checkpoint: if the rank-1 term was the only damage, loss returns near the healthy 1.605; a clear remaining gap would mean a second fault"
+  }
+ ],
+ "weights_run": [
+  "1b7d8ac0006e97fe73f0cf1237fbe29101619f8c398617a35e9ead58bbc39613",
+  "b3fbe3943e3521cf98e2dd2b7e2cc6022c60a7ec6b0c55a91fa3d8bd98aeb650"
+ ],
+ "static_scan": {
+  "analysis/01_norms.py": [],
+  "analysis/02_l2_mlp_proj.py": [],
+  "analysis/03_direction.py": [],
+  "analysis/04_eval.py": [],
+  "repair.py": []
+ },
+ "static_scan_clean": true,
+ "workspace_checkpoint_sha256": "1b7d8ac0006e97fe73f0cf1237fbe29101619f8c398617a35e9ead58bbc39613",
+ "files": [
+  {
+   "path": "TASK.md",
+   "bytes": 8274
+  },
+  {
+   "path": "analysis/01_norms.out",
+   "bytes": 12819
+  },
+  {
+   "path": "analysis/01_norms.py",
+   "bytes": 1320
+  },
+  {
+   "path": "analysis/02_l2_mlp_proj.out",
+   "bytes": 3107
+  },
+  {
+   "path": "analysis/02_l2_mlp_proj.py",
+   "bytes": 2378
+  },
+  {
+   "path": "analysis/03_direction.out",
+   "bytes": 6734
+  },
+  {
+   "path": "analysis/03_direction.py",
+   "bytes": 3343
+  },
+  {
+   "path": "analysis/04_eval.py",
+   "bytes": 1941
+  },
+  {
+   "path": "checkpoint/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "checkpoint/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "checkpoint/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "dev/prompts.json",
+   "bytes": 45284
+  },
+  {
+   "path": "dev/stories.txt",
+   "bytes": 3992888
+  },
+  {
+   "path": "diagnosis.json",
+   "bytes": 1177
+  },
+  {
+   "path": "harness_source/activations.py",
+   "bytes": 3763
+  },
+  {
+   "path": "harness_source/edits.py",
+   "bytes": 4757
+  },
+  {
+   "path": "harness_source/generation.py",
+   "bytes": 8605
+  },
+  {
+   "path": "harness_source/metrics.py",
+   "bytes": 7098
+  },
+  {
+   "path": "harness_source/sandbox.py",
+   "bytes": 14435
+  },
+  {
+   "path": "journal.md",
+   "bytes": 4612
+  },
+  {
+   "path": "model_source/__init__.py",
+   "bytes": 192
+  },
+  {
+   "path": "model_source/attention.py",
+   "bytes": 2820
+  },
+  {
+   "path": "model_source/gpt.py",
+   "bytes": 3892
+  },
+  {
+   "path": "model_source/layers.py",
+   "bytes": 1525
+  },
+  {
+   "path": "repair.py",
+   "bytes": 1619
+  },
+  {
+   "path": "repaired/diff_summary.json",
+   "bytes": 14070
+  },
+  {
+   "path": "repaired/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "repaired/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "repaired/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "work/ledger.jsonl",
+   "bytes": 2890
+  },
+  {
+   "path": "work/outputs/read_call001.npz",
+   "bytes": 150997222
+  },
+  {
+   "path": "work/outputs/read_call002.npz",
+   "bytes": 150997222
+  }
+ ]
+}

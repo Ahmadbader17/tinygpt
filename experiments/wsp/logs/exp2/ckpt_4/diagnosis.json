@@ -1,0 +1,9 @@
+{
+  "tensor": "blocks.2.mlp.proj.weight",
+  "layer": 2,
+  "component": "mlp",
+  "head": null,
+  "fault": "A foreign rank-1 component (sigma about 36.2, roughly 12 times the tensor's next singular value of 3.10) has been added to the MLP output projection of block 2. Its output direction u is dense and random-looking, not a learned direction, so the block-2 MLP writes a large spurious vector into the residual stream at every position.",
+  "confidence": 0.85,
+  "evidence": "Weights: sigma_1 = 36.24 against 3.10, 3.05, 2.82 next and 2.4 to 4.8 for the top value of every other mlp.proj; Frobenius norm 42.2 against 18 to 27 for the others; later layers read u with norms 1.62 (L3 mlp.fc) and 1.27 (L3 qkv), which is what a random unit vector gives, against 2.2 to 3.4 for the learned directions; |v| is uncorrelated with fc row norms (0.007 against 0.12 to 0.17). Passes (4 of 20): on the same 64 dev windows loss was 1.7636 damaged and 1.6578 after removing the term; on the same 64 dev stories 1.6609 damaged and 1.5563 repaired. In the damaged model layer-2 mlp_out had rms norm 8.92 with 7.45 of it along u; repaired, 4.90, between layer 1 (3.82) and layer 3 (6.79)."
+}

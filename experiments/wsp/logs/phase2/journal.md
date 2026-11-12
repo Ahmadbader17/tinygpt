@@ -104,3 +104,8 @@ rebuild matches. Static scan flag: `analysis/03_gram.py` calls `lstsq`, to fit a
 through two spectra computed from weight matrices (a description of the weights, labelled
 as such in the script). No text or activation enters and `repair.py` does not use it.
 Same judgement as the `pinv` case of `ckpt_2`: within I1, flagged and disclosed.
+
+## 2026-11-12: Exp 2, `ckpt_4` editor (collected)
+
+4 of 20 passes, tripwires clean (200 files), every tool call inside the workspace, clean
+rebuild matches, static scan clean.

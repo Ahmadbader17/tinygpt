@@ -1,0 +1,82 @@
+[
+ {
+  "name": "ckpt_4_gauss_0",
+  "kind": "gauss",
+  "seed": 0,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_0",
+  "sha256": "135fbd4073e293a3e255b46a8eef717c75d63f159de115d47392fa4e7aec896a",
+  "relative_l2": 0.25352207791066045
+ },
+ {
+  "name": "ckpt_4_lowrank_0",
+  "kind": "lowrank",
+  "seed": 0,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_0",
+  "sha256": "bded6d262a5f1f17705ce2c42040059c9e87111ea569a0c1bf2b4825fc3d2333",
+  "relative_l2": 0.2535220723603557
+ },
+ {
+  "name": "ckpt_4_gauss_1",
+  "kind": "gauss",
+  "seed": 1,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_1",
+  "sha256": "72803036ac22ca47c289df669eea36fb4cec8766836ccd6b5ea0a6b85e30a50b",
+  "relative_l2": 0.25352206777211145
+ },
+ {
+  "name": "ckpt_4_lowrank_1",
+  "kind": "lowrank",
+  "seed": 1,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_1",
+  "sha256": "1026332c92a1f823521542788828c7884a74faf203b1ad01d9fdf3c2885bac41",
+  "relative_l2": 0.25352207613791156
+ },
+ {
+  "name": "ckpt_4_gauss_2",
+  "kind": "gauss",
+  "seed": 2,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_2",
+  "sha256": "4ca37700d01d713908669f057a20bcae64c5da70ece7d5ff2dab941d2ec9f124",
+  "relative_l2": 0.25352205798338995
+ },
+ {
+  "name": "ckpt_4_lowrank_2",
+  "kind": "lowrank",
+  "seed": 2,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_2",
+  "sha256": "40b00cf299f7bd62f5eb8cee8d8f9927b14d341f63425a6e43487a3373afdf64",
+  "relative_l2": 0.253522059249438
+ },
+ {
+  "name": "ckpt_4_gauss_3",
+  "kind": "gauss",
+  "seed": 3,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_3",
+  "sha256": "c4311c7935631eb79e83bcbe46cb3781a9c75a17ab2d8184a519c6e6ee570dfc",
+  "relative_l2": 0.25352206096031
+ },
+ {
+  "name": "ckpt_4_lowrank_3",
+  "kind": "lowrank",
+  "seed": 3,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_3",
+  "sha256": "568a4d56389283fb37a403d9963eeddaddf38596575d988b5d8efa65c633ff60",
+  "relative_l2": 0.2535220684089783
+ },
+ {
+  "name": "ckpt_4_gauss_4",
+  "kind": "gauss",
+  "seed": 4,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/gauss_4",
+  "sha256": "b7fe090914ca00a2f9d55db96952eb133905e5d24c6b8e41cc509f84283e3a5d",
+  "relative_l2": 0.253522069834198
+ },
+ {
+  "name": "ckpt_4_lowrank_4",
+  "kind": "lowrank",
+  "seed": 4,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_4/lowrank_4",
+  "sha256": "dcdbe9eb21866f0077f7086e4ee8b3ea494984e4aef8ea734e4d4ef258f89fda",
+  "relative_l2": 0.25352208271922766
+ }
+]
