@@ -69,3 +69,63 @@ so everything below about layers 1 to 5 is a weaker inference than what is said 
 
 The reasoning above is mine, written before verification. Whether it describes what the model
 does is exactly what the verification measures.
+
+## Verification (run after the predictions were committed at `1f61782`)
+
+`exp1_verify.py`, dev data only, 336 s: attention on 256 natural windows and 64 repeated-random
+sequences, and 48 single-head ablations on 500 dev stories. Results:
+`results/exp1_verification.json`. These were harness passes, not editor passes.
+
+| Class | Heads truly in class | Predicted | Hit | False alarm | Missed |
+|---|---|---|---|---|---|
+| previous token | none (largest score 0.33) | none | | | |
+| start anchor | none (largest 0.06) | none | | | |
+| induction | none (largest 0.03) | none | | | |
+| duplicate token | none (largest 0.01) | none | | | |
+| positional | 0.0, 0.1, 1.0, 1.4, 1.5 | 0.0, 0.1, 1.0, 1.2, 1.4, 1.5 | 5 | 1 (head 1.2) | 0 |
+| mostly inactive | 0.2, 0.4, 1.2, 1.7 | 0.2, 0.4 | 2 | 0 | 2 (heads 1.2, 1.7) |
+
+Micro-precision 0.875, micro-recall 0.78, micro-F1 0.82. Shuffling heads within their layer
+gives a mean F1 of 0.29 and reaches 0.82 in 3 of 10,000 shuffles (p = 0.0003). **H1 is met.**
+
+### What supports the result, and what weakens it
+
+- **It was not a leak.** The predictions file is the committed one (the script checks this and
+  records the commit). The analysis scripts cannot construct the model (static scan), and the
+  only model run before the commit was a smoke test on an untrained network.
+- **Two hits were close calls.** Heads 0.1 and 1.0 measured 0.801 and 0.807 against a threshold
+  of 0.80, and I had given them 0.55 and 0.52. `exp1_sensitivity.py` (post hoc, not
+  preregistered) moves the thresholds: with "positional" at 0.85 the score falls to 5 hits,
+  3 false alarms (F1 0.67, p = 0.002); with both thresholds made stricter, precision is exactly
+  0.5 and p = 0.015. H1 holds in every variant tried, but the F1 of 0.82 is partly luck.
+- **The reading worked only where the weights could be read.** For the "positional" score my
+  confidences rank the 16 heads of layers 0 and 1 well (Spearman 0.64, p = 0.004) and the 32
+  heads of layers 2 to 5 not at all (0.16, p = 0.20). All nine true positives are in layers 0
+  and 1. This matches the limit stated before verification: nothing behind an MLP was read.
+- **Four classes were empty, which made "none" an easy call.** The model has no head that
+  reaches the previous-token, start-anchor, induction or duplicate-token thresholds. Saying so
+  from weights was correct, but those calls add nothing to the scored F1.
+
+### Where the stated mechanism was wrong, although the label came out right
+
+- **Previous token.** I argued that no head can single out the previous position because
+  neighbouring position embeddings are almost identical. Six heads in layers 2 to 4 put 25% to
+  33% of their attention on the previous token (3.1: 0.33, 3.6: 0.33, 3.2: 0.28). That is
+  below the 0.40 line, so "none" stands, but a third of the attention on one position out of a
+  hundred is a real previous-token tendency that the direct path cannot produce. The MLPs must
+  sharpen position, as I listed under "where I expect to be wrong". My mechanism was incomplete.
+- **Start anchor.** I gave heads 4.0 and 5.0 a 0.30 chance because of a positive direct-path
+  preference for the first position. Measured attention there is 0.003 and 0.002. Across heads
+  my confidence is *negatively* related to the measured score (Spearman -0.74). The direct-path
+  number was worse than useless for this class in deep layers.
+- **Inactive.** The two heads I named (0.2, 0.4) are among the four that cost less than
+  0.002 nats, and the confidence ranks the ablation effects well overall (Spearman 0.63). The
+  two I missed are in layer 1 (1.2, 1.7), where I had ruled the class out because the constant
+  write is large. So "a large constant write means the head matters" is false for this model.
+- **A pattern I did not predict:** the three heads whose positional score I overestimated most
+  (0.2, 0.4, 1.2) are all in the "mostly inactive" class. A head the model barely uses seems to
+  have a less regular attention pattern than its weights suggest.
+
+Evidence grading for the write-up: the class labels are measured facts. The explanation for
+layers 0 and 1 (diffuse, position-dominated attention with small writes) is supported by both
+the weights and the measured patterns. The explanations for layers 2 to 5 are not supported.
