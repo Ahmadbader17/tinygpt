@@ -25,6 +25,7 @@ FIGURES = REPO / "docs" / "img"
 LOSS_TOLERANCE = 0.02  # nats, PLAN.md section 7
 GREY, BLUE, ORANGE, GREEN, RED = "#7f7f7f", "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"
 ATTEMPT_LABEL = {"b10": "edit, 10 passes", "b25": "edit, 25 passes", "b50": "edit, 50 passes"}
+ATTEMPT_COLOUR = {"b10": "#1f77b4", "b25": "#9467bd", "b50": "#2ca02c"}
 FAMILY_LABEL = {
     "head_scale": "head scaled up",
     "rank_one": "rank-one addition",
@@ -160,7 +161,7 @@ def figure_exp2(exp2: dict[str, Any], out: Path) -> None:
     ax.set_ylim(max(low, -3.0), 1.25)
     ax.set_ylabel("share of lost test loss recovered")
     ax.set_title("Exp 2: blind repair of planted faults, sealed test stories")
-    ax.legend(fontsize=8, loc="lower left")
+    ax.legend(fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
     fig.tight_layout()
     fig.savefig(out, dpi=150)
     plt.close(fig)
@@ -249,7 +250,7 @@ def figure_exp3_headline(exp3: dict[str, Any], out: Path) -> None:
     ax.set_xticks(range(len(shown)))
     ax.set_xticklabels([label for _, label, _ in shown], rotation=20, fontsize=8)
     ax.set_ylabel("test loss minus unedited (nats per token)")
-    ax.set_yscale("symlog", linthresh=0.05)
+    ax.set_yscale("symlog", linthresh=0.03)
     ax.legend(fontsize=7)
     fig.suptitle(
         "Exp 3: repetition and loss on sealed prompts and stories (95% intervals)", fontsize=11
@@ -284,6 +285,7 @@ def figure_exp3_tradeoff(exp3: dict[str, Any], out: Path) -> None:
             xerr=err(diff["loss_diff"]),
             yerr=err(diff["loop_rate"]),
             fmt="o",
+            color=ATTEMPT_COLOUR[key],
             capsize=3,
             label=ATTEMPT_LABEL[key],
         )
@@ -301,7 +303,7 @@ def figure_exp3_tradeoff(exp3: dict[str, Any], out: Path) -> None:
     ax.axhline(0, color="k", lw=0.8)
     ax.axvline(0, color="k", lw=0.8)
     ax.axvline(LOSS_TOLERANCE, color=RED, ls="--", lw=1, label="loss tolerance")
-    ax.set_xscale("symlog", linthresh=0.05)
+    ax.set_xscale("symlog", linthresh=0.03)
     ax.set_xlabel("test loss minus unedited (nats per token)")
     ax.set_ylabel("loop rate minus unedited (sampling)")
     ax.set_title("Exp 3: success needs a point below zero and left of the red line")
@@ -397,7 +399,7 @@ def table_samples(generations: dict[str, Any], count: int = 5) -> str:
     """The first generation (seed 0) of the first prompts, for every model: no picking."""
     names = [n for n in ("unedited", "repetition_penalty", *ATTEMPT_LABEL) if n in generations]
     rows = []
-    for p in range(count):
+    for p in range(min(count, len(generations["unedited"]["sample"]))):
         prompt = generations["unedited"]["sample"][p]["prompt"]
         rows.append(f"**Sealed prompt {p + 1}:** {prompt}")
         rows.append("")
@@ -408,11 +410,11 @@ def table_samples(generations: dict[str, Any], count: int = 5) -> str:
     return "\n".join(rows)
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     parser.add_argument("--results", type=Path, default=RESULTS)
     parser.add_argument("--figures", type=Path, default=FIGURES)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     args.figures.mkdir(parents=True, exist_ok=True)
     sections = []
 

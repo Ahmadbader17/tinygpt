@@ -256,3 +256,26 @@ def test_sealed_file_location_is_guarded() -> None:
     assert any(str(d).endswith(str(Path("data") / "sealed")) for d in SEALED_DIRS)
     with pytest.raises(PermissionError):
         guard_path(REPO / "data" / "sealed" / "TinyStoriesV2-GPT4-valid.txt")
+
+
+def test_figures_and_tables_are_built_from_result_files_only(world: dict[str, Any]) -> None:
+    _run(world)
+    results = world["tmp"] / "results"
+    figures = world["tmp"] / "figures"
+    exp1 = REPO / "experiments" / "wsp" / "results" / "exp1_verification.json"
+    (results / "exp1_verification.json").write_text(exp1.read_text())
+    spec = importlib.util.spec_from_file_location("make_figures", FINAL.parent / "make_figures.py")
+    assert spec is not None and spec.loader is not None
+    mf = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mf)
+    assert mf.main(["--results", str(results), "--figures", str(figures)]) == 0
+    names = {p.name for p in figures.glob("wsp_*.png")}
+    assert names == {
+        "wsp_exp1_heads.png",
+        "wsp_exp2_recovery.png",
+        "wsp_exp3_headline.png",
+        "wsp_exp3_tradeoff.png",
+    }
+    tables = (results / "tables.md").read_text()
+    for heading in ("## Exp 1", "## Exp 2", "## Exp 3", "Headline H3 met"):
+        assert heading in tables

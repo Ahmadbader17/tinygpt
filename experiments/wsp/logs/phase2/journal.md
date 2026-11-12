@@ -205,3 +205,44 @@ converged on the same late-layer heads. All workspaces are deleted.
 **Freeze.** `pipeline.py manifest` pins every checkpoint the final evaluation loads. The
 commit that adds the manifest is tagged `wsp-freeze`. No edit, repair, control, threshold or
 evaluation code changes after it. `final_eval.py` then runs once.
+
+## 2026-11-12: final evaluation, one audit, and what I noticed afterwards
+
+`final_eval.py` ran once at `wsp-freeze` (`de99f1b`), 62 minutes, exit 0. One record in
+`sealed_access.jsonl`. Results were committed as produced (`final_eval.json`,
+`final_generations.json`, `final_arrays.npz`) before I wrote anything about them.
+
+- **Outcome.** H2a met (5 of 5), H2b met (5 of 5), H3 met (b10 and b50 at 98.3%, b25 at 95%
+  only). H1 had been met in the morning. My priors for H2b (35%) and H3 (15 to 20%) were
+  too low.
+- **Audit trigger (section 9): `ckpt_5` recovery 1.0003.** Checked for a leak (none: wires
+  clean, transcript in-workspace, clean rebuild). Repeated on the sealed audit block, stories
+  20,000 to 21,999, with `audit_ckpt5.py` (second and last sealed access, logged):
+  repaired minus clean = -0.000019 nats [-0.000029, -0.000009]. It repeats. The repair
+  divides by 5.556 where the fault multiplied by 5.724, so the head is left 3% stronger
+  than trained, and that is very slightly better. Real, negligible, reported as 100%.
+- **No other trigger fired.** I still treated H3 as suspect because it beat my prior. What
+  argues against a bug: the 15 matched random edits do nothing to loop rate; the loss cost
+  on sealed stories (0.0068 to 0.0085) matches what each editor measured on dev (0.0057 to
+  0.0078); the unedited model's sealed numbers match its dev baseline (loop rate 0.239
+  against 0.243); judge loss and length are unchanged; three edits built separately agree.
+- **Deviation found afterwards: 300 sealed prompts, not 600.** PLAN sections 2, 3 and 7 say
+  600. `protocol.N_SEALED_PROMPTS` has been 300 since the Phase 0 commit (`07b2e0d`), and
+  the evaluation used it. I did not catch the mismatch before the freeze. Effect: intervals
+  about 1.4 times wider than planned, no bias. Not rerun (one run only). The shorter run
+  time (62 minutes against an estimate of 2.5 hours) is mostly this.
+- **Fault specs published** after the evaluation: `results/exp2_fault_specs.json`, so the
+  damaged checkpoints can be rebuilt with `inject_faults.py --from-specs`.
+- **Check of the original post.** A fetch subagent re-read the page against twelve claims.
+  Corrections taken into the report: their Exp 8 did not stop the looping (93% to 33% at 50
+  passes, barely any change at 10 and 25); their Exp 3 ground truth is attention on a
+  random string repeated twice; the agent is called "GPT-6 Astra".
+
+## Did I stay within the editor rules?
+
+As harness builder: I ran no gradient, fitted nothing, and wrote no edit. I did not open
+the fault specs before the final evaluation. I read sealed data only through the two logged
+scripts. As Exp 1 editor: zero forward passes before the predictions were committed.
+The eight subagent editors: within budget, ledgers verify, no sealed or forbidden file read
+as far as tripwires and transcripts can show. Open to challenge: the three weight-only
+`pinv`/`lstsq` uses, and the two Exp 3 revisions that followed a dev measurement.

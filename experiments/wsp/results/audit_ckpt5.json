@@ -1,0 +1,25 @@
+{
+ "case": "ckpt_5",
+ "audit_block": [
+  20000,
+  22000
+ ],
+ "stories": 2000,
+ "tokens": 405594,
+ "loss": {
+  "clean": 1.6256681400068638,
+  "damaged": 1.707453180704248,
+  "repaired": 1.6256494864139375
+ },
+ "repaired_minus_clean": {
+  "estimate": -1.8653592926323415e-05,
+  "low": -2.860232238769021e-05,
+  "high": -8.815220810224595e-06
+ },
+ "recovery": {
+  "estimate": 1.000228080743951,
+  "low": 1.0001058641315097,
+  "high": 1.000355839990932
+ },
+ "share_of_stories_where_repaired_is_better": 0.549
+}

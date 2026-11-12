@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Phase 2 running.** Progress and every deviation: `logs/phase2/journal.md` and the change log in section 12. |
+| Status | **Complete.** All experiments run, final evaluation done once at `wsp-freeze`. Report: `docs/WSP_REPORT.md`. Every deviation: the change log in section 12 and `logs/phase2/journal.md`. |
 | Branch | `exp/weight_space_programming` (from `main` at `a60bae9`) |
 | Written | 2026-11-11, before any weight analysis and before any edit |
 | Editor | Claude (`claude-fable-5-2`) in Claude Code; fresh subagents of the same model where section 7 says so |
@@ -455,3 +455,13 @@ Change log:
   states H2 with and without `ckpt_2`. Ahmad may overrule this reading.
 - 2026-11-12: `git config core.trustctime false` is set in the working clone so that arming
   the tripwires does not make git re-read the armed files (journal, false alarm at `ckpt_1`).
+- 2026-11-12, found after the final evaluation: the evaluation used 300 sealed prompts, not
+  the 600 this plan states in sections 2, 3 and 7. The constant in `protocol.py` was 300 from
+  the first commit and the mismatch was not caught before the freeze. Not rerun.
+- 2026-11-12, after the final evaluation: `audit_ckpt5.py` read the sealed audit block once
+  for the section 9 audit of `ckpt_5` (recovery above 100%). The fault specs were then
+  published as `results/exp2_fault_specs.json`.
+- 2026-11-12: the description of the original Exp 8 in section 1 ("so that it stops looping")
+  overstates it. The page reports the share of answers at the token limit falling from 93% to
+  33% at 50 passes and barely moving at 10 and 25. Section 1 is left as written; the report
+  has the corrected account.
