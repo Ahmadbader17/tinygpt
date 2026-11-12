@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | **Phase 1 (harness) built and checked; no editor has run.** Next: Phase 2, after the open items in `logs/phase1/journal.md`. |
+| Status | **Phase 2 running.** Progress and every deviation: `logs/phase2/journal.md` and the change log in section 12. |
 | Branch | `exp/weight_space_programming` (from `main` at `a60bae9`) |
 | Written | 2026-11-11, before any weight analysis and before any edit |
 | Editor | Claude (`claude-fable-5-2`) in Claude Code; fresh subagents of the same model where section 7 says so |
@@ -416,3 +416,29 @@ Change log:
   catch.
 - 2026-11-12, Phase 1: the penalised decoder's test loss (section 7) is not implemented yet.
   Listed as an open item in `logs/phase1/journal.md`, to be done before the freeze.
+- 2026-11-12, start of Phase 2, **before any weight of the checkpoint was inspected**:
+  - The Exp 1 verification script (`exp1_verify.py`) and its scoring module were written and
+    committed now (commit `805f12d`), not in Phase 1 as section 7 said. The condition that
+    matters holds: they were fixed before any weight analysis.
+  - Exp 1 natural-text windows are j = 1..256 (the `<|endoftext|>` before dev story 8j), not
+    j = 0..255: story 0 has no preceding `<|endoftext|>`.
+  - Exp 1 also reports micro-averages over all six classes, where false positives in an empty
+    class count. The H1 rule is unchanged (classes with at least one positive).
+  - The editor's budget is no longer an argument the editor passes. The harness writes it as
+    the first record of the workspace ledger (`init_budget`), and the sandbox reads it there.
+  - The `read` call now returns what section 6 promised (per-token loss, logits, attention,
+    per-head outputs, residual stream, MLP hidden); Phase 1 had only loss and attention.
+  - The static rule scan also forbids constructing or running the model outside the sandbox,
+    and it now covers the editors' archived scripts.
+  - Exp 2 editors run one after another, and only one workspace exists at a time, because two
+    damaged checkpoints side by side would reveal both faults by subtraction.
+  - Exp 2: a zeroed head is chosen by trying all 48 heads in a seeded order (first one costing
+    at least 0.02 nats); if none does, the costliest head is used and the spec records it.
+  - Editor prompts were corrected before any experiment: the Exp 3 prompt no longer says
+    "some stories never end" (not measured); both prompts gained run instructions and the full
+    sandbox interface; the Exp 2 prompt gives both healthy-loss reference values (1.688, 1.605).
+  - An editor's edit is the checkpoint rebuilt from its script in a clean folder that holds
+    only the base checkpoint and the editor's Python files (`pipeline.py rebuild`). No dev data
+    or saved activations exist there, so an edit whose values depend on data cannot be rebuilt.
+  - The final evaluation flags the section 9 "too good" conditions automatically
+    (`audit_triggers` in `final_eval.json`).

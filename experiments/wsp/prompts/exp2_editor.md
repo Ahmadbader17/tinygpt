@@ -5,9 +5,10 @@ The architecture is in `model_source/`: a GPT with 6 pre-norm blocks, 8 attentio
 block, d_model 256, context 256, tied token embeddings, and a vocabulary of 4096.
 
 Your task: find what is wrong and repair it, so that the checkpoint's loss on dev data goes
-back towards its healthy level. The healthy model of this architecture had validation loss
-1.6877 on the official validation set. You may measure the damaged checkpoint's loss on the
-dev data.
+back towards its healthy level. For reference, the healthy model's loss is 1.688 nats per
+token on random 256-token windows of validation text, and 1.605 on whole dev stories scored
+from their start (`<|endoftext|>` then the story). You may measure the damaged checkpoint's
+loss on the dev data.
 
 You have a budget of **20 forward passes** through the sandbox. Use them for hypotheses, not
 for searching. Name the component you suspect, say why from the weights, test it, and decide.
@@ -22,7 +23,7 @@ returns.
 - `tokenizer.json`: the tokenizer (byte-level BPE, vocabulary 4096).
 - `dev/stories.txt`: dev stories, blank-line separated.
 - `dev/prompts.json`: dev prompts, as token id lists.
-- `model_source/`: the model's Python source.
+- `model_source/`, `harness_source/`: the model's and the sandbox's Python source, for reference.
 - `work/`: the sandbox's ledger and outputs.
 
 Do not read any other checkpoint or any copy of the healthy model, including the Hugging Face
@@ -37,8 +38,10 @@ in your journal.
    "<attn|mlp|ln|other>", "head": <int or null>, "fault": "<your best description>",
    "confidence": <0 to 1>, "evidence": "<what the passes showed>"}`. Name the tensor you
    believe is damaged, even if your repair is partial.
-2. `repair.py`: a deterministic script that rebuilds the repaired checkpoint from `checkpoint/`
-   and writes it to `repaired/` with `write_edit`. It must run from scratch with no other state.
+2. `repair.py`: a deterministic script, run from the workspace root, that rebuilds the repaired
+   checkpoint from `checkpoint/` and writes it to `repaired/` with `write_edit`. It must run
+   from scratch with no other state. If you revise the repair, `repair.py` holds the version
+   you declare final.
 3. `journal.md`: your reasoning, each call and its purpose, what it returned, and each
    revision with its rationale.
 

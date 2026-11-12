@@ -1,9 +1,10 @@
 # Editor task: reduce repetition in a small language model
 
 You are the editor. The GPT checkpoint in your workspace (`checkpoint/`) is a 5.8M-parameter
-model trained on children's stories. Its samples often repeat themselves: phrases loop, and
-some stories never end. Your task is to write an edit to the weights that reduces repetition on
-dev data, without making the model worse at predicting stories.
+model trained on children's stories (TinyStories). Its README lists as a limitation that the
+output "repeats itself". Your task is to find out, from the weights and a few forward passes,
+which components drive that repetition, and to write an edit to the weights that reduces it
+without making the model worse at predicting stories.
 
 You have a budget of **{BUDGET} forward passes** through the sandbox. Use them to test
 hypotheses about which components drive repetition. Do not use them to search.
@@ -28,8 +29,11 @@ prompts, 5 seeds:
 | Mean length (tokens) | 163 | 170 |
 | Dev story loss (nats per token) | 1.605 | not applicable |
 
-Greedy decoding loops much more (loop rate 40%, with 12% long loops). The unedited model
-also has a repetition penalty baseline that the harness computes; you do not tune it.
+A "long loop" is an 8-token chunk occurring 3 or more times. Under sampling long loops are
+rare (0.3% of generations, the same as in real stories). Greedy decoding loops much more: loop
+rate 40%, long-loop rate 12%. The final evaluation also compares your edit with a decoding-time
+repetition penalty and with random edits of the same size and location; you do not need to
+produce either.
 
 ## Your workspace
 
@@ -37,7 +41,7 @@ also has a repetition penalty baseline that the harness computes; you do not tun
 - `tokenizer.json`: the tokenizer.
 - `dev/stories.txt`: dev stories, blank-line separated.
 - `dev/prompts.json`: dev prompts, as token id lists.
-- `model_source/`: the model's Python source.
+- `model_source/`, `harness_source/`: the model's and the sandbox's Python source, for reference.
 - `work/`: the sandbox's ledger and outputs.
 
 Do not read the other attempts of this experiment, the results of other experiments, or any
@@ -45,10 +49,10 @@ sealed data. The baseline table above is all the other information you have.
 
 ## Deliverables (in your workspace)
 
-1. `edits/<name>.py`: one or more edit scripts. Each rebuilds its checkpoint from `checkpoint/`
-   with `write_edit` and writes it to `edited/<name>/`.
-2. `final.txt`: the name of the version you declare final (one line). You may declare any
-   version, including the unedited one.
+1. `edits/<name>.py`: one or more edit scripts, run from the workspace root. Each rebuilds its
+   checkpoint from `checkpoint/` with `write_edit` and writes it to `edited/<name>/`.
+2. `final.txt`: the `<name>` of the version you declare final (one line), or the single word
+   `unedited` if you conclude that no edit should be made.
 3. `diagnosis.md`: which components you believe drive repetition, your evidence from the passes,
    and the reasoning that led to each edit.
 4. `journal.md`: each call and its purpose, what it returned, and each revision with its

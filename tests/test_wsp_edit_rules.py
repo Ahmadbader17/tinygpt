@@ -7,10 +7,11 @@ Rule 5: edit code never names or reads sealed data.
 
 from __future__ import annotations
 
-import ast
 from pathlib import Path
 
 import pytest
+
+from tinygpt.wsp.rules import scan_source
 
 REPO = Path(__file__).resolve().parents[1]
 RULED_DIRS = (
@@ -18,74 +19,6 @@ RULED_DIRS = (
     REPO / "experiments" / "wsp" / "analysis",
     REPO / "experiments" / "wsp" / "logs",  # the editors' own scripts are archived here
 )
-
-FORBIDDEN_MODULES = (
-    "torch.optim",
-    "sklearn",
-    "scipy.optimize",
-    "tinygpt.training",
-    "tinygpt.inference",
-    "tinygpt.model",
-    "tinygpt.wsp.scoring",
-    "tinygpt.wsp.activations",
-    "tinygpt.wsp.evaluate",
-)
-FORBIDDEN_NAMES = {
-    "backward",
-    "requires_grad",
-    "requires_grad_",
-    "enable_grad",
-    "set_grad_enabled",
-    "autograd",
-    "optim",
-    "Optimizer",
-    "AdamW",
-    "SGD",
-    "Adam",
-    "lstsq",
-    "pinv",
-    "solve",
-    "cholesky_solve",
-    "linear_regression",
-    # running the model anywhere but through the sandbox (rule 4)
-    "GPT",
-    "from_pretrained",
-    "generate_all",
-    "generate_batch",
-    "forward_capture",
-    "forward_with_attention",
-    "story_nll",
-    "sequence_nll",
-    "scaled_dot_product_attention",
-}
-FORBIDDEN_STRINGS = ("sealed", "GPT4-valid", "TinyStoriesV2")
-
-
-def scan_source(source: str) -> list[str]:
-    """Violations in one file's source, as readable strings (empty means clean)."""
-    problems: list[str] = []
-    tree = ast.parse(source)
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                if alias.name.startswith(FORBIDDEN_MODULES):
-                    problems.append(f"line {node.lineno}: import {alias.name}")
-        elif isinstance(node, ast.ImportFrom):
-            module = node.module or ""
-            if module.startswith(FORBIDDEN_MODULES):
-                problems.append(f"line {node.lineno}: from {module} import ...")
-            for alias in node.names:
-                if alias.name in FORBIDDEN_NAMES:
-                    problems.append(f"line {node.lineno}: imports {alias.name}")
-        elif isinstance(node, ast.Attribute) and node.attr in FORBIDDEN_NAMES:
-            problems.append(f"line {node.lineno}: uses .{node.attr}")
-        elif isinstance(node, ast.Name) and node.id in FORBIDDEN_NAMES:
-            problems.append(f"line {node.lineno}: uses {node.id}")
-        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
-            for marker in FORBIDDEN_STRINGS:
-                if marker in node.value:
-                    problems.append(f"line {node.lineno}: mentions '{marker}'")
-    return problems
 
 
 def _ruled_files() -> list[Path]:
