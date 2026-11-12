@@ -64,6 +64,14 @@ def watched(profile: str) -> list[Path]:
             if folder.exists():
                 files += [p for p in folder.rglob("*") if p.is_file()]
         files += [p for p in (wsp / "analysis").rglob("*") if p.is_file()]
+    # Earlier editors' collected work, rebuilt checkpoints and controls: a later editor must
+    # not learn from them (and in Exp 2 a second damaged copy would reveal a fault by
+    # subtraction). Collected logs of the same experiment and all archived edit scripts.
+    earlier = [REPO / "runs" / "wsp" / "rebuild", REPO / "runs" / "wsp" / "controls"]
+    earlier += [wsp / "logs" / profile, wsp / "edits"]
+    for folder in earlier:
+        if folder.exists():
+            files += [p for p in folder.rglob("*") if p.is_file()]
     return sorted({p for p in files if p.exists()})
 
 
