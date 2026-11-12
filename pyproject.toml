@@ -50,7 +50,14 @@ explicit = true
 
 [tool.ruff]
 line-length = 100
-extend-exclude = ["notebooks"]
+# Editors' analysis and edit scripts are archived exactly as they were run (docs/DECISIONS.md
+# 0010); the rule scan in tests/test_wsp_edit_rules.py still covers them.
+extend-exclude = [
+    "notebooks",
+    "experiments/wsp/analysis",
+    "experiments/wsp/edits/exp*",
+    "experiments/wsp/logs",
+]
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -59,6 +66,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.mypy]
 strict = true
 files = ["src", "experiments"]
+exclude = ["experiments/wsp/analysis/", "experiments/wsp/edits/exp", "experiments/wsp/logs/"]
 plugins = []
 
 [[tool.mypy.overrides]]

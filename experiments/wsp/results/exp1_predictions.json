@@ -1,0 +1,1307 @@
+{
+ "meta": {
+  "forward_passes": 0,
+  "editor": "Claude Fable 5.2 (main session)",
+  "method": "weights only: direct-path query-key and output-value circuits, one-step composition through earlier heads, LayerNorm folded as a fixed gain. MLPs were not read.",
+  "positive_at": 0.5,
+  "scripts": "experiments/wsp/analysis/exp1/01..07"
+ },
+ "heads": {
+  "0.0": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.19 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.11"
+   },
+   "positional": {
+    "confidence": 0.718,
+    "reason": "content moves scores by sigma ~ 0.37 nats, so patterns on different text should have cosine ~ 0.87"
+   },
+   "inactive": {
+    "confidence": 0.45,
+    "reason": "a diffuse head writes a near-constant vector of 0.15 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.19 nats; same-token z -0.11; content sigma est 0.37 -> pattern cosine est 0.87; constant write 0.15 of residual"
+  },
+  "0.1": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.15 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.49"
+   },
+   "positional": {
+    "confidence": 0.545,
+    "reason": "content moves scores by sigma ~ 0.46 nats, so patterns on different text should have cosine ~ 0.81"
+   },
+   "inactive": {
+    "confidence": 0.4,
+    "reason": "a diffuse head writes a near-constant vector of 0.18 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.15 nats; same-token z -0.49; content sigma est 0.46 -> pattern cosine est 0.81; constant write 0.18 of residual"
+  },
+  "0.2": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.00 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.032,
+    "reason": "same-token query-key z-score on the direct path is +0.19"
+   },
+   "positional": {
+    "confidence": 0.281,
+    "reason": "content moves scores by sigma ~ 0.57 nats, so patterns on different text should have cosine ~ 0.72"
+   },
+   "inactive": {
+    "confidence": 0.58,
+    "reason": "a diffuse head writes a near-constant vector of 0.06 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.00 nats; same-token z +0.19; content sigma est 0.57 -> pattern cosine est 0.72; constant write 0.06 of residual"
+  },
+  "0.3": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.03"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.88 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.039,
+    "reason": "same-token query-key z-score on the direct path is +0.31"
+   },
+   "positional": {
+    "confidence": 0.036,
+    "reason": "content moves scores by sigma ~ 1.19 nats, so patterns on different text should have cosine ~ 0.24"
+   },
+   "inactive": {
+    "confidence": 0.3,
+    "reason": "a diffuse head writes a near-constant vector of 0.07 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.03; eot@0 advantage +1.88 nats; same-token z +0.31; content sigma est 1.19 -> pattern cosine est 0.24; constant write 0.07 of residual"
+  },
+  "0.4": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.05 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.022,
+    "reason": "same-token query-key z-score on the direct path is +0.04"
+   },
+   "positional": {
+    "confidence": 0.304,
+    "reason": "content moves scores by sigma ~ 0.56 nats, so patterns on different text should have cosine ~ 0.73"
+   },
+   "inactive": {
+    "confidence": 0.55,
+    "reason": "a diffuse head writes a near-constant vector of 0.08 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.05 nats; same-token z +0.04; content sigma est 0.56 -> pattern cosine est 0.73; constant write 0.08 of residual"
+  },
+  "0.5": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.09 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.059,
+    "reason": "same-token query-key z-score on the direct path is +0.64"
+   },
+   "positional": {
+    "confidence": 0.036,
+    "reason": "content moves scores by sigma ~ 1.57 nats, so patterns on different text should have cosine ~ 0.08"
+   },
+   "inactive": {
+    "confidence": 0.25,
+    "reason": "a diffuse head writes a near-constant vector of 0.06 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.09 nats; same-token z +0.64; content sigma est 1.57 -> pattern cosine est 0.08; constant write 0.06 of residual"
+  },
+  "0.6": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.03"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.04 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.039,
+    "reason": "same-token query-key z-score on the direct path is +0.32"
+   },
+   "positional": {
+    "confidence": 0.036,
+    "reason": "content moves scores by sigma ~ 1.24 nats, so patterns on different text should have cosine ~ 0.21"
+   },
+   "inactive": {
+    "confidence": 0.3,
+    "reason": "a diffuse head writes a near-constant vector of 0.06 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.03; eot@0 advantage +1.04 nats; same-token z +0.32; content sigma est 1.24 -> pattern cosine est 0.21; constant write 0.06 of residual"
+  },
+  "0.7": {
+   "previous_token": {
+    "confidence": 0.01,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.04"
+   },
+   "start_anchor": {
+    "confidence": 0.02,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.50 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.005,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.032,
+    "reason": "same-token query-key z-score on the direct path is +0.21"
+   },
+   "positional": {
+    "confidence": 0.036,
+    "reason": "content moves scores by sigma ~ 1.07 nats, so patterns on different text should have cosine ~ 0.31"
+   },
+   "inactive": {
+    "confidence": 0.3,
+    "reason": "a diffuse head writes a near-constant vector of 0.07 of the residual norm; judged removable at second order"
+   },
+   "stats": "pos-only attn to i-1 0.04; eot@0 advantage +0.50 nats; same-token z +0.21; content sigma est 1.07 -> pattern cosine est 0.31; constant write 0.07 of residual"
+  },
+  "1.0": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.44 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.69"
+   },
+   "positional": {
+    "confidence": 0.516,
+    "reason": "content moves scores by sigma ~ 0.47 nats, so patterns on different text should have cosine ~ 0.80"
+   },
+   "inactive": {
+    "confidence": 0.05,
+    "reason": "a diffuse head writes a near-constant vector of 0.66 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.44 nats; same-token z -0.69; content sigma est 0.47 -> pattern cosine est 0.80; constant write 0.66 of residual"
+  },
+  "1.1": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.03"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.38 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.58"
+   },
+   "positional": {
+    "confidence": 0.058,
+    "reason": "content moves scores by sigma ~ 0.79 nats, so patterns on different text should have cosine ~ 0.53"
+   },
+   "inactive": {
+    "confidence": 0.05,
+    "reason": "a diffuse head writes a near-constant vector of 0.89 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.03; eot@0 advantage -0.38 nats; same-token z -0.58; content sigma est 0.79 -> pattern cosine est 0.53; constant write 0.89 of residual"
+  },
+  "1.2": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -1.09 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.40"
+   },
+   "positional": {
+    "confidence": 0.783,
+    "reason": "content moves scores by sigma ~ 0.32 nats, so patterns on different text should have cosine ~ 0.90"
+   },
+   "inactive": {
+    "confidence": 0.08,
+    "reason": "a diffuse head writes a near-constant vector of 0.74 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -1.09 nats; same-token z -0.40; content sigma est 0.32 -> pattern cosine est 0.90; constant write 0.74 of residual"
+  },
+  "1.3": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.28 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.37"
+   },
+   "positional": {
+    "confidence": 0.19,
+    "reason": "content moves scores by sigma ~ 0.63 nats, so patterns on different text should have cosine ~ 0.67"
+   },
+   "inactive": {
+    "confidence": 0.05,
+    "reason": "a diffuse head writes a near-constant vector of 0.75 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.28 nats; same-token z -0.37; content sigma est 0.63 -> pattern cosine est 0.67; constant write 0.75 of residual"
+  },
+  "1.4": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.58 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.38"
+   },
+   "positional": {
+    "confidence": 0.788,
+    "reason": "content moves scores by sigma ~ 0.32 nats, so patterns on different text should have cosine ~ 0.90"
+   },
+   "inactive": {
+    "confidence": 0.08,
+    "reason": "a diffuse head writes a near-constant vector of 1.35 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.58 nats; same-token z -0.38; content sigma est 0.32 -> pattern cosine est 0.90; constant write 1.35 of residual"
+  },
+  "1.5": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -1.88 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.59"
+   },
+   "positional": {
+    "confidence": 0.763,
+    "reason": "content moves scores by sigma ~ 0.34 nats, so patterns on different text should have cosine ~ 0.89"
+   },
+   "inactive": {
+    "confidence": 0.08,
+    "reason": "a diffuse head writes a near-constant vector of 0.63 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -1.88 nats; same-token z -0.59; content sigma est 0.34 -> pattern cosine est 0.89; constant write 0.63 of residual"
+  },
+  "1.6": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.166,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.97 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.021,
+    "reason": "same-token query-key z-score on the direct path is +0.02"
+   },
+   "positional": {
+    "confidence": 0.203,
+    "reason": "content moves scores by sigma ~ 0.71 nats, so patterns on different text should have cosine ~ 0.61"
+   },
+   "inactive": {
+    "confidence": 0.05,
+    "reason": "a diffuse head writes a near-constant vector of 0.85 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.97 nats; same-token z +0.02; content sigma est 0.71 -> pattern cosine est 0.61; constant write 0.85 of residual"
+  },
+  "1.7": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.03"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.46 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.02,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.19"
+   },
+   "positional": {
+    "confidence": 0.048,
+    "reason": "content moves scores by sigma ~ 0.82 nats, so patterns on different text should have cosine ~ 0.51"
+   },
+   "inactive": {
+    "confidence": 0.05,
+    "reason": "a diffuse head writes a near-constant vector of 0.79 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.03; eot@0 advantage -0.46 nats; same-token z -0.19; content sigma est 0.82 -> pattern cosine est 0.51; constant write 0.79 of residual"
+  },
+  "2.0": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.169,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.99 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.024,
+    "reason": "same-token query-key z-score on the direct path is +0.06"
+   },
+   "positional": {
+    "confidence": 0.152,
+    "reason": "content moves scores by sigma ~ 1.66 nats, so patterns on different text should have cosine ~ 0.06"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.82 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.99 nats; same-token z +0.06; content sigma est 1.66 -> pattern cosine est 0.06; constant write 0.82 of residual"
+  },
+  "2.1": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.123,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.61 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.37"
+   },
+   "positional": {
+    "confidence": 0.116,
+    "reason": "content moves scores by sigma ~ 1.10 nats, so patterns on different text should have cosine ~ 0.30"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.06 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.61 nats; same-token z -0.37; content sigma est 1.10 -> pattern cosine est 0.30; constant write 1.06 of residual"
+  },
+  "2.2": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.095,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.37 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.16"
+   },
+   "positional": {
+    "confidence": 0.094,
+    "reason": "content moves scores by sigma ~ 1.49 nats, so patterns on different text should have cosine ~ 0.11"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.62 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.37 nats; same-token z -0.16; content sigma est 1.49 -> pattern cosine est 0.11; constant write 0.62 of residual"
+  },
+  "2.3": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.059,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.07 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.16"
+   },
+   "positional": {
+    "confidence": 0.066,
+    "reason": "content moves scores by sigma ~ 0.99 nats, so patterns on different text should have cosine ~ 0.38"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.84 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.07 nats; same-token z -0.16; content sigma est 0.99 -> pattern cosine est 0.38; constant write 0.84 of residual"
+  },
+  "2.4": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.136,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.72 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.14"
+   },
+   "positional": {
+    "confidence": 0.127,
+    "reason": "content moves scores by sigma ~ 1.61 nats, so patterns on different text should have cosine ~ 0.08"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.89 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.72 nats; same-token z -0.14; content sigma est 1.61 -> pattern cosine est 0.08; constant write 0.89 of residual"
+  },
+  "2.5": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.063,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.11 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.02"
+   },
+   "positional": {
+    "confidence": 0.07,
+    "reason": "content moves scores by sigma ~ 0.94 nats, so patterns on different text should have cosine ~ 0.41"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.94 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.11 nats; same-token z -0.02; content sigma est 0.94 -> pattern cosine est 0.41; constant write 0.94 of residual"
+  },
+  "2.6": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.55 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.10"
+   },
+   "positional": {
+    "confidence": 0.044,
+    "reason": "content moves scores by sigma ~ 1.23 nats, so patterns on different text should have cosine ~ 0.22"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.82 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.55 nats; same-token z -0.10; content sigma est 1.23 -> pattern cosine est 0.22; constant write 0.82 of residual"
+  },
+  "2.7": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.162,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.94 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.13"
+   },
+   "positional": {
+    "confidence": 0.147,
+    "reason": "content moves scores by sigma ~ 1.21 nats, so patterns on different text should have cosine ~ 0.23"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.07 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.94 nats; same-token z -0.13; content sigma est 1.21 -> pattern cosine est 0.23; constant write 1.07 of residual"
+  },
+  "3.0": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.196,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.22 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.047,
+    "reason": "same-token query-key z-score on the direct path is +0.44"
+   },
+   "positional": {
+    "confidence": 0.174,
+    "reason": "content moves scores by sigma ~ 1.36 nats, so patterns on different text should have cosine ~ 0.16"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.36 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.22 nats; same-token z +0.44; content sigma est 1.36 -> pattern cosine est 0.16; constant write 1.36 of residual"
+  },
+  "3.1": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.188,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.15 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.043,
+    "reason": "same-token query-key z-score on the direct path is +0.38"
+   },
+   "positional": {
+    "confidence": 0.167,
+    "reason": "content moves scores by sigma ~ 2.34 nats, so patterns on different text should have cosine ~ 0.00"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 0.94 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.15 nats; same-token z +0.38; content sigma est 2.34 -> pattern cosine est 0.00; constant write 0.94 of residual"
+  },
+  "3.2": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.226,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.47 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.042,
+    "reason": "same-token query-key z-score on the direct path is +0.36"
+   },
+   "positional": {
+    "confidence": 0.197,
+    "reason": "content moves scores by sigma ~ 1.90 nats, so patterns on different text should have cosine ~ 0.03"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.31 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.47 nats; same-token z +0.36; content sigma est 1.90 -> pattern cosine est 0.03; constant write 1.31 of residual"
+  },
+  "3.3": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.131,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.68 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.021,
+    "reason": "same-token query-key z-score on the direct path is +0.02"
+   },
+   "positional": {
+    "confidence": 0.123,
+    "reason": "content moves scores by sigma ~ 1.35 nats, so patterns on different text should have cosine ~ 0.16"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.32 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.68 nats; same-token z +0.02; content sigma est 1.35 -> pattern cosine est 0.16; constant write 1.32 of residual"
+  },
+  "3.4": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.087,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.31 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.16"
+   },
+   "positional": {
+    "confidence": 0.088,
+    "reason": "content moves scores by sigma ~ 1.45 nats, so patterns on different text should have cosine ~ 0.12"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.02 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.31 nats; same-token z -0.16; content sigma est 1.45 -> pattern cosine est 0.12; constant write 1.02 of residual"
+  },
+  "3.5": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.216,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.38 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.033,
+    "reason": "same-token query-key z-score on the direct path is +0.22"
+   },
+   "positional": {
+    "confidence": 0.189,
+    "reason": "content moves scores by sigma ~ 1.64 nats, so patterns on different text should have cosine ~ 0.07"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.05 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.38 nats; same-token z +0.22; content sigma est 1.64 -> pattern cosine est 0.07; constant write 1.05 of residual"
+  },
+  "3.6": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.218,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.40 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.042,
+    "reason": "same-token query-key z-score on the direct path is +0.37"
+   },
+   "positional": {
+    "confidence": 0.191,
+    "reason": "content moves scores by sigma ~ 2.17 nats, so patterns on different text should have cosine ~ 0.01"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.29 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.40 nats; same-token z +0.37; content sigma est 2.17 -> pattern cosine est 0.01; constant write 1.29 of residual"
+  },
+  "3.7": {
+   "previous_token": {
+    "confidence": 0.04,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.105,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.46 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.05,
+    "reason": "same-token query-key z-score on the direct path is +0.50"
+   },
+   "positional": {
+    "confidence": 0.102,
+    "reason": "content moves scores by sigma ~ 1.56 nats, so patterns on different text should have cosine ~ 0.09"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.01 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.46 nats; same-token z +0.50; content sigma est 1.56 -> pattern cosine est 0.09; constant write 1.01 of residual"
+  },
+  "4.0": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.3,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +2.34 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.054,
+    "reason": "same-token query-key z-score on the direct path is +0.56"
+   },
+   "positional": {
+    "confidence": 0.255,
+    "reason": "content moves scores by sigma ~ 2.22 nats, so patterns on different text should have cosine ~ 0.01"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.50 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +2.34 nats; same-token z +0.56; content sigma est 2.22 -> pattern cosine est 0.01; constant write 1.50 of residual"
+  },
+  "4.1": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.137,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.72 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.034,
+    "reason": "same-token query-key z-score on the direct path is +0.23"
+   },
+   "positional": {
+    "confidence": 0.127,
+    "reason": "content moves scores by sigma ~ 1.76 nats, so patterns on different text should have cosine ~ 0.04"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.68 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.72 nats; same-token z +0.23; content sigma est 1.76 -> pattern cosine est 0.04; constant write 1.68 of residual"
+  },
+  "4.2": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.173,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.03 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.032,
+    "reason": "same-token query-key z-score on the direct path is +0.20"
+   },
+   "positional": {
+    "confidence": 0.156,
+    "reason": "content moves scores by sigma ~ 1.74 nats, so patterns on different text should have cosine ~ 0.05"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.17 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.03 nats; same-token z +0.20; content sigma est 1.74 -> pattern cosine est 0.05; constant write 1.17 of residual"
+  },
+  "4.3": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.01"
+   },
+   "start_anchor": {
+    "confidence": 0.265,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.79 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.039,
+    "reason": "same-token query-key z-score on the direct path is +0.31"
+   },
+   "positional": {
+    "confidence": 0.228,
+    "reason": "content moves scores by sigma ~ 2.06 nats, so patterns on different text should have cosine ~ 0.01"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.29 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.01; eot@0 advantage +1.79 nats; same-token z +0.31; content sigma est 2.06 -> pattern cosine est 0.01; constant write 1.29 of residual"
+  },
+  "4.4": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.041,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.07 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.047,
+    "reason": "same-token query-key z-score on the direct path is +0.45"
+   },
+   "positional": {
+    "confidence": 0.053,
+    "reason": "content moves scores by sigma ~ 1.45 nats, so patterns on different text should have cosine ~ 0.12"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.11 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.07 nats; same-token z +0.45; content sigma est 1.45 -> pattern cosine est 0.12; constant write 1.11 of residual"
+  },
+  "4.5": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -2.03 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.045,
+    "reason": "same-token query-key z-score on the direct path is +0.42"
+   },
+   "positional": {
+    "confidence": 0.044,
+    "reason": "content moves scores by sigma ~ 1.58 nats, so patterns on different text should have cosine ~ 0.08"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.75 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -2.03 nats; same-token z +0.42; content sigma est 1.58 -> pattern cosine est 0.08; constant write 1.75 of residual"
+  },
+  "4.6": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.2,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.25 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.04,
+    "reason": "same-token query-key z-score on the direct path is +0.34"
+   },
+   "positional": {
+    "confidence": 0.177,
+    "reason": "content moves scores by sigma ~ 1.61 nats, so patterns on different text should have cosine ~ 0.07"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.22 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.25 nats; same-token z +0.34; content sigma est 1.61 -> pattern cosine est 0.07; constant write 1.22 of residual"
+  },
+  "4.7": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.141,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.75 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.027,
+    "reason": "same-token query-key z-score on the direct path is +0.12"
+   },
+   "positional": {
+    "confidence": 0.13,
+    "reason": "content moves scores by sigma ~ 1.37 nats, so patterns on different text should have cosine ~ 0.16"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.38 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.75 nats; same-token z +0.12; content sigma est 1.37 -> pattern cosine est 0.16; constant write 1.38 of residual"
+  },
+  "5.0": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.3,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +2.26 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.02,
+    "reason": "same-token query-key z-score on the direct path is -0.04"
+   },
+   "positional": {
+    "confidence": 0.255,
+    "reason": "content moves scores by sigma ~ 1.93 nats, so patterns on different text should have cosine ~ 0.02"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.74 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +2.26 nats; same-token z -0.04; content sigma est 1.93 -> pattern cosine est 0.02; constant write 1.74 of residual"
+  },
+  "5.1": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.58 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.052,
+    "reason": "same-token query-key z-score on the direct path is +0.53"
+   },
+   "positional": {
+    "confidence": 0.044,
+    "reason": "content moves scores by sigma ~ 1.76 nats, so patterns on different text should have cosine ~ 0.05"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.88 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.58 nats; same-token z +0.53; content sigma est 1.76 -> pattern cosine est 0.05; constant write 1.88 of residual"
+  },
+  "5.2": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.148,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.82 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.049,
+    "reason": "same-token query-key z-score on the direct path is +0.48"
+   },
+   "positional": {
+    "confidence": 0.136,
+    "reason": "content moves scores by sigma ~ 1.40 nats, so patterns on different text should have cosine ~ 0.14"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 2.04 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.82 nats; same-token z +0.48; content sigma est 1.40 -> pattern cosine est 0.14; constant write 2.04 of residual"
+  },
+  "5.3": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.213,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +1.36 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.043,
+    "reason": "same-token query-key z-score on the direct path is +0.39"
+   },
+   "positional": {
+    "confidence": 0.187,
+    "reason": "content moves scores by sigma ~ 1.82 nats, so patterns on different text should have cosine ~ 0.04"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.24 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +1.36 nats; same-token z +0.39; content sigma est 1.82 -> pattern cosine est 0.04; constant write 1.24 of residual"
+  },
+  "5.4": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -0.24 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.044,
+    "reason": "same-token query-key z-score on the direct path is +0.41"
+   },
+   "positional": {
+    "confidence": 0.044,
+    "reason": "content moves scores by sigma ~ 1.64 nats, so patterns on different text should have cosine ~ 0.07"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.41 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -0.24 nats; same-token z +0.41; content sigma est 1.64 -> pattern cosine est 0.07; constant write 1.41 of residual"
+  },
+  "5.5": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.123,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: +0.61 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.038,
+    "reason": "same-token query-key z-score on the direct path is +0.29"
+   },
+   "positional": {
+    "confidence": 0.116,
+    "reason": "content moves scores by sigma ~ 2.02 nats, so patterns on different text should have cosine ~ 0.02"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 1.13 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage +0.61 nats; same-token z +0.29; content sigma est 2.02 -> pattern cosine est 0.02; constant write 1.13 of residual"
+  },
+  "5.6": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -1.58 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.046,
+    "reason": "same-token query-key z-score on the direct path is +0.44"
+   },
+   "positional": {
+    "confidence": 0.044,
+    "reason": "content moves scores by sigma ~ 1.83 nats, so patterns on different text should have cosine ~ 0.04"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 2.07 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -1.58 nats; same-token z +0.44; content sigma est 1.83 -> pattern cosine est 0.04; constant write 2.07 of residual"
+  },
+  "5.7": {
+   "previous_token": {
+    "confidence": 0.03,
+    "reason": "neighbouring position embeddings are not separable; position-only attention to i-1 is 0.02"
+   },
+   "start_anchor": {
+    "confidence": 0.03,
+    "reason": "direct-path advantage of the position-0 <|endoftext|> key: -2.20 nats (about 4.5 needed)"
+   },
+   "induction": {
+    "confidence": 0.03,
+    "reason": "no earlier head offers a sharp token-before signal and same-token matching through any earlier head has z < 1"
+   },
+   "duplicate_token": {
+    "confidence": 0.05,
+    "reason": "same-token query-key z-score on the direct path is +0.51"
+   },
+   "positional": {
+    "confidence": 0.044,
+    "reason": "content moves scores by sigma ~ 1.75 nats, so patterns on different text should have cosine ~ 0.05"
+   },
+   "inactive": {
+    "confidence": 0.03,
+    "reason": "a diffuse head writes a near-constant vector of 2.27 of the residual norm; too large to remove freely"
+   },
+   "stats": "pos-only attn to i-1 0.02; eot@0 advantage -2.20 nats; same-token z +0.51; content sigma est 1.75 -> pattern cosine est 0.05; constant write 2.27 of residual"
+  }
+ }
+}
