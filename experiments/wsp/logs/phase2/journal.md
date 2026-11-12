@@ -109,3 +109,21 @@ Same judgement as the `pinv` case of `ckpt_2`: within I1, flagged and disclosed.
 
 4 of 20 passes, tripwires clean (200 files), every tool call inside the workspace, clean
 rebuild matches, static scan clean.
+
+## 2026-11-12: Exp 2, `ckpt_5` editor (collected), and Exp 2 closed for editing
+
+5 of 20 passes, tripwires clean (265 files), every tool call inside the workspace, clean
+rebuild matches, static scan clean. The last workspace is deleted.
+
+| Checkpoint | Passes | Tensor named by the editor | Tripwires | Scan |
+|---|---|---|---|---|
+| ckpt_1 | 4 | `blocks.5.ln2.weight` | false alarm (git), audited | clean |
+| ckpt_2 | 4 | `blocks.5.attn.proj.weight` (head 6) | one false alarm (git), audited | `pinv` on weights, audited |
+| ckpt_3 | 8 | `blocks.3.attn.proj.weight` | clean | `lstsq` on weights, audited |
+| ckpt_4 | 4 | `blocks.2.mlp.proj.weight` | clean | clean |
+| ckpt_5 | 5 | `blocks.5.attn.proj.weight` (head 5) | clean | clean |
+
+I have not opened the sealed specs. Whether these names are right, and what the repairs
+recover on sealed stories, is decided by `final_eval.py` after the freeze. The editors' own
+dev numbers (in their journals) are on 64-row samples and are not results of this study.
+No Exp 2 edit is changed after this point.

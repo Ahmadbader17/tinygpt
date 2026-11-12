@@ -1,0 +1,211 @@
+{
+ "workspace": "/home/baderowski/wsp_workspaces/exp2_ckpt_5",
+ "budget": 20,
+ "passes_used": 5,
+ "calls_refused": 0,
+ "within_budget": true,
+ "ledger_verifies": true,
+ "genesis_matches": true,
+ "ledger_final_hash": "1dd3b7621d43e3d2909b136a92e7281b792efe93c4161804859b66b8951b8687",
+ "calls": [
+  {
+   "n": 1,
+   "kind": "read",
+   "weights": "52a2b9cc82d7",
+   "purpose": "H1: the damaged checkpoint's loss on 64 random 256-token dev windows is above the healthy 1.688, and in block 5 the output norm of head 5 is several times that of the other heads (weights show its proj columns are ~5.6x too large)"
+  },
+  {
+   "n": 2,
+   "kind": "read",
+   "weights": "52a2b9cc82d7",
+   "purpose": "H1b: the damaged checkpoint's loss on 64 whole dev stories from <|endoftext|> is above the healthy 1.605"
+  },
+  {
+   "n": 3,
+   "kind": "read",
+   "weights": "24119087dcc1",
+   "purpose": "H2: dividing head 5's columns of blocks.5.attn.proj.weight by the weight-derived factor 5.556 brings loss on the same 64 windows back to about the healthy 1.688"
+  },
+  {
+   "n": 4,
+   "kind": "read",
+   "weights": "24119087dcc1",
+   "purpose": "H2b: the same repair brings loss on the same 64 whole stories back to about the healthy 1.605"
+  },
+  {
+   "n": 5,
+   "kind": "read",
+   "weights": "24119087dcc1",
+   "purpose": "H3: the repaired model's 0.07 gap to the healthy 1.688 on the first 64 windows is sampling noise; a fresh independent draw of 64 windows should scatter around 1.69 rather than repeat 1.76"
+  }
+ ],
+ "weights_run": [
+  "24119087dcc18a48a32fae20bc37d60bd6be5fca885a3836ac9c0dca6d04c01f",
+  "52a2b9cc82d7c0e67033a1c8ecbd858220a699776fb41b5406eaa4648495f0db"
+ ],
+ "static_scan": {
+  "analysis/01_norms.py": [],
+  "analysis/02_balance.py": [],
+  "analysis/03_passes.py": [],
+  "analysis/04_other_checks.py": [],
+  "analysis/05_noise_pass.py": [],
+  "analysis/evalsets.py": [],
+  "repair.py": []
+ },
+ "static_scan_clean": true,
+ "workspace_checkpoint_sha256": "24119087dcc18a48a32fae20bc37d60bd6be5fca885a3836ac9c0dca6d04c01f",
+ "files": [
+  {
+   "path": "TASK.md",
+   "bytes": 8274
+  },
+  {
+   "path": "analysis/01_norms.out",
+   "bytes": 13277
+  },
+  {
+   "path": "analysis/01_norms.py",
+   "bytes": 1487
+  },
+  {
+   "path": "analysis/02_balance.out",
+   "bytes": 7064
+  },
+  {
+   "path": "analysis/02_balance.py",
+   "bytes": 3447
+  },
+  {
+   "path": "analysis/03_passes.json",
+   "bytes": 163
+  },
+  {
+   "path": "analysis/03_passes.out",
+   "bytes": 413
+  },
+  {
+   "path": "analysis/03_passes.py",
+   "bytes": 2388
+  },
+  {
+   "path": "analysis/04_other_checks.out",
+   "bytes": 7771
+  },
+  {
+   "path": "analysis/04_other_checks.py",
+   "bytes": 1266
+  },
+  {
+   "path": "analysis/05_noise_pass.out",
+   "bytes": 104
+  },
+  {
+   "path": "analysis/05_noise_pass.py",
+   "bytes": 1254
+  },
+  {
+   "path": "analysis/__pycache__/evalsets.cpython-312.pyc",
+   "bytes": 2728
+  },
+  {
+   "path": "analysis/evalsets.json",
+   "bytes": 139463
+  },
+  {
+   "path": "analysis/evalsets.py",
+   "bytes": 1267
+  },
+  {
+   "path": "checkpoint/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "checkpoint/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "checkpoint/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "dev/prompts.json",
+   "bytes": 45284
+  },
+  {
+   "path": "dev/stories.txt",
+   "bytes": 3992888
+  },
+  {
+   "path": "diagnosis.json",
+   "bytes": 1294
+  },
+  {
+   "path": "harness_source/activations.py",
+   "bytes": 3763
+  },
+  {
+   "path": "harness_source/edits.py",
+   "bytes": 4757
+  },
+  {
+   "path": "harness_source/generation.py",
+   "bytes": 8605
+  },
+  {
+   "path": "harness_source/metrics.py",
+   "bytes": 7098
+  },
+  {
+   "path": "harness_source/sandbox.py",
+   "bytes": 14435
+  },
+  {
+   "path": "journal.md",
+   "bytes": 6105
+  },
+  {
+   "path": "model_source/__init__.py",
+   "bytes": 192
+  },
+  {
+   "path": "model_source/attention.py",
+   "bytes": 2820
+  },
+  {
+   "path": "model_source/gpt.py",
+   "bytes": 3892
+  },
+  {
+   "path": "model_source/layers.py",
+   "bytes": 1525
+  },
+  {
+   "path": "repair.py",
+   "bytes": 1917
+  },
+  {
+   "path": "repaired/diff_summary.json",
+   "bytes": 14053
+  },
+  {
+   "path": "repaired/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "repaired/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "repaired/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "work/ledger.jsonl",
+   "bytes": 3288
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+[
+ {
+  "name": "ckpt_5_gauss_0",
+  "kind": "gauss",
+  "seed": 0,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_0",
+  "sha256": "d2e1712a187d83c237f49cd032030a64df027878dc1674430f1367934862f5ce",
+  "relative_l2": 0.13134120187706888
+ },
+ {
+  "name": "ckpt_5_gauss_1",
+  "kind": "gauss",
+  "seed": 1,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_1",
+  "sha256": "1fa59fb273523c12eecfcc17acfe57bfa85acc56b3ea70d5253d0b5ebe05da4f",
+  "relative_l2": 0.13134120500152974
+ },
+ {
+  "name": "ckpt_5_gauss_2",
+  "kind": "gauss",
+  "seed": 2,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_2",
+  "sha256": "ea5198df953b7f3d538f68b4147a2cd7d993ee97426ec5feb537514c4c3d3199",
+  "relative_l2": 0.1313412087389926
+ },
+ {
+  "name": "ckpt_5_gauss_3",
+  "kind": "gauss",
+  "seed": 3,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_3",
+  "sha256": "1318e4dddba85ef9cec21713570970a983f863e4659c5c114c81075aa1e1ecac",
+  "relative_l2": 0.1313412087765242
+ },
+ {
+  "name": "ckpt_5_gauss_4",
+  "kind": "gauss",
+  "seed": 4,
+  "checkpoint": "runs/wsp/controls/exp2_ckpt_5/gauss_4",
+  "sha256": "9e90de6c336cb6a48c1a28a2e01373a02d2ea843d9ed5ce3b590dbe2917f30bc",
+  "relative_l2": 0.1313412105263761
+ }
+]

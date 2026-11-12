@@ -447,3 +447,11 @@ Change log:
   (commit `fe28f14`). Without this a later Exp 2 editor could have compared its damaged
   checkpoint with an earlier rebuilt one unseen. Exp 3 attempts also run one after another,
   each workspace deleted before the next is built, so attempts cannot read each other.
+- 2026-11-12, after the five Exp 2 editors: the static rule scan flagged two editors for
+  `pinv` (`ckpt_2`, in its repair) and `lstsq` (`ckpt_3`, in one descriptive analysis script).
+  Both are applied to weight matrices only, which interpretation I1 allows; the scan's name
+  match is a proxy for fitting to data and is over-broad. The rule test now carries a
+  per-file, per-pattern list of these audited cases instead of a relaxed scan. The report
+  states H2 with and without `ckpt_2`. Ahmad may overrule this reading.
+- 2026-11-12: `git config core.trustctime false` is set in the working clone so that arming
+  the tripwires does not make git re-read the armed files (journal, false alarm at `ckpt_1`).

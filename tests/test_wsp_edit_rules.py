@@ -29,9 +29,27 @@ def _ruled_files() -> list[Path]:
     return files
 
 
+# Scan hits in editors' archived scripts that were audited by hand and found to be within the
+# rules (experiments/wsp/logs/phase2/journal.md, entries for ckpt_2 and ckpt_3). The scan
+# forbids `pinv` and `lstsq` by name as a proxy for "fitting weights to data"; in these files
+# both are applied to weight matrices only, and the clean rebuild (no data in its folder)
+# reproduces the edit. Each entry excuses one pattern in one file, nothing else.
+AUDITED_WEIGHT_ONLY = {
+    "experiments/wsp/edits/exp2_ckpt_2/analysis/04_siblings.py": ".pinv",
+    "experiments/wsp/edits/exp2_ckpt_2/edits/surrogate_h1h7.py": ".pinv",
+    "experiments/wsp/edits/exp2_ckpt_2/repair.py": ".pinv",
+    "experiments/wsp/edits/exp2_ckpt_3/analysis/03_gram.py": ".lstsq",
+}
+
+
 @pytest.mark.parametrize("path", _ruled_files(), ids=lambda p: str(p.relative_to(REPO)))
 def test_edit_and_analysis_scripts_follow_the_rules(path: Path) -> None:
-    assert scan_source(path.read_text(encoding="utf-8")) == []
+    problems = scan_source(path.read_text(encoding="utf-8"))
+    excused = AUDITED_WEIGHT_ONLY.get(str(path.relative_to(REPO)))
+    if excused is not None:
+        assert problems, "audited entry no longer needed: remove it"
+        problems = [p for p in problems if not p.endswith(f"uses {excused}")]
+    assert problems == []
 
 
 def test_the_scan_catches_each_forbidden_pattern() -> None:
