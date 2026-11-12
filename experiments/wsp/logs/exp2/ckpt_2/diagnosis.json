@@ -1,0 +1,9 @@
+{
+  "tensor": "blocks.5.attn.proj.weight",
+  "layer": 5,
+  "component": "attn",
+  "head": 6,
+  "fault": "The output (write) matrix of layer-5 attention head 6 was zeroed: columns 192-223 of blocks.5.attn.proj.weight are exactly 0 (8192 weights), which removes that head's whole contribution to the residual stream. Its query/key/value rows are intact. No other tensor shows damage.",
+  "confidence": 0.95,
+  "evidence": "Weights: 12.5% of blocks.5.attn.proj.weight is exactly zero, all of it in columns 192-223 and nothing else in any tensor; the matrix has rank 224 while every other attn.proj has rank 256; head 6's value rows have norm 5.43 (third largest in the layer), and in the 47 intact heads the write-matrix norm tracks the value-row norm (within about 25%), so a zero write matrix is not a trained state. Passes: damaged loss 1.7194 on 64 dev windows of 256 tokens (healthy reference 1.688) and 1.5792 on 64 whole dev stories (my sample, truncated to 256 tokens; healthy reference 1.605 on the study's sample, so not directly comparable). Captured L5 attention shows head 6 is still a working long-range content head (mean distance 41 tokens) whose pattern is closest to heads 1 and 7 (cosine 0.59, 0.57). Filling the zeroed columns with the neighbours' mean OV circuit lowered loss to 1.7131 (windows) and 1.5725 (stories): a consistent but small gain of about 0.006-0.007 nats, so the head matters and the repair is only partial."
+}

@@ -1,0 +1,273 @@
+{
+ "workspace": "/home/baderowski/wsp_workspaces/exp2_ckpt_2",
+ "budget": 20,
+ "passes_used": 4,
+ "calls_refused": 0,
+ "within_budget": true,
+ "ledger_verifies": true,
+ "genesis_matches": true,
+ "ledger_final_hash": "4d59ca792d9b0e433bf71d32d31e2ced04d03c95141db1b230645331ef6035c6",
+ "calls": [
+  {
+   "n": 1,
+   "kind": "read",
+   "weights": "353caf6aa644",
+   "purpose": "Baseline: the weights show blocks.5.attn.proj columns 192-223 (head 6) are exactly zero. Hypothesis: this is the only damage and it costs a modest loss increase over healthy 1.688 on 256-token windows. Capture L5 attention to test whether head 6 attends like its weight-neighbours h1/h7."
+  },
+  {
+   "n": 2,
+   "kind": "read",
+   "weights": "353caf6aa644",
+   "purpose": "Baseline on whole dev stories from <|endoftext|>: hypothesis that the zeroed L5 head 6 raises loss above healthy 1.605 by a similar margin as on windows."
+  },
+  {
+   "n": 3,
+   "kind": "read",
+   "weights": "2566a60ba70f",
+   "purpose": "Test: is L5 head 6 functionally redundant with its weight/attention neighbours h1 and h7? Edit sets its zeroed write matrix to mean(OV1, OV7) routed through V6 (weights only). Weights predict NO gain (OV cosine of h1,h7 is 0.15); adopt only if window loss falls clearly below the damaged 1.7194, otherwise the lost write matrix is declared unrecoverable."
+  },
+  {
+   "n": 4,
+   "kind": "read",
+   "weights": "2566a60ba70f",
+   "purpose": "Confirmation on independent data: pass 3 showed the h1/h7 surrogate for L5 head 6 lowers window loss by 0.006. Hypothesis: the gain is real, so whole-story loss also falls below the damaged 1.5792; if it does not, the surrogate is rejected and the repair is the identity."
+  }
+ ],
+ "weights_run": [
+  "2566a60ba70f47c1466178757d833d1adb1112666104ee8ad5f383da933483cb",
+  "353caf6aa644f4e1417d0461f4b3faf925e85ace4846215655fb9bbb8098aa8a"
+ ],
+ "static_scan": {
+  "analysis/01_norms.py": [],
+  "analysis/02_detail.py": [],
+  "analysis/03_head_structure.py": [],
+  "analysis/04_ov_similarity.py": [],
+  "analysis/04_siblings.py": [
+   "line 43: uses .pinv",
+   "line 43: uses .pinv",
+   "line 36: uses .pinv",
+   "line 41: uses .pinv",
+   "line 30: uses .pinv",
+   "line 48: uses .pinv"
+  ],
+  "analysis/05_baseline.py": [],
+  "analysis/06_attn_patterns.py": [],
+  "analysis/07_test_surrogate.py": [],
+  "analysis/08_confirm_surrogate.py": [],
+  "analysis/common.py": [],
+  "edits/surrogate_h1h7.py": [
+   "line 16: uses .pinv"
+  ],
+  "repair.py": [
+   "line 37: uses .pinv"
+  ]
+ },
+ "static_scan_clean": false,
+ "workspace_checkpoint_sha256": "2566a60ba70f47c1466178757d833d1adb1112666104ee8ad5f383da933483cb",
+ "files": [
+  {
+   "path": "TASK.md",
+   "bytes": 8274
+  },
+  {
+   "path": "analysis/01_norms.out",
+   "bytes": 14192
+  },
+  {
+   "path": "analysis/01_norms.py",
+   "bytes": 1479
+  },
+  {
+   "path": "analysis/02_detail.out",
+   "bytes": 10929
+  },
+  {
+   "path": "analysis/02_detail.py",
+   "bytes": 2176
+  },
+  {
+   "path": "analysis/03_head_structure.out",
+   "bytes": 6135
+  },
+  {
+   "path": "analysis/03_head_structure.py",
+   "bytes": 3229
+  },
+  {
+   "path": "analysis/04_ov_similarity.out",
+   "bytes": 4730
+  },
+  {
+   "path": "analysis/04_ov_similarity.py",
+   "bytes": 2355
+  },
+  {
+   "path": "analysis/04_siblings.out",
+   "bytes": 3313
+  },
+  {
+   "path": "analysis/04_siblings.py",
+   "bytes": 2742
+  },
+  {
+   "path": "analysis/05_baseline.out",
+   "bytes": 166
+  },
+  {
+   "path": "analysis/05_baseline.py",
+   "bytes": 1153
+  },
+  {
+   "path": "analysis/06_attn_patterns.out",
+   "bytes": 1232
+  },
+  {
+   "path": "analysis/06_attn_patterns.py",
+   "bytes": 1459
+  },
+  {
+   "path": "analysis/07_test_surrogate.out",
+   "bytes": 66
+  },
+  {
+   "path": "analysis/07_test_surrogate.py",
+   "bytes": 831
+  },
+  {
+   "path": "analysis/08_confirm_surrogate.out",
+   "bytes": 65
+  },
+  {
+   "path": "analysis/08_confirm_surrogate.py",
+   "bytes": 897
+  },
+  {
+   "path": "analysis/08_rows.json",
+   "bytes": 1587
+  },
+  {
+   "path": "analysis/__pycache__/common.cpython-312.pyc",
+   "bytes": 2004
+  },
+  {
+   "path": "analysis/common.py",
+   "bytes": 1071
+  },
+  {
+   "path": "checkpoint/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "checkpoint/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "checkpoint/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "dev/prompts.json",
+   "bytes": 45284
+  },
+  {
+   "path": "dev/stories.txt",
+   "bytes": 3992888
+  },
+  {
+   "path": "diagnosis.json",
+   "bytes": 1446
+  },
+  {
+   "path": "edited/surrogate_h1h7/diff_summary.json",
+   "bytes": 14077
+  },
+  {
+   "path": "edited/surrogate_h1h7/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "edited/surrogate_h1h7/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "edited/surrogate_h1h7/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "edits/surrogate_h1h7.py",
+   "bytes": 1249
+  },
+  {
+   "path": "harness_source/activations.py",
+   "bytes": 3763
+  },
+  {
+   "path": "harness_source/edits.py",
+   "bytes": 4757
+  },
+  {
+   "path": "harness_source/generation.py",
+   "bytes": 8605
+  },
+  {
+   "path": "harness_source/metrics.py",
+   "bytes": 7098
+  },
+  {
+   "path": "harness_source/sandbox.py",
+   "bytes": 14435
+  },
+  {
+   "path": "journal.md",
+   "bytes": 7257
+  },
+  {
+   "path": "model_source/__init__.py",
+   "bytes": 192
+  },
+  {
+   "path": "model_source/attention.py",
+   "bytes": 2820
+  },
+  {
+   "path": "model_source/gpt.py",
+   "bytes": 3892
+  },
+  {
+   "path": "model_source/layers.py",
+   "bytes": 1525
+  },
+  {
+   "path": "repair.py",
+   "bytes": 1761
+  },
+  {
+   "path": "repaired/diff_summary.json",
+   "bytes": 14073
+  },
+  {
+   "path": "repaired/model.safetensors",
+   "bytes": 23419560
+  },
+  {
+   "path": "repaired/model_config.json",
+   "bytes": 144
+  },
+  {
+   "path": "repaired/tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "tokenizer.json",
+   "bytes": 265079
+  },
+  {
+   "path": "work/ledger.jsonl",
+   "bytes": 3125
+  },
+  {
+   "path": "work/outputs/read_call001.npz",
+   "bytes": 134283524
+  }
+ ]
+}

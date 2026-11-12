@@ -74,3 +74,25 @@ tripwire anomaly; this is it.
 Conclusion: a harness artefact, not a read by the editor. The `ckpt_1` attempt stands. The
 access-time record for `ckpt_1` is therefore uninformative for those six files; the
 transcript is the evidence for them.
+
+## 2026-11-12: Exp 2, `ckpt_2` editor: interruption, one tripped wire, one scan flag (audited)
+
+- **Interruption.** The editor's run was cut off by an account usage limit after it had
+  written its diagnosis, repair script and journal (4 passes used). After the limit was reset
+  the same agent was resumed with one message that said only that the interruption was an API
+  limit and that it should continue under the same rules. It appended a note to its journal,
+  re-ran `repair.py` and reported. No pass was spent after the resume.
+- **Tripwire.** One file tripped: this journal, read at 19:53:48, the second it was armed
+  and before the editor's first tool call. Cause: I had appended to it and committed within
+  the same second, which leaves git unsure whether the file changed ("racily clean"), so
+  the next `git status` re-reads it. The editor's 18 tool calls all ran inside its
+  workspace. From `ckpt_3` on the index is refreshed before arming and the wires are checked
+  once right after a `git status` of my own, before the editor starts.
+- **Static scan flag.** `repair.py` uses `torch.linalg.pinv`, which the rule-2 scan forbids
+  by name. Audit: the pseudo-inverse is taken of head 6's own value rows, a weight matrix,
+  and the repair is `0.5 * (P1 V1 + P7 V7) pinv(V6)`: a function of existing weights and one
+  stated scalar, which is what interpretation I1 allows. No activation or text enters; the
+  clean rebuild, which has no data in its folder, reproduces the same sha256. The scan
+  pattern was a proxy for "least squares on data" and is over-broad here. I count the repair
+  and disclose the flag; whether to count it is put to Ahmad in the final summary, and the
+  report gives H2 both ways.

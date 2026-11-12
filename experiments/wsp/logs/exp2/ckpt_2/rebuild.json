@@ -1,0 +1,731 @@
+{
+ "rebuilt": true,
+ "sha256": "2566a60ba70f47c1466178757d833d1adb1112666104ee8ad5f383da933483cb",
+ "matches_workspace": true,
+ "checkpoint": "runs/wsp/rebuild/exp2_ckpt_2/repaired",
+ "diff_summary": {
+  "tensors_total": 76,
+  "tensors_touched": 1,
+  "weights_total": 5853184,
+  "weights_changed": 8192,
+  "fraction_changed": 0.0013995801259622112,
+  "relative_l2": 0.026358685383565898,
+  "per_tensor": {
+   "blocks.0.attn.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.attn.proj.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.attn.qkv.bias": {
+    "shape": [
+     768
+    ],
+    "numel": 768,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.attn.qkv.weight": {
+    "shape": [
+     768,
+     256
+    ],
+    "numel": 196608,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.ln1.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.ln1.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.ln2.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.ln2.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.mlp.fc.bias": {
+    "shape": [
+     1024
+    ],
+    "numel": 1024,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.mlp.fc.weight": {
+    "shape": [
+     1024,
+     256
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.mlp.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.0.mlp.proj.weight": {
+    "shape": [
+     256,
+     1024
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.attn.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.attn.proj.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.attn.qkv.bias": {
+    "shape": [
+     768
+    ],
+    "numel": 768,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.attn.qkv.weight": {
+    "shape": [
+     768,
+     256
+    ],
+    "numel": 196608,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.ln1.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.ln1.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.ln2.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.ln2.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.mlp.fc.bias": {
+    "shape": [
+     1024
+    ],
+    "numel": 1024,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.mlp.fc.weight": {
+    "shape": [
+     1024,
+     256
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.mlp.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.1.mlp.proj.weight": {
+    "shape": [
+     256,
+     1024
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.attn.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.attn.proj.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.attn.qkv.bias": {
+    "shape": [
+     768
+    ],
+    "numel": 768,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.attn.qkv.weight": {
+    "shape": [
+     768,
+     256
+    ],
+    "numel": 196608,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.ln1.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.ln1.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.ln2.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.ln2.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.mlp.fc.bias": {
+    "shape": [
+     1024
+    ],
+    "numel": 1024,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.mlp.fc.weight": {
+    "shape": [
+     1024,
+     256
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.mlp.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.2.mlp.proj.weight": {
+    "shape": [
+     256,
+     1024
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.attn.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.attn.proj.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.attn.qkv.bias": {
+    "shape": [
+     768
+    ],
+    "numel": 768,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.attn.qkv.weight": {
+    "shape": [
+     768,
+     256
+    ],
+    "numel": 196608,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.ln1.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.ln1.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.ln2.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.ln2.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.mlp.fc.bias": {
+    "shape": [
+     1024
+    ],
+    "numel": 1024,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.mlp.fc.weight": {
+    "shape": [
+     1024,
+     256
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.mlp.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.3.mlp.proj.weight": {
+    "shape": [
+     256,
+     1024
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.attn.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.attn.proj.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.attn.qkv.bias": {
+    "shape": [
+     768
+    ],
+    "numel": 768,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.attn.qkv.weight": {
+    "shape": [
+     768,
+     256
+    ],
+    "numel": 196608,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.ln1.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.ln1.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.ln2.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.ln2.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.mlp.fc.bias": {
+    "shape": [
+     1024
+    ],
+    "numel": 1024,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.mlp.fc.weight": {
+    "shape": [
+     1024,
+     256
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.mlp.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.4.mlp.proj.weight": {
+    "shape": [
+     256,
+     1024
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.attn.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.attn.proj.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 8192,
+    "fraction_changed": 0.125,
+    "relative_l2": 0.29206773182500134
+   },
+   "blocks.5.attn.qkv.bias": {
+    "shape": [
+     768
+    ],
+    "numel": 768,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.attn.qkv.weight": {
+    "shape": [
+     768,
+     256
+    ],
+    "numel": 196608,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.ln1.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.ln1.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.ln2.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.ln2.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.mlp.fc.bias": {
+    "shape": [
+     1024
+    ],
+    "numel": 1024,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.mlp.fc.weight": {
+    "shape": [
+     1024,
+     256
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.mlp.proj.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "blocks.5.mlp.proj.weight": {
+    "shape": [
+     256,
+     1024
+    ],
+    "numel": 262144,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "ln_f.bias": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "ln_f.weight": {
+    "shape": [
+     256
+    ],
+    "numel": 256,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "wpe.weight": {
+    "shape": [
+     256,
+     256
+    ],
+    "numel": 65536,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   },
+   "wte.weight": {
+    "shape": [
+     4096,
+     256
+    ],
+    "numel": 1048576,
+    "changed": 0,
+    "fraction_changed": 0.0,
+    "relative_l2": 0.0
+   }
+  },
+  "edit": "repair_l5h6_neighbour_ov",
+  "script": "/home/baderowski/code/tiny-gpt/runs/wsp/rebuild/exp2_ckpt_2/repair.py",
+  "script_sha256": "db84a3e177e13518ad8da43a337433a7c6225cbf994e89cadff3f5ba156f0127",
+  "base_sha256": "353caf6aa644f4e1417d0461f4b3faf925e85ace4846215655fb9bbb8098aa8a",
+  "edited_sha256": "2566a60ba70f47c1466178757d833d1adb1112666104ee8ad5f383da933483cb"
+ }
+}
