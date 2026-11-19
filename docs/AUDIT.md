@@ -75,3 +75,19 @@ With 200 warmup steps, all 100 steps are in warmup; this is a regression check, 
 - Peak RSS: 3.46 GB.
 - Real checkpoints (`runs/overnight_long` best/last, `export/`): same state-dict SHA256 `5a7dc51d…`, recomputed
   val loss 1.708412 (equal to `best_val` in `state.json`), and greedy completions recorded for three prompts.
+
+## After (end of the pass)
+Same seeded 100-step command on the simplified code:
+
+| | Before | After |
+|---|---|---|
+| Final val loss | 4.502402 | 4.502402 |
+| Train loss at step 100 | 4.6267878 | 4.6267878 (differs in the 8th digit, same as run-to-run noise) |
+| Samples at step 100 | | byte-identical |
+| Mean tok/s (10 windows) | 2,517 | 2,545 |
+| Peak RSS | 3.46 GB | 3.42 GB |
+| Real checkpoints fingerprint | | identical (weights hash, logits, val loss, greedy and seeded outputs) |
+| Tracked files | 425 | 79 (WSP study moved to its branch) |
+| Core `src` lines (without `wsp/`) | 1,991 | 1,973 |
+| Tests | 120 core (+198 WSP) | 119 (2 regression tests added, 3 for removed code dropped) |
+| Runtime dependencies | 9 | 9 |
