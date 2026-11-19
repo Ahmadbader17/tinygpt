@@ -1,4 +1,6 @@
+import csv
 import dataclasses
+import time
 from pathlib import Path
 
 import numpy as np
@@ -84,6 +86,35 @@ def test_fit_stops_on_time_limit_and_can_resume(token_file: Path, tmp_path: Path
     second = make_trainer(cfg, token_file, run)
     assert second.resume()
     assert second.state.step == first.state.step
+
+
+def test_divergence_keeps_the_last_good_checkpoint(token_file: Path, tmp_path: Path) -> None:
+    """A NaN validation loss must not overwrite checkpoints/last, or --resume restarts broken."""
+    cfg = make_cfg(max_steps=20, eval_interval=10, warmup_steps=2)
+    run = tmp_path / "run"
+    trainer = make_trainer(cfg, token_file, run)
+    vals = iter([2.0, float("nan")])
+    trainer.evaluate = lambda: next(vals)  # type: ignore[method-assign]
+    with pytest.raises(RuntimeError, match="diverged"):
+        trainer.fit()
+    resumed = make_trainer(cfg, token_file, run)
+    assert resumed.resume()
+    assert resumed.state.step == 10  # the last step whose validation loss was finite
+
+
+def test_checkpoint_and_sampling_time_is_not_counted_as_training(
+    token_file: Path, tmp_path: Path
+) -> None:
+    cfg = make_cfg(max_steps=8, eval_interval=4, warmup_steps=2)
+    trainer = make_trainer(cfg, token_file, tmp_path / "run")
+    trainer.sample_fn = lambda model: time.sleep(1.0) or "slow sample"
+    trainer.fit()
+    with open(tmp_path / "run" / "metrics.csv", newline="") as f:
+        tps = {int(r["step"]): float(r["tokens_per_sec"]) for r in csv.DictReader(f)}
+    # step 5 is the first step after an eval whose sample took 1 s. Counting that second would
+    # put this one-step window above 1 s; a tiny-model step really takes milliseconds.
+    seconds_for_step_5 = trainer.tokens_per_step / tps[5]
+    assert seconds_for_step_5 < 0.5
 
 
 def test_estimate_loss_is_deterministic_and_restores_mode(token_file: Path) -> None:

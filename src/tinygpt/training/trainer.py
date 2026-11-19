@@ -201,18 +201,21 @@ class Trainer:
                         tps,
                         eta_h,
                     )
-                    window_start, window_loss, window_steps = time.perf_counter(), 0.0, 0
                     if val is not None:
                         self._after_eval(val)
+                    # reset after checkpoints and samples, so their time is not counted as training
+                    window_start, window_loss, window_steps = time.perf_counter(), 0.0, 0
                 if max_hours is not None and st.elapsed - base_elapsed > max_hours * 3600:
                     log.warning("time limit of %.2fh reached at step %d", max_hours, st.step)
                     break
         finally:
             for s, h in old_handlers.items():
                 signal.signal(s, h)
-            self.save("last")  # always leave a resumable checkpoint, even on Ctrl-C or error
-            plot_loss(self.metrics.path, self.run_dir / "loss.png")
-            log.info("stopped at step %d; best val %.4f", self.state.step, self.state.best_val)
+        # Ctrl-C, SIGTERM and the time limit all end the loop normally and get saved here. An
+        # exception (such as divergence) skips this, so checkpoints/last keeps the last good state.
+        self.save("last")
+        plot_loss(self.metrics.path, self.run_dir / "loss.png")
+        log.info("stopped at step %d; best val %.4f", self.state.step, self.state.best_val)
 
     def _after_eval(self, val: float) -> None:
         if not math.isfinite(val):
