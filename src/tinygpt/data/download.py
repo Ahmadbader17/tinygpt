@@ -40,7 +40,7 @@ def split_stories(chunks: Iterable[bytes], limit: int | None = None) -> Iterator
 
 def stream_url(url: str, limit: int | None) -> Iterator[str]:
     """Stream stories over HTTP; leaving the generator early closes the connection."""
-    with urllib.request.urlopen(url) as resp:  # noqa: S310 (our own configured https URL)
+    with urllib.request.urlopen(url) as resp:
         yield from split_stories(iter(lambda: resp.read(_CHUNK_BYTES), b""), limit)
 
 

@@ -52,7 +52,7 @@ Time estimates are honest guesses for someone comfortable in Python and PyTorch 
 - **CI (`.github/workflows/ci.yml`):** a clean machine runs lint, format check, mypy and pytest on every push, which found a real bug (a `.gitignore` rule that hid the `data` package). *Question:* "What does CI catch that your laptop does not?"
 - **Hub upload (`publish.py`):** a dry run by default, one atomic commit per repo, the token only from the environment. *Question:* "How do you publish safely and verify what was published?"
 - **CLI (`cli.py`):** thin argparse commands that call library code. *Question:* "Why keep the CLI thin?"
-- **Logging and metrics (`utils/logging.py`, `training/metrics.py`):** a log file and a CSV per run, so a night-long job can be diagnosed afterwards. *Question:* "How do you know a long job is healthy while you sleep?"
+- **Logging and metrics (`utils.py` `setup_logging`, `training/metrics.py`):** a log file and a CSV per run, so a night-long job can be diagnosed afterwards. *Question:* "How do you know a long job is healthy while you sleep?"
 
 ## Interview drill
 Whiteboard each of these without notes, then check against `docs/LEARNING.md`:

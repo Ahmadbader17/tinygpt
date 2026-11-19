@@ -98,7 +98,7 @@ def load_config(path: Path | str) -> Config:
         raw = tomllib.load(f)
     return Config(
         name=raw["name"],
-        seed=raw.get("seed", 1337),
+        seed=raw.get("seed", Config.seed),
         model=_build(ModelConfig, raw["model"], "model"),
         data=_build(DataConfig, raw.get("data", {}), "data"),
         train=_build(TrainConfig, raw.get("train", {}), "train"),

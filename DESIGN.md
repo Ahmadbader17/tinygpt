@@ -143,10 +143,7 @@ tiny-gpt/
     __init__.py
     config.py
     cli.py
-    utils/
-      seed.py
-      device.py
-      logging.py
+    utils.py             # seed, device, logging, environment probe
     tokenizer/
       base.py            # Tokenizer protocol
       bpe.py             # HF tokenizers byte level BPE: train, save, load

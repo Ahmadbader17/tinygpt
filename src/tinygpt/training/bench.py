@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import tempfile
 import time
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -39,7 +39,7 @@ def bench_threads(
         for n in thread_counts:
             torch.set_num_threads(n)
             torch.manual_seed(0)
-            trainer = Trainer(GPT(cfg.model), replace(cfg), data, data, Path(tmp) / f"run{n}")
+            trainer = Trainer(GPT(cfg.model), cfg, data, data, Path(tmp) / f"run{n}")
             for _ in range(2):  # warm-up: allocator and kernel caches
                 trainer.train_step()
             t0 = time.perf_counter()

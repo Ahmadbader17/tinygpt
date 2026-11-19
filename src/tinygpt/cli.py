@@ -1,4 +1,4 @@
-"""Command line entry point. Subcommands are added phase by phase."""
+"""Command line entry point: `tinygpt <command>`; the Makefile wraps the common ones."""
 
 import argparse
 import dataclasses
@@ -22,10 +22,7 @@ from tinygpt.publish import plan_model_upload, plan_space_upload, upload
 from tinygpt.tokenizer import BPETokenizer, train_bpe
 from tinygpt.training.bench import bench_threads
 from tinygpt.training.trainer import Trainer, estimate_loss
-from tinygpt.utils.device import pick_device
-from tinygpt.utils.env import probe_environment
-from tinygpt.utils.logging import setup_logging
-from tinygpt.utils.seed import seed_everything
+from tinygpt.utils import pick_device, probe_environment, seed_everything, setup_logging
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -110,6 +107,11 @@ def make_sample_fn(tokenizer: BPETokenizer, device: torch.device) -> Callable[[G
     return sample
 
 
+# the final validation number in docs/RESULTS.md: 200 fixed batches, 10x the in-training estimate
+EXPORT_EVAL_BATCHES = 200
+EXPORT_EVAL_BATCH_SIZE = 32
+
+
 def run_export(args: argparse.Namespace) -> None:
     """Bundle a checkpoint with its tokenizer and a model_info.json the API serves at /v1/model."""
     run_dir, data_dir = Path(args.run), Path(args.data_dir)
@@ -118,7 +120,9 @@ def run_export(args: argparse.Namespace) -> None:
     state = json.loads((ckpt / "state.json").read_text(encoding="utf-8"))
     model = GPT.from_pretrained(ckpt)
     val = MemmapTokenSampler(data_dir / "processed" / "val.bin", cfg.model.context_length)
-    loss = estimate_loss(model, val, 200, 32, torch.device("cpu"))  # same recipe as docs/RESULTS.md
+    loss = estimate_loss(
+        model, val, EXPORT_EVAL_BATCHES, EXPORT_EVAL_BATCH_SIZE, torch.device("cpu")
+    )
     data_meta = json.loads((data_dir / "processed" / "meta.json").read_text(encoding="utf-8"))
     info = {
         "run": run_dir.name,

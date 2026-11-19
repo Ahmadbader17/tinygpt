@@ -23,7 +23,7 @@ from tinygpt.model import GPT
 from tinygpt.training.checkpoint import TrainState, load_checkpoint, save_checkpoint
 from tinygpt.training.metrics import MetricsLogger, plot_loss
 from tinygpt.training.schedule import lr_at
-from tinygpt.utils.env import probe_environment
+from tinygpt.utils import probe_environment
 
 log = logging.getLogger(__name__)
 
