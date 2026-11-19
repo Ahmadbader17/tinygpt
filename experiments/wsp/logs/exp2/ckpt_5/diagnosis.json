@@ -1,9 +1,0 @@
-{
-  "tensor": "blocks.5.attn.proj.weight",
-  "layer": 5,
-  "component": "attn",
-  "head": 5,
-  "fault": "The 32 input columns owned by head 5 (columns 160-191) of block 5's attention output projection were multiplied by one scalar of about 5.5 (weights-only estimate 5.56, plausible range 5.4-5.8), so this head writes about 5.5 times too strongly into the residual stream. Its direction structure is intact; only the gain is wrong.",
-  "confidence": 0.93,
-  "evidence": "Weights: head 5's columns have Frobenius norm 22.43 against 4.1-6.5 for the other heads of the layer; |O_h|/|V_h| is 5.66 for this head and 0.97-1.05 for every other head in blocks 2-5; the ratio is uniform over the head's 32 columns (5.52-5.81) and the Gram matrices O^T O and V V^T keep the usual cosine (0.971), which means a pure scalar gain, not noise. No other tensor shows an outlier. Passes (5 of 20 used): on the damaged checkpoint head 5 of block 5 writes vectors of mean norm 11.07 against 1.9-3.0 for the other heads; loss 1.845 on 64 dev windows and 1.742 on 64 whole stories. After dividing those columns by 5.556: head norm 1.99, loss 1.762 on the same windows and 1.661 on the same stories; a fresh independent draw of 64 windows gives 1.694 (standard error about 0.05), in line with the healthy 1.688."
-}

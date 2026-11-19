@@ -1,6 +1,0 @@
-test_ablate_secondary4 tensors touched 3 weights changed 32768 relative L2 0.06531
-secondary ablated g0 {"call": 18, "weights_sha256": "244974f1eec301b8ecf3b77c20dbb4e66f87e5e0f0edf3fdefa6ad8aa9e78b59", "generations_file": "/home/baderowski/wsp_workspaces/exp3_b50/work/outputs/generations_call018.json", "loop_rate": 0.125, "rep4": 0.01898055349425289, "mean_length": 163.703125, "eot_rate": 0.671875}
-secondary ablated g1 {"call": 19, "weights_sha256": "244974f1eec301b8ecf3b77c20dbb4e66f87e5e0f0edf3fdefa6ad8aa9e78b59", "generations_file": "/home/baderowski/wsp_workspaces/exp3_b50/work/outputs/generations_call019.json", "loop_rate": 0.203125, "rep4": 0.026511666985218424, "mean_length": 171.078125, "eot_rate": 0.65625}
-secondary ablated l0 {"call": 20, "weights_sha256": "244974f1eec301b8ecf3b77c20dbb4e66f87e5e0f0edf3fdefa6ad8aa9e78b59", "mean_nll": 1.7084322568808534}
-  delta vs base (1.64999) 0.05844290116295259
-used 20 remaining 30

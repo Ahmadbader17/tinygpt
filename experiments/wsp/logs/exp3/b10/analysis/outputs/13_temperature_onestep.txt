@@ -1,3 +1,0 @@
-T=0.800: expected seen-4-gram completions 307.7  ratio to T=0.8 1.000
-T=0.889: expected seen-4-gram completions 299.0  ratio to T=0.8 0.972
-T=1.000: expected seen-4-gram completions 287.6  ratio to T=0.8 0.935

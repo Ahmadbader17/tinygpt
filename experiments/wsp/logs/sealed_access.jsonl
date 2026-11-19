@@ -1,2 +1,0 @@
-{"time": "2026-11-12T21:03:18.449164+00:00", "commit": "de99f1becc624d836f43ca99e1a953b62c73ac48", "file": "TinyStoriesV2-GPT4-valid.txt", "sha256": "6874bae9a4c1a4e7edcf0e53b86c17817e9cf881fc75ff2368da457b80c0585d", "purpose": "final evaluation"}
-{"time": "2026-11-12T22:00:55.856413+00:00", "commit": "4fe9a09f85f9eddb927ebed1ed7fd95e2d339f65", "file": "TinyStoriesV2-GPT4-valid.txt", "sha256": "6874bae9a4c1a4e7edcf0e53b86c17817e9cf881fc75ff2368da457b80c0585d", "purpose": "section 9 audit of exp2 ckpt_5: stories 20000-21999 only"}

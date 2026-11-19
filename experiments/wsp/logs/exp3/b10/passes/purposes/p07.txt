@@ -1,1 +1,0 @@
-Hypothesis (revision 1): the loss cost of scaling heads L4H5, L4H4, L5H7, L5H6 is second order in the step, so the factor 0.75 (edit copyheads_075, half the step of the rejected factor 0.5 which cost +0.0225) costs about a quarter of that, near +0.006 nats, well inside the 0.02 limit. Same 64 dev stories as passes 3 and 6, paired per token.

@@ -1,9 +1,0 @@
-{
-  "tensor": "blocks.5.ln2.weight",
-  "layer": 5,
-  "component": "ln",
-  "head": null,
-  "fault": "64 of the 256 gains of the LayerNorm in front of the last MLP (blocks.5.ln2.weight) were multiplied by a common factor of about 4.5 (weights-only estimates 4.45 to 4.51). The affected channels are scattered, not contiguous: 4, 10, 11, 17, 19, 20, 21, 23, 26, 29, 32, 35, 38, 58, 60, 63, 64, 65, 66, 67, 78, 79, 81, 83, 84, 85, 87, 89, 90, 103, 118, 119, 120, 125, 128, 130, 133, 137, 139, 143, 150, 158, 163, 164, 168, 174, 176, 184, 191, 201, 203, 204, 210, 214, 216, 219, 221, 222, 224, 226, 232, 239, 252, 254. The other 192 gains and every other tensor look undamaged.",
-  "confidence": 0.95,
-  "evidence": "Weights: the 64 gains form a separate cluster (3.86 to 5.81, mean 5.41) with an empty gap to the other 192 (0.91 to 1.35, mean 1.22, in line with the depth trend of all other LayerNorm gains); the cluster still correlates 0.93 with the column norms of blocks.5.mlp.fc.weight, so it was scaled, not replaced. Passes: damaged checkpoint 2.512 nats/token on 64 random 256-token dev windows and 2.371 on 64 whole dev stories; after dividing the 64 gains by 4.5 the same inputs give 1.674 and 1.522 (healthy reference 1.688 and 1.605 on their own samples). 4 of 20 passes used."
-}

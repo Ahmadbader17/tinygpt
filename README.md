@@ -62,36 +62,9 @@ docker run -p 7860:7860 -e TINYGPT_HF_REPO=Ahmadbader17/tiny-gpt tiny-gpt
 - Not evaluated for bias or safety.
 
 ## Weight Space Programming study
-A small, preregistered replication of ["Sparks of Weight-Space Programming"](https://rikiyat.github.io/blog/weight-space-programming) (Takehi et al., 2026) on this model: an LLM (Claude Fable 5.2) reads the weights and writes new ones by hand, with no gradients, a rationed number of forward passes, and a test set that stayed off the machine until the edits were frozen. Full write-up: [`docs/WSP_REPORT.md`](docs/WSP_REPORT.md).
-
-![Repetition and loss on sealed prompts](docs/img/wsp_exp3_headline.png)
-
-- **Reading:** from weights alone, predictions of what 48 heads do scored F1 0.82 against 0.29 by chance within a layer; all correct positives were in layers 0 and 1.
-- **Repair:** five blind editors each located a planted fault; three repairs recovered 100% of the lost loss, two (where information was destroyed) 46% and 47%.
-- **Repetition:** scaling a few late attention heads by 0.75 to 0.8 cut loop rate from 23.9% to 18.6 to 20.6% (real stories: 18.3%) for +0.007 to +0.009 nats of test loss. The effect is small; a decoding-time repetition penalty removes far more, at +0.155 nats.
-
-Rebuild every edited checkpoint and rerun the evaluation from a clean clone (about 75 minutes on a laptop CPU):
-
-```bash
-git checkout wsp-freeze          # de99f1b: the commit the edits and the evaluation are pinned to
-make setup && make data          # environment; dev and train stories (needed to drop duplicates)
-uv run python -c "from huggingface_hub import snapshot_download as d; d('Ahmadbader17/tiny-gpt', revision='36ee8ed', local_dir='runs/wsp/original')"
-git show exp/weight_space_programming:experiments/wsp/results/exp2_fault_specs.json > /tmp/specs.json
-uv run python experiments/wsp/inject_faults.py --from-specs /tmp/specs.json --out runs/wsp/sealed/exp2
-cp /tmp/specs.json runs/wsp/sealed/exp2/specs.json
-for c in ckpt_1 ckpt_2 ckpt_3 ckpt_4 ckpt_5; do
-  uv run python experiments/wsp/pipeline.py rebuild exp2 $c && uv run python experiments/wsp/pipeline.py controls exp2 $c
-done
-for a in b10 b25 b50; do
-  uv run python experiments/wsp/pipeline.py rebuild exp3 $a && uv run python experiments/wsp/pipeline.py controls exp3 $a
-done
-git status --short               # should be empty: rebuilt logs match the committed ones
-uv run python experiments/wsp/final_eval.py      # downloads the sealed file, verifies sha256 of everything
-git checkout exp/weight_space_programming -- experiments/wsp/make_figures.py
-uv run python experiments/wsp/make_figures.py    # figures and tables from result files only
-```
-
-Reported run: Intel Core Ultra 9 185H (12 threads, no GPU), Python 3.12.3, torch 2.14.1+cpu, numpy 2.5.4. The plan, journals, ledgers and every editor's scripts are in [`experiments/wsp/`](experiments/wsp/).
+A preregistered replication of "Sparks of Weight-Space Programming" on this model (reading, repairing and editing the
+weights by hand) lives on branch [`exp/weight_space_programming`](https://github.com/Ahmadbader17/tinygpt/tree/exp/weight_space_programming),
+with its report in `docs/WSP_REPORT.md` there. It is kept off the main line so this repo stays the model itself.
 
 ## More detail
 - [`docs/architecture.md`](docs/architecture.md): how the pieces fit together

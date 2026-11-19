@@ -1,9 +1,0 @@
-{
-  "tensor": "blocks.3.attn.proj.weight",
-  "layer": 3,
-  "component": "attn",
-  "head": null,
-  "fault": "Dense iid Gaussian noise added to the whole attention output projection of layer 3 (all 8 heads, all 65536 entries), sigma about 0.061 (about 1.5x the estimated clean entry std of 0.041; noise Frobenius norm about 15.6 against a clean norm of about 10.5). The underlying weight is still present underneath the noise; it is not a rescale or a replacement.",
-  "confidence": 0.9,
-  "evidence": "Weights: in layers 1,2,4,5 each head's output block O_h and value block V_h are balanced (O_h^T O_h ~ V_h V_h^T, ||O_h||/||V_h|| = 0.97-1.02, column-norm correlation 0.92-0.99). Only in layer 3 the tensor norm is 18.8 instead of ~10.5, O_h^T O_h ~ 1.0*V_h V_h^T + c*I with c = 0.88-1.08 in every head (trace excess 29.2-31.4 per head, i.e. the same sigma = 0.061 everywhere), entry kurtosis 3.00, column-norm correlation with V drops to 0.46. No other tensor shows an anomaly. Passes (8 of 20 used): damaged loss 1.717 / 1.804 on two sets of 64 random dev windows and 1.672 on 64 whole stories; zeroing the tensor gives 1.729 on the first set (so the noisy tensor still carries useful signal, and layer-3 attention is a modest contributor); the Wiener-filtered repair gives 1.679 / 1.766 / 1.641 on the same three sets, a consistent gain of 0.031-0.038 nats. The healthy loss on these exact samples is unknown, so the residual gap is not measured; the noise cannot be removed exactly from the weights alone."
-}
