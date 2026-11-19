@@ -85,7 +85,7 @@ The project grows directly out of `notebooks/01_tokenization_and_embeddings.ipyn
 
 * Tokenize all stories once, join with `<|endoftext|>`, write `data/processed/train.bin` and `val.bin` as `numpy.uint16` (valid because vocab < 65536), plus a `meta.json` with token counts and tokenizer hash.
 * Training samples random windows of `context_length + 1` tokens from the memmap.
-* **Why this instead of the notebook's `GPTDatasetV1`:** the notebook materialises every window as a Python list of tensors, which uses memory proportional to `num_windows x context_length`. A memmap uses about 2 bytes per token on disk and almost nothing in RAM, and random window sampling replaces the stride parameter. Keep a small `SlidingWindowDataset` equivalent to the notebook version for deterministic evaluation and tests.
+* **Why this instead of the notebook's `GPTDatasetV1`:** the notebook materialises every window as a Python list of tensors, which uses memory proportional to `num_windows x context_length`. A memmap uses about 2 bytes per token on disk and almost nothing in RAM, and random window sampling replaces the stride parameter. (A `SlidingWindowDataset` mirroring the notebook was dropped in the simplify pass: nothing used it; see `docs/DECISIONS.md` 0011.)
 * Tokenization in `prepare-data` uses multiprocessing across cores.
 
 ### D6. Sampling
@@ -154,7 +154,7 @@ tiny-gpt/
     data/
       download.py
       prepare.py         # text -> uint16 .bin + meta.json
-      dataset.py         # MemmapTokenSampler, SlidingWindowDataset
+      dataset.py         # MemmapTokenSampler
     model/
       attention.py       # CausalSelfAttention (naive and sdpa)
       layers.py          # MLP, Block
@@ -320,7 +320,6 @@ All tests run on CPU in under about 2 minutes using the `tiny` config and fixtur
 | Tokenizer | round trip on ASCII, punctuation, unicode, emoji | lossless byte level encoding, no unknown token |
 | Tokenizer | `<|endoftext|>` maps to `eot_id` and survives round trip | special token handling |
 | Dataset | target window equals input window shifted by one | the core LM objective |
-| Dataset | `SlidingWindowDataset` matches notebook behaviour for a given stride | continuity with the notebook |
 | Attention | naive and sdpa outputs match (`atol` 1e-5) | the optimised path is correct |
 | Attention | changing token at position t+1 does not change outputs at positions up to t | causal masking works |
 | Model | logits shape `(B, T, vocab)` | wiring |

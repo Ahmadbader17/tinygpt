@@ -56,3 +56,9 @@
 - **Consequences:** CLAUDE.md's teaching protocol (phase briefings, `docs/LEARNING.md` entries) is not applied to this study; it follows the phases and stop points of Ahmad's study brief instead. `experiments/wsp/PLAN.md` is the spec for it.
 - **Editors' scripts are evidence (added 2026-11-12):** the analysis and edit scripts written by an editor (`experiments/wsp/analysis/`, `experiments/wsp/edits/exp*/`, `experiments/wsp/logs/`) are archived as they were run and are excluded from ruff and mypy. They stay under the static rule scan (`tests/test_wsp_edit_rules.py`), which is the check that matters for them. Harness code is linted and typed as before.
 - **Moved off the main line (2026-11-19):** the study (harness, scripts, results, report) was removed from branch `simplify`; it lives unchanged on `exp/weight_space_programming` and tag `wsp-freeze`, which its reproduction steps already pin.
+
+## 0011: simplification pass (branch `simplify`)
+- **Context:** Ahmad asked for an audit that makes the repo smaller and easier to defend line by line, with behaviour and results unchanged. Findings and baseline numbers are in `docs/AUDIT.md`.
+- **Decision:** remove what has no caller (`SlidingWindowDataset`), fix the two training-loop bugs found (divergence overwrote `checkpoints/last`; tok/s counted eval overhead), and collapse duplicated sampling defaults. DESIGN.md's tiktoken adapter and `train-tokenizer` command stay, by Ahmad's choice.
+- **Kept on purpose:** config fields (old run directories store them and unknown keys are rejected), the naive attention path, and the `# LEARN:` markers.
+- **Consequences:** model weights, checkpoint format and HTTP API are unchanged; a checkpoint fingerprint taken before the pass matches after it.

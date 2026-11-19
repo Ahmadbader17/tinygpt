@@ -80,7 +80,7 @@ next token. One window therefore gives `T` training examples at once.
 
 **Versus the notebook.** The notebook's `GPTDatasetV1` builds a Python list holding a tensor for every window, so memory grows
 as `num_windows x context_length`. The memmap maps the file and the OS pages in only what we touch: RAM stays tiny and
-random starts replace `stride`. We keep `SlidingWindowDataset` for deterministic evaluation and tests.
+random starts replace `stride`. (An early `SlidingWindowDataset` that mirrored the notebook was removed: nothing used it.)
 
 **Design choices.** Validation is held out, and the tokenizer never sees it. Cleaning is light (whitespace, control characters) so
 the model still sees natural text. `meta.json` stores the tokenizer SHA256 so a checkpoint can be checked against its tokenizer.

@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 import torch
 
-from tinygpt.data.dataset import MemmapTokenSampler, SlidingWindowDataset
+from tinygpt.data.dataset import MemmapTokenSampler
 
 
 @pytest.fixture
@@ -47,20 +47,3 @@ def test_too_short_file_rejected(tmp_path: Path) -> None:
     np.arange(4, dtype=np.uint16).tofile(path)
     with pytest.raises(ValueError):
         MemmapTokenSampler(path, 8)
-
-
-def test_sliding_window_matches_notebook_behaviour() -> None:
-    """Same windows as GPTDatasetV1 in notebook 01: range(0, n - max_length, stride)."""
-    ids = list(range(10))
-    ds = SlidingWindowDataset(ids, max_length=4, stride=2)
-    assert len(ds) == 3
-    x, y = ds[1]
-    assert x.tolist() == [2, 3, 4, 5] and y.tolist() == [3, 4, 5, 6]
-    assert ds[-1][1].tolist()[-1] <= 9
-
-
-@pytest.mark.parametrize(("max_length", "stride"), [(4, 1), (8, 4), (5, 5)])
-def test_sliding_window_count(max_length: int, stride: int) -> None:
-    ds = SlidingWindowDataset(list(range(50)), max_length, stride)
-    assert len(ds) == len(range(0, 50 - max_length, stride))
-    assert all(len(x) == len(y) == max_length for x, y in ds)

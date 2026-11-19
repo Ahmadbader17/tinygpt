@@ -1,14 +1,12 @@
-"""Training data access: random windows from a uint16 memmap, plus a deterministic dataset."""
+"""Training data access: random windows from a uint16 memmap."""
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
 import torch
 from torch import Tensor
-from torch.utils.data import Dataset
 
 
 # LEARN: rewrite this yourself, see docs/LEARNING_PLAN.md item 1
@@ -37,23 +35,3 @@ class MemmapTokenSampler:
         x = np.stack([self.data[s : s + t] for s in starts]).astype(np.int64)  # (B, T)
         y = np.stack([self.data[s + 1 : s + t + 1] for s in starts]).astype(np.int64)  # (B, T)
         return torch.from_numpy(x), torch.from_numpy(y)
-
-
-class SlidingWindowDataset(Dataset[tuple[Tensor, Tensor]]):
-    """Deterministic windows over a token sequence, equal to the notebook's `GPTDatasetV1`.
-
-    Used for evaluation and tests where the exact windows must be reproducible.
-    """
-
-    def __init__(self, ids: Sequence[int], max_length: int, stride: int) -> None:
-        self.input_ids: list[Tensor] = []
-        self.target_ids: list[Tensor] = []
-        for i in range(0, len(ids) - max_length, stride):
-            self.input_ids.append(torch.tensor(ids[i : i + max_length]))
-            self.target_ids.append(torch.tensor(ids[i + 1 : i + max_length + 1]))
-
-    def __len__(self) -> int:
-        return len(self.input_ids)
-
-    def __getitem__(self, idx: int) -> tuple[Tensor, Tensor]:
-        return self.input_ids[idx], self.target_ids[idx]
