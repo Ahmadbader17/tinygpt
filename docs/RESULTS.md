@@ -37,8 +37,7 @@ within this budget, and no sign of instability: the curve is smooth, with no spi
 
 ## Speed
 Generating 100 tokens on the laptop CPU takes a median of **0.51 s** (5 runs, range
-0.49 to 0.61 s) with no KV cache. Generation latency on the Hugging Face Space
-will be added after Phase 8.
+0.49 to 0.61 s) with no KV cache. Latency on the Hugging Face Space has not been measured.
 
 ## Samples
 Same checkpoint (`best`), temperature 0.8, top-k 40, fixed seeds, 80 new tokens. These are not cherry-picked: the first
