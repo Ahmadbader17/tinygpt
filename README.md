@@ -57,7 +57,7 @@ Needs Python 3.12 and [uv](https://docs.astral.sh/uv/). Everything runs on CPU; 
 ```bash
 make setup     # install the locked environment and pre-commit hooks
 make check     # lint, format check, mypy --strict, pytest (about 30 s)
-make data      # stream 300k + 5k stories, train the tokenizer, write uint16 .bin files (a few minutes)
+make data      # stream 300k + 5k stories, train the tokenizer, write uint16 .bin files (about 1 minute)
 make train     # configs/small.toml into runs/small; Ctrl-C saves, re-run with --resume to continue
 make generate PROMPT="Once upon a time"
 make export && make serve    # bundle runs/small for serving, then http://localhost:8000
