@@ -6,12 +6,15 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from tinygpt.config import SampleConfig
+
 
 class CompletionIn(BaseModel):
     prompt: str = Field(min_length=1, max_length=500)
-    max_new_tokens: int = Field(default=120, ge=1, le=256)
-    temperature: float = Field(default=0.8, ge=0.0, le=2.0)
-    top_k: int | None = Field(default=40, ge=1)  # upper bound (vocab size) is checked in the route
+    max_new_tokens: int = Field(default=SampleConfig.max_new_tokens, ge=1, le=256)
+    temperature: float = Field(default=SampleConfig.temperature, ge=0.0, le=2.0)
+    # the upper bound (vocab size) depends on the loaded model, so the route checks it
+    top_k: int | None = Field(default=SampleConfig.top_k, ge=1)
     seed: int | None = Field(default=None, ge=0, le=2**31 - 1)
 
 

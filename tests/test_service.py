@@ -22,7 +22,7 @@ def test_returns_completion_without_the_prompt(service: CompletionService) -> No
     res = service.complete(CompletionRequest("Once upon a time", max_new_tokens=10, seed=1))
     assert res.prompt_tokens == len(service.tokenizer.encode("Once upon a time"))
     assert res.completion_tokens <= 10
-    assert res.finish_reason in ("stop", "length")
+    assert res.finish_reason in ("eot", "length")
     assert res.latency_s > 0
 
 
@@ -58,7 +58,7 @@ def test_stop_token_ends_generation_and_is_not_in_text(
 
     stopper = CompletionService(service.model, StopAtFirst())  # type: ignore[arg-type]
     res = stopper.complete(req)
-    assert res.finish_reason == "stop"
+    assert res.finish_reason == "eot"
     assert res.completion_tokens == 0
     assert res.text == ""
 

@@ -70,7 +70,7 @@ def completions(body: CompletionIn, request: Request) -> CompletionOut:
         prompt=body.prompt,
         completion=res.text,
         tokens_generated=res.completion_tokens,
-        stop_reason="eot" if res.finish_reason == "stop" else "length",
+        stop_reason=res.finish_reason,
         seed=res.seed,
         latency_ms=round(res.latency_s * 1000),
     )

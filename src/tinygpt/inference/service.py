@@ -9,6 +9,7 @@ import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 import torch
 
@@ -24,11 +25,13 @@ INFO_FILE = "model_info.json"
 
 @dataclass(frozen=True)
 class CompletionRequest:
+    """A prompt plus sampling settings; defaults come from `SampleConfig`, their one home."""
+
     prompt: str
-    max_new_tokens: int = 120
-    temperature: float = 0.8
-    top_k: int | None = 40
-    seed: int | None = None
+    max_new_tokens: int = SampleConfig.max_new_tokens
+    temperature: float = SampleConfig.temperature
+    top_k: int | None = SampleConfig.top_k
+    seed: int | None = None  # None: the service picks one and reports it
 
 
 @dataclass(frozen=True)
@@ -36,7 +39,7 @@ class CompletionResult:
     text: str  # the completion only, without the prompt
     prompt_tokens: int
     completion_tokens: int
-    finish_reason: str  # "stop" (model ended the story) or "length" (hit max_new_tokens)
+    finish_reason: Literal["eot", "length"]  # model ended the story, or hit max_new_tokens
     seed: int  # the seed actually used, so any sample can be reproduced
     latency_s: float
 
@@ -110,7 +113,7 @@ class CompletionService:
             text=self.tokenizer.decode(new),
             prompt_tokens=len(ids),
             completion_tokens=len(new),
-            finish_reason="stop" if stopped else "length",
+            finish_reason="eot" if stopped else "length",
             seed=seed,
             latency_s=latency,
         )
