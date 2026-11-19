@@ -89,5 +89,5 @@ Same seeded 100-step command on the simplified code:
 | Real checkpoints fingerprint | | identical (weights hash, logits, val loss, greedy and seeded outputs) |
 | Tracked files | 425 | 79 (WSP study moved to its branch) |
 | Core `src` lines (without `wsp/`) | 1,991 | 1,973 |
-| Tests | 120 core (+198 WSP) | 119 (2 regression tests added, 3 for removed code dropped) |
+| Tests | 120 core (+198 WSP) | 119 (2 regression tests added, 4 cases for removed code dropped) |
 | Runtime dependencies | 9 | 9 |
