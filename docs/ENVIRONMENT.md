@@ -15,5 +15,5 @@ Captured in Phase 0 with `tinygpt env`.
 }
 ```
 
-CPU: Intel Core Ultra 9 185H (hybrid: performance + efficiency cores), 22 logical threads.
-Repo lives on the Linux filesystem (`~/code/tiny-gpt`), not `/mnt/c`, for IO speed.
+CPU: Intel Core Ultra 9 185H (hybrid: performance and efficiency cores), 22 logical threads.
+The repository resides on the Linux filesystem (`~/code/tiny-gpt`), not `/mnt/c`, for faster IO.
